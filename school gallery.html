@@ -483,21 +483,19 @@
 </head>
 <body>
 
-    <!-- Main Gallery Section -->
     <section class="gallery-section" id="mediaGallery">
         <div class="gallery-header">
             <h2>Campus & Events Showcase</h2>
             <p>Explore recent moments, academic achievements, and dynamic activities across our modern school campus.</p>
         </div>
 
-        <!-- Category Controller Filters -->
         <div class="gallery-filters">
             <button class="filter-btn active" data-filter="all">All Media</button>
             <button class="filter-btn" data-filter="image">Images</button>
             <button class="filter-btn" data-filter="video">Videos</button>
         </div>
 
-       <div class="gallery-grid">
+        <div class="gallery-grid">
             
             <div class="gallery-card" data-type="image">
                 <div class="media-wrapper" onclick="openLightbox(this, 'image')">
@@ -555,28 +553,6 @@
                 </div>
             </div>
 
-            <div class="gallery-card" data-type="video">
-                <div class="media-wrapper" onclick="openLightbox(this, 'video')">
-                    <span class="media-badge">Video</span>
-                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1000" alt="Campus Activity Clip Cover">
-                    <div class="video-overlay">
-                        <i class="fa-solid fa-play"></i>
-                    </div>
-                    <video class="hidden-source" style="display:none;" controls>
-                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="card-profile-footer">
-                    <img class="profile-avatar" src="https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?q=80&w=150" alt="Coach Collins">
-                    <div class="profile-meta">
-                        <h4>Campus Tour & Highlights</h4>
-                        <p>By Video Desk • Production Team</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-            <!-- Item 2: Science Lab -->
             <div class="gallery-card" data-type="image">
                 <div class="media-wrapper" onclick="openLightbox(this, 'image')">
                     <span class="media-badge">Photo</span>
@@ -591,7 +567,34 @@
                 </div>
             </div>
 
-            <!-- Item 3: Video Campus Tour -->
+            <div class="gallery-card" data-type="image">
+                <div class="media-wrapper" onclick="openLightbox(this, 'image')">
+                    <span class="media-badge">Photo</span>
+                    <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000" alt="Students reviewing references in central study room">
+                </div>
+                <div class="card-profile-footer">
+                    <img class="profile-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150" alt="Marcus Vance">
+                    <div class="profile-meta">
+                        <h4>Resource Library Complex</h4>
+                        <p>By Marcus Vance • Librarian</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-type="image">
+                <div class="media-wrapper" onclick="openLightbox(this, 'image')">
+                    <span class="media-badge">Photo</span>
+                    <img src="https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?q=80&w=1000" alt="Track field operations during sports event">
+                </div>
+                <div class="card-profile-footer">
+                    <img class="profile-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150" alt="Coach Collins">
+                    <div class="profile-meta">
+                        <h4>Annual Sports Day Sprint</h4>
+                        <p>By Coach Collins • Athletics</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="gallery-card" data-type="video">
                 <div class="media-wrapper" onclick="openLightbox(this, 'video')">
                     <span class="media-badge">Video</span>
@@ -612,50 +615,17 @@
                 </div>
             </div>
 
-            <!-- Item 4: Library -->
-            <div class="gallery-card" data-type="image">
-                <div class="media-wrapper" onclick="openLightbox(this, 'image')">
-                    <span class="media-badge">Photo</span>
-                    <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000" alt="Students reviewing references in central study room">
-                </div>
-                <div class="card-profile-footer">
-                    <img class="profile-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150" alt="Marcus Vance">
-                    <div class="profile-meta">
-                        <h4>Resource Library Complex</h4>
-                        <p>By Marcus Vance • Librarian</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 5: Athletics -->
-            <div class="gallery-card" data-type="image">
-                <div class="media-wrapper" onclick="openLightbox(this, 'image')">
-                    <span class="media-badge">Photo</span>
-                    <img src="https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?q=80&w=1000" alt="Track field operations during sports event">
-                </div>
-                <div class="card-profile-footer">
-                    <img class="profile-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150" alt="Coach Coach Collins">
-                    <div class="profile-meta">
-                        <h4>Annual Sports Day Sprint</h4>
-                        <p>By Coach Collins • Athletics</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
-    <!-- Global Accessible Modal Viewport window -->
     <div class="lightbox-modal" id="galleryLightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-content-box" id="lightboxDisplayContainer"></div>
     </div>
 
-    <!-- Professional School Footer Element -->
     <footer class="main-footer">
         <div class="footer-container">
             
-            <!-- Column 1: Identity & Networks -->
             <div class="footer-brand">
                 <h3>NAMUNGOONA HIGH SCHOOL</h3>
                 <p>Nurturing young minds through holistic modern education frameworks, leading technology innovation labs, and unparalleled athletic tracking infrastructure.</p>
@@ -668,7 +638,6 @@
                 </div>
             </div>
 
-            <!-- Column 2: Structural Routing Map -->
             <div class="footer-links">
                 <h4>Quick Navigation</h4>
                 <ul>
@@ -680,7 +649,6 @@
                 </ul>
             </div>
 
-            <!-- Column 3: Contact Records Matrix -->
             <div class="footer-contact">
                 <h4>Contact Us</h4>
                 <p><i class="fa-solid fa-location-dot"></i> Located 5 Miles along Hoima Rd, 100 Meters off Nakibinge Stage.</p>
@@ -688,7 +656,6 @@
                 <p><i class="fa-solid fa-envelope"></i> namungoonahighschool@gmail.com</p>
             </div>
 
-            <!-- Column 4: Newsletter Engine Component -->
             <div class="footer-newsletter">
                 <h4>Stay Updated</h4>
                 <p style="color: #a4b0be; margin-bottom: 12px; line-height: 1.6;">Subscribe to receive academic schedules, quarterly reports, and breaking campus news logs.</p>
@@ -700,14 +667,12 @@
 
         </div>
 
-        <!-- Footer Base Bar -->
         <div class="footer-bottom">
             <p>&copy; 2026 NAMUNGOONA HIGH SCHOOL. All institutional rights reserved globally.</p>
             <p>Designed for excellence • <a href="#" style="color: #7f8c8d; text-decoration: underline;">Privacy Matrix</a></p>
         </div>
     </footer>
 
-    <!-- Interactive Execution Logic Scripts -->
     <script>
         // 1. Live Filter System logic implementation
         const filterButtons = document.querySelectorAll('.filter-btn');
