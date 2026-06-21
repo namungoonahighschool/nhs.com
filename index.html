@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en-Us">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namungoona High School | Excellence & Integrity</title>
- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
@@ -20,7 +20,7 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {font-family: 'Montserrat', sans-serif; line-height: 1.6; color: var(--dark); background-color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: 'Montserrat', sans-serif; line-height: 1.6; color: var(--dark); background-color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 
         /* TOP CONTACT BAR */
@@ -63,44 +63,50 @@
         .nav-links a:hover { color: var(--secondary); }
         .logo-container img { height: 70px; transition: 0.3s; }
 
-.contact-container {
-    padding: 100px 10%;
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 50px;
-    background: white;
-}
+        /* HERO SLIDESHOW SYSTEM */
+        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; color: white; text-align: center; overflow: hidden; }
+        
+        .slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
 
-.contact-info h2 {
-    font-size: 2.5rem;
-    color: var(--primary);
-    margin-bottom: 20px;
-}
+        .slide { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-size: cover; 
+            background-position: center; 
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; 
+            opacity: 0; 
+            transform: scale(1);
+        }
+        .slide.active { opacity: 1; transform: scale(1.05); }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10,42,75,0.7), rgba(0,0,0,0.4)); z-index: -1; }
+        .hero-content { z-index: 10; max-width: 900px; padding: 20px; }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1rem; }
 
-.contact-form-wrapper {
-    background: var(--light);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-.contact-form-wrapper .form-group {
-    margin-bottom: 20px;
-}
-
-.contact-form-wrapper textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: inherit;
-    min-height: 150px;
-    resize: vertical;
-}
-
-@media (max-width: 992px) {
-    .contact-container { grid-template-columns: 1fr; padding: 60px 5%; }
-}
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        .btn-red { background: var(--secondary); color: white; }
+        .btn-gold { background: var(--accent); color: var(--primary); }
 
         .menu-toggle {
             display: none;
@@ -118,24 +124,6 @@
             border-radius: 3px;
             transition: 0.4s;
         }
-
-.back-to-top {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    background: var(--primary);
-    color: white;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: none; /* Hidden by default */
-    align-items: center;
-    justify-content: center;
-    z-index: 2999;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.back-to-top:hover { background: var(--secondary); transform: scale(1.1); }
 
         .side-menu { 
             position: fixed; 
@@ -157,7 +145,6 @@
         .side-menu#mobileNav.active { left: 0; }
         
         .close-menu { position: absolute; top: 25px; right: 30px; font-size: 2rem; cursor: pointer; color: var(--accent); }
-        #mobileNav .close-menu { left: auto; right: 30px; }
 
         .side-triggers { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 999; display: flex; flex-direction: column; gap: 5px; }
         .trigger-btn { background: var(--secondary); color: white; padding: 15px 8px; border-radius: 0 8px 8px 0; cursor: pointer; writing-mode: vertical-rl; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; transition: 0.3s; text-align: center; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
@@ -185,449 +172,60 @@
         .side-menu a { color: white; text-decoration: none; font-weight: 600; width: 100%; display: block; }
         .side-menu li:hover a { color: var(--primary); }
 
-.whatsapp-float {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #25d366;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50px;
-    text-align: center;
-    font: montserrat;
-    font-size: 30px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-    z-index: 3000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.whatsapp-float:hover {
-    transform: scale(1.1);
-}
-
-/* The popup menu for two numbers */
-.wa-menu {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    display: none; /* Hidden by default */
-    flex-direction: column;
-    padding: 10px;
-    z-index: 3001;
-    border: 1px solid #eee;
-}
-
-.wa-menu.active {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
-
-.wa-option {
-    text-decoration: none;
-    color: #333;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: 0.2s;
-}
-
-.wa-option:hover {
-    background: #f0f0f0;
-    border-radius: 8px;
-    color: #25d366;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; color: white; text-align: center; overflow: hidden; }
-        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; transition: 1.5s ease-in-out; opacity: 0; z-index: -1; }
-        .slide.active { opacity: 1; transform: scale(1.05); }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10,42,75,0.7), rgba(0,0,0,0.4)); }
-        .hero-content { z-index: 10; max-width: 900px; padding: 20px; }
-        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1rem; }
-
-     .btn {
-    padding: 12px 25px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 700;
-    display: inline-block;
-    transition: 0.3s;
-    cursor: pointer;
-    border: none;
-    font-family: 'Montserrat', sans-serif;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-}
-        .btn-red { background: var(--secondary); color: white; }
-        .btn-gold { background: var(--accent); color: var(--primary); }
-
-         .stats-bar { background: var(--primary); color: white; display: flex; justify-content: space-around; padding: 60px 5%; flex-wrap: wrap; gap: 30px; text-align: center; }
-        .stat-item h2 { font-size: 3rem; color: var(--accent); }
-       
- .sector-section { padding: 80px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-        .info-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; text-align: center; }
-        .info-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .card-img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 30px; }
-        .card-body h3 { color: var(--primary); margin-bottom: 15px; }
-
-        .admission-section { padding: 100px 10%; background: var(--light); }
-        .portal-info { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-bottom: 60px; align-items: center; }
-        .admission-form { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .admission-form h2 { grid-column: span 2; margin-bottom: 20px; color: var(--primary); text-align: center; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--primary); }
-        .form-group input, .form-group select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
-        .form-full { grid-column: span 2; }
-        .submit-btn { grid-column: span 2; background: var(--secondary); color: white; padding: 18px; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .submit-btn:hover { background: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
-        .mis-card { background: var(--primary); color: white; padding: 45px; border-radius: 20px; position: relative; overflow: hidden; }
-        .mis-card h3 { color: var(--accent); margin-bottom: 20px; font-size: 1.8rem; }
-        .mis-card ul { list-style: none; margin: 20px 0; }
-        .mis-card li { margin-bottom: 15px; display: flex; align-items: center; gap: 15px; font-size: 0.95rem; }
-        .mis-card i { color: var(--accent); font-size: 1.2rem; }
-
-        .footer-logo { height: 110px; margin-bottom: 25px; filter: brightness(0) invert(1); }
-        .footer-contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .footer-contact-item i { color: orange; width: 25px; font-size: 1.1rem; }
-        .footer-link { color:orange; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 10px; }
-        .footer-link:hover { color: var(--accent); padding-left: 5px; }
-
         @media (max-width: 992px) { 
             .top-bar { display: none; } 
             .header { top: 0; }
             .nav-links { display: none; }
-            .admission-form { grid-template-columns: 1fr; }
-            .admission-form h2, .form-full { grid-column: span 1; }
-        }
-
-        @media (max-width: 992px) { 
-            .top-bar { display: none; } 
-            .header { top: 0; }
-            .nav-links, .desktop-only { display: none; }
             .menu-toggle { display: flex; }
-            .portal-info { grid-template-columns: 1fr; }
-            .admission-form { grid-template-columns: 1fr; }
-            .admission-form h2, .form-full, .submit-btn { grid-column: span 1; }
         }
-
-        .wa-menu {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            background: white;
-            border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            z-index: 1000;
-            min-width: 200px;
-        }
-
-        .wa-menu.active {
-            display: flex; /* Shows when clicked */
-        }
-
-        .wa-option {
-            text-decoration: none;
-            color: #333;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: sans-serif;
-            border-bottom: 1px solid #eee;
-        }
-
-        .wa-option:last-child { border-bottom: none; }
-        
-        .wa-option i { color: #25d366; }
-<!-- ==========================================================================
-   CSS STYLING (Add to your existing <style> tag or style sheet)
-   ========================================================================== -->
-<style>
-    .teachers-section {
-        padding: 100px 10%;
-        background-color: var(--light); /* Subtle gray contrast to alternate from white blocks */
-    }
-
-    .teachers-container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .teachers-header {
-        text-align: center;
-        margin-bottom: 60px;
-    }
-
-    .teachers-header h2 {
-        font-size: 2.5rem;
-        color: var(--primary);
-        margin-bottom: 15px;
-    }
-
-    .teachers-header p {
-        color: #666;
-        font-size: 1.05rem;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    /* Grid Framework matching your sector & gallery systems */
-    .teachers-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 40px;
-    }
-
-    /* Card Box Component */
-    .teacher-card {
-        background: #ffffff;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-        border: 1px solid #eee;
-        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .teacher-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-
-    /* Image Wrapper with Interaction Overlay */
-    .teacher-image-wrapper {
-        position: relative;
-        width: 100%;
-        height: 320px;
-        overflow: hidden;
-        background-color: #f0f0f0;
-    }
-
-    .teacher-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: top center;
-        transition: transform 0.5s ease;
-    }
-
-    .teacher-card:hover .teacher-img {
-        transform: scale(1.05);
-    }
-
-    /* Floating Social Action Overlay */
-    .teacher-socials {
-        position: absolute;
-        bottom: -50px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--glass);
-        backdrop-filter: blur(5px);
-        padding: 10px 20px;
-        border-radius: 30px;
-        display: flex;
-        gap: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .teacher-card:hover .teacher-socials {
-        bottom: 20px;
-    }
-
-    .teacher-socials a {
-        color: var(--primary);
-        font-size: 1.1rem;
-        transition: color 0.2s ease;
-        width: 35px;
-        height: 35px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-    }
-
-    .teacher-socials a:hover {
-        color: var(--secondary);
-        background: rgba(0, 0, 0, 0.04);
-    }
-
-    /* Card Details Structure */
-    .teacher-info {
-        padding: 30px;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .teacher-info h3 {
-        color: var(--primary);
-        font-size: 1.35rem;
-        margin-bottom: 5px;
-    }
-
-    .teacher-title {
-        color: var(--secondary);
-        font-weight: 700;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: block;
-        margin-bottom: 15px;
-    }
-
-    .teacher-bio {
-        font-size: 0.9rem;
-        color: #555;
-        line-height: 1.5;
-        margin-bottom: 20px;
-    }
-
-    /* Small specialized domain badges */
-    .teacher-tags {
-        margin-top: auto;
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .teacher-tags span {
-        background: var(--light);
-        color: var(--primary);
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        border: 1px solid #eef0f2;
-    }
-    @media (max-width: 992px) {
-        .teachers-section { padding: 60px 5%; }
-        .teachers-header h2 { font-size: 2rem; }
-    }
-
-    @media (max-width: 576px) {
-        .teachers-grid { grid-template-columns: 1fr; }
-        .teacher-image-wrapper { height: 280px; }
-        /* Keep social links visible automatically on mobile touch targets */
-        .teacher-socials { bottom: 20px; } 
-    }
-.trust-badge {
-        background: var(--accent);
-        color: var(--primary);
-        padding: 6px 16px;
-        border-radius: 50px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: inline-block;
-        margin-bottom: 20px;
-    }
-    .hero-subtext {
-        font-size: 1.25rem; 
-        margin-bottom: 35px;
-        font-weight: 300;
-    }
-    .hero-action-box {
-        display: flex; 
-        gap: 20px; 
-        justify-content: center; 
-        flex-wrap: wrap;
-    }
-    .btn-enroll-now {
-        background: var(--secondary);
-        color: white;
-        font-size: 0.95rem;
-        padding: 15px 35px;
-        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
-    }
-    /* Simple CSS animation that draws attention to the enroll button */
-    @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4); }
-        50% { transform: scale(1.03); box-shadow: 0 4px 25px rgba(211, 47, 47, 0.6); }
-        100% { transform: scale(1); box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4); }
-    }
-    .pulse-animation {
-        animation: pulse 2.5s infinite ease-in-out;
-    }
-    .btn-chat-now {
-        background: #25d366;
-        color: white;
-        font-size: 0.95rem;
-        padding: 15px 35px;
-    }
-    .bursary-alert-container {
-        max-width: 1200px;
-        margin: 40px auto;
-        background: linear-gradient(135deg, var(--primary) 0%, #154575 100%);
-        color: white;
-        padding: 30px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 30px;
-        box-shadow: 0 10px 30px rgba(10,42,75,0.15);
-    }
-    .bursary-icon i {
-        font-size: 3.5rem;
-        color: var(--accent);
-    }
-    .bursary-text h3 {
-        color: var(--accent);
-        font-size: 1.5rem;
-        margin-bottom: 8px;
-    }
-    .bursary-text p {
-        font-size: 0.95rem;
-        opacity: 0.9;
-        max-width: 700px;
-    }
-    @media (max-width: 768px) {
-        .bursary-alert-container {
-            flex-direction: column;
-            text-align: center;
-            padding: 35px 20px;
-        }
-    }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div>
-          <span>
-    <i class="fas fa-phone"></i> 
-    <a href="tel:+256700627960" style="color: inherit; text-decoration: none;">+256 700 627 960</a> / 
-    <a href="tel:+256788772660" style="color: inherit; text-decoration: none;">+256 788 772 660</a>
-</span>
-           <span>
-    <i class="fas fa-envelope"></i> 
-    <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
-</span>
+            <span>
+                <i class="fas fa-phone"></i> 
+                <a href="tel:+256700627960" style="color: inherit; text-decoration: none;">+256 700 627 960</a> / 
+                <a href="tel:+256788772660" style="color: inherit; text-decoration: none;">+256 788 772 660</a>
+            </span>
+            <span>
+                <i class="fas fa-envelope"></i> 
+                <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
+            </span>
         </div>
         <div><span><i class="fas fa-map-marker-alt"></i> Located 5 Km along Hoima Road, 100 Meters off Nakibinge Stage, Kampala</span></div>
+    </div>
+
+    <header class="header" id="header">
+        <div class="logo-container">
+            <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#director">Director</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#admissions">Admissions</a>
+            <a href="school magazine.html">School Magazine</a>
+            <a href="school gallery.html">School Gallery</a>
+            <a href="dos.html">Past Papers & Report Cards</a>
+            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="btn btn-gold desktop-only" onclick="toggleMenu('anthemMenu')">Anthem</button>
+            <div class="menu-toggle" onclick="toggleMenu('mobileNav')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="side-triggers">
+        <div class="trigger-btn" onclick="toggleMenu('clubsMenu')">SCHOOL CLUBS</div>
+        <div class="trigger-btn anthem-trigger" onclick="toggleMenu('anthemMenu')">SCHOOL ANTHEM</div>
     </div>
 
     <div class="side-menu" id="mobileNav">
@@ -640,7 +238,7 @@
             <li><a href="#admissions" onclick="toggleMenu('mobileNav')"><i class="fas fa-pen-alt"></i> Admissions</a></li>
             <li><a href="school magazine.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-building-alt"></i> Magazine</a></li>
             <li><a href="school gallery.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-dictionary-alt"></i> Gallery</a></li>
-			 <li><a href="dos.html"  onclick="toggleMenu('mobileNav')"><i class="fas fa-book-alt"></i> Past Papers & Report Cards</a></li>
+            <li><a href="dos.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-book-alt"></i> Past Papers & Report Cards</a></li>
             <li><a href="https://mis.nhs.ac.ug"><i class="fas fa-user-graduate"></i> MIS Portal</a></li>
             <li onclick="toggleMenu('clubsMenu')"><i class="fas fa-star"></i> School Clubs</li>
             <li onclick="toggleMenu('anthemMenu')"><i class="fas fa-music"></i> School Anthem</li>
@@ -650,7 +248,8 @@
     <div class="side-menu" id="clubsMenu">
         <span class="close-menu" onclick="toggleMenu('clubsMenu')">×</span>
         <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px;">School Clubs</h3>
-        <ul> <li><i class="fas fa-microchip"></i> ICT & Robotics Club</li>
+        <ul> 
+            <li><i class="fas fa-microchip"></i> ICT & Robotics Club</li>
             <li><i class="fas fa-comments"></i> Debate Society</li>
             <li><i class="fas fa-flask"></i> Science Club</li>
             <li><i class="fas fa-leaf"></i> Wildlife & Environment Club</li>
@@ -672,66 +271,33 @@
         <span class="close-menu" onclick="toggleMenu('anthemMenu')">×</span>
         <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">The School Anthem</h3>
         <div style="font-style: italic; line-height: 1.8; font-size: 0.9rem;">
-            <p><strong>Verse 1:</strong><br>We are the trainees, of tomorrow.<br>At NAMUNGOONA HIGH SCHOOL,<br>The the school of brilliant ladies and gentlemen, <br>It caters for those in need, <br>You can enter and enjoy its our pleasure,<br>Education is the key wherever the world.</p>
+            <p><strong>Verse 1:</strong><br>We are the trainees, of tomorrow.<br>At NAMUNGOONA HIGH SCHOOL,<br>The school of brilliant ladies and gentlemen, <br>It caters for those in need, <br>You can enter and enjoy its our pleasure,<br>Education is the key wherever the world.</p>
             <br>
-
-           <p><strong>Verse 2:</strong><br>We have a motto,<br>In our school.<br>We still Strive to Excel,<br>Support us whenever we call for help, <br>To fulfil our motto, <br>Let us struggle and raise our standards, <br>With all efforts which can be applied.</p><br>
-            
-           <p><strong>Verse 3:</strong><br>Lord Almighty,<br>Bless our school.<br>Without your power no one can stand,<br>We hand our school in your hands, <br>So that you may embrace it, <br>Keep us in peace in our school, <br>Of NAMUNGOONA HIGH SCHOOL.</p>
+            <p><strong>Verse 2:</strong><br>We have a motto,<br>In our school.<br>We still Strive to Excel,<br>Support us whenever we call for help, <br>To fulfil our motto, <br>Let us struggle and raise our standards, <br>With all efforts which can be applied.</p>
+            <br>
+            <p><strong>Verse 3:</strong><br>Lord Almighty,<br>Bless our school.<br>Without your power no one can stand,<br>We hand our school in your hands, <br>So that you may embrace it, <br>Keep us in peace in our school, <br>Of NAMUNGOONA HIGH SCHOOL.</p>
         </div>
     </div>
 
-    <header class="header" id="header">
-        <div class="logo-container">
-            <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
-        </div>
+    <section class="hero" id="home"> 
+        <div class="hero-overlay"></div>
         
-        <nav class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#director">Director</a>
-            <a href="#sectors">Sectors</a>
-            <a href="#admissions">Admissions</a>
-            <a href="school magazine.html">School Magazine</a>
-			<a href="school gallery.html">School Gallery</a>
-			<a href="dos.html">Past Papers & Report Cards</a>
-            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
-			
-        </nav>
+        <div class="slideshow">
+            <div class="slide active" style="background-image: url('seseco.webp');"></div>
+            <div class="slide" style="background-image: url('WE.jpg');"></div>
+            <div class="slide" style="background-image: url('mimi.jpg');"></div>
+        </div>
 
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <button class="btn btn-gold desktop-only" onclick="toggleMenu('anthemMenu')">Anthem</button>
-            <div class="menu-toggle" onclick="toggleMenu('mobileNav')">
-                <span></span>
-                <span></span>
-                <span></span>
+        <div class="hero-content">
+            <h1>Namungoona High School</h1>
+            <p><i>Strive to Excel</i>, Securing Futures since 1999</p>
+            <p><i>UNEB CENTER NO.</i>, U1256</p>
+            <div class="hero-buttons" style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
+                <a href="#admissions" class="btn btn-red">Enroll Now</a>
+                <button onclick="toggleMenu('clubsMenu')" class="btn btn-gold">Explore Clubs</button>
             </div>
         </div>
-    </header>
-
-    <div class="side-triggers">
-        <div class="trigger-btn" onclick="toggleMenu('clubsMenu')">SCHOOL CLUBS</div>
-        <div class="trigger-btn anthem-trigger" onclick="toggleMenu('anthemMenu')">SCHOOL ANTHEM</div>
-    </div>
-
-<section class="hero" id="home"> 
-    <div class="hero-overlay"></div>
-    
-    <div class="slideshow">
-    <div class="slide" style="background-image: url('seseco.webp');"></div>
-    <div class="slide" style="background-image: url('WE.jpg');"></div>
-    <div class="slide" style="background-image: url('mimi.jpg');"></div>
-</div>
-
-    <div class="hero-content">
-        <h1>Namungoona High School</h1>
-        <p><i>Strive to Excel</i>, Securing Futures since 1999</p>
-	<p><i>UNEB CENTER NO.</i>, U1256</p>
-        <div class="hero-buttons">
-            <a href="#admissions" class="btn btn-red">Enroll Now</a>
-            <button onclick="toggleMenu('clubsMenu')" class="btn btn-gold">Explore Clubs</button>
-        </div>
-    </div>
-</section>
+    </section>
 
     <!-- 2. STATS BAR -->
     <div class="stats-bar">
@@ -1468,6 +1034,41 @@ if (response.ok) {
         // 4. Scroll to the top so they see the message
         window.scrollTo(0, 0);
     });
+	
+        // Side menus handling system
+        function toggleMenu(menuId) {
+            const menu = document.getElementById(menuId);
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            } else {
+                // Close other panels first
+                document.querySelectorAll('.side-menu').forEach(m => m.classList.remove('active'));
+                menu.classList.add('active');
+            }
+        }
+
+        // Header Transformation Loop on Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // WORKING ROTATING RUNTIME SLIDESHOW 
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showNextSlide() {
+            slides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            slides[currentSlideIndex].classList.add('active');
+        }
+        
+        // Changes picture automatically every 5 seconds (5000ms)
+        setInterval(showNextSlide, 5000);
 </script>
 </body>
 </html>
