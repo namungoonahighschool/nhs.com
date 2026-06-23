@@ -497,6 +497,90 @@
         async function uploadReportCard() {
             alert("Publishing payload straight to database framework.");
         }
+        async function handleBatchUpload() {
+    const fileInput = document.getElementById('batchPdfFiles');
+    const year = document.getElementById('batchYear').value.trim();
+    const term = document.getElementById('batchTerm').value;
+    const progressContainer = document.getElementById('batchProgressContainer');
+    const progressBar = document.getElementById('batchProgressBar');
+    const statusText = document.getElementById('batchStatusText');
+    const progressPercent = document.getElementById('batchProgressPercent');
+    const submitBtn = document.getElementById('batchSubmitBtn');
+
+    if (!fileInput.files || fileInput.files.length === 0) {
+        alert("Please select at least one PDF report card file.");
+        return;
+    }
+
+    const files = Array.from(fileInput.files);
+    const totalFiles = files.length;
+    
+    // Disable button and show progress bar
+    submitBtn.disabled = true;
+    progressContainer.classList.remove('hidden');
+
+    for (let i = 0; i < totalFiles; i++) {
+        const file = files[i];
+        
+        // 1. Automatically extract Student ID from the filename (removes '.pdf')
+        const studentId = file.name.replace(/\.[^/.]+$/, ""); 
+        
+        // Update status UI
+        statusText.innerText = `Uploading: ${file.name}`;
+        let percent = Math.round((i / totalFiles) * 100);
+        progressBar.style.width = `${percent}%`;
+        progressPercent.innerText = `${percent}%`;
+
+        // 2. Upload the PDF file to Supabase Storage Bucket named 'reports'
+        // Construct a unique path in storage: year/term/studentId.pdf
+        const filePath = `${year}/${term}/${file.name}`;
+        
+        const { data: uploadData, error: uploadError } = await _supabase.storage
+            .from('reports')
+            .upload(filePath, file, { upsert: true });
+
+        if (uploadError) {
+            console.error(`Error uploading file ${file.name}:`, uploadError);
+            continue; // Skip this file if it fails and move to the next
+        }
+
+        // 3. Get the public URL of the uploaded file
+        const { data: urlData } = _supabase.storage
+            .from('reports')
+            .getPublicUrl(filePath);
+            
+        const fileUrl = urlData.publicUrl;
+
+        // 4. Insert or update the record into the 'report_cards' database table
+        // Guessing a generic name or leaving it to be updated, or using Student ID as placeholder name
+        const { error: dbError } = await _supabase
+            .from('report_cards')
+            .upsert({
+                student_id: studentId,
+                access_code: studentId, // Using the ID as the access code for parents
+                student_name: `Student (${studentId})`, // DOS can rename later or match via a students table
+                year: year,
+                term: term,
+                file_url: fileUrl,
+                parent_phone: "+256700000000" // Placeholder default phone number
+            }, { onConflict: 'student_id,year,term' }); // Prevents duplicates for the same term
+
+        if (dbError) {
+            console.error(`Database linking failed for ${studentId}:`, dbError);
+        }
+    }
+
+    // Completion UI update
+    progressBar.style.width = '100%';
+    progressPercent.innerText = '100%';
+    statusText.innerText = `Successfully deployed ${totalFiles} report cards live!`;
+    submitBtn.disabled = false;
+    
+    // Refresh the admin data table to show the new reports
+    if (activeAdminTab === 'reports') {
+        fetchAdminReportCards();
+    }
+}
     </script>
 </body>
 </html>
