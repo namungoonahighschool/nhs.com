@@ -552,7 +552,7 @@
 
                 const { data: urlData } = _supabase.storage.from('past-papers').getPublicUrl(filePath);
                 
-                // FIXED: Wrapped payload fields inside bracket notation array structure [{...}]
+                // Wrapped fields inside bracket array notation array format [{...}]
                 await _supabase.from('past_papers').insert([{
                     title: paperTitle,
                     grade: grade,
@@ -619,7 +619,7 @@
                     
                 const fileUrl = urlData.publicUrl;
 
-                // FIXED: Wrapped payload parameters inside array bracket bounds [{...}]
+                // Wrapped payload structural fields within array bounds [{...}]
                 const { error: dbError } = await _supabase
                     .from('report_cards')
                     .upsert([{
