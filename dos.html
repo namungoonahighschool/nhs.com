@@ -118,12 +118,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="space-y-6">
                     <div id="form-panel-papers" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">
-                        <h2 class="text-lg font-bold text-slate-900">Upload New Paper</h2>
-                        <form id="upload-form" onsubmit="handleUpload(event)" class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Paper Title</label>
-                                <input type="text" id="up-title" required placeholder="e.g., 2026 Senior 4 Mock Exam" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
-                            </div>
+                        <h2 class="text-lg font-bold text-slate-900 text-indigo-600">📚 Bulk Paper Uploader</h2>
+                        <form id="upload-form" onsubmit="handleBatchPapersUpload(event)" class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Grade</label>
@@ -151,32 +147,56 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Select PDF File</label>
-                                <input type="file" id="up-file" accept=".pdf" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Select PDF Files</label>
+                                <input type="file" id="up-files" accept=".pdf" multiple required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
                             </div>
-                            <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Publish Paper Asset</button>
+                            
+                            <div id="paperProgressContainer" class="hidden space-y-1">
+                                <div class="flex justify-between text-xs font-medium text-slate-500">
+                                    <span id="paperStatusText">Uploading documents...</span>
+                                    <span id="paperProgressPercent">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                    <div id="paperProgressBar" class="bg-indigo-600 h-full w-0 transition-all duration-200"></div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="paperSubmitBtn" class="w-full bg-indigo-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Deploy Papers Live</button>
                         </form>
                     </div>
 
                     <div id="form-panel-reports" class="hidden space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-                            <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Single Report Upload</h2>
-                            <div class="space-y-3">
-                                <div class="grid grid-cols-2 gap-2">
+                            <h2 class="text-lg font-bold text-slate-900 text-emerald-600">⚡ Bulk Report Uploader</h2>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student ID</label>
-                                        <input type="text" id="studentId" placeholder="e.g., STU-001" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs">
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Batch Year</label>
+                                        <input type="text" id="batchYear" value="2026" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Parent Phone</label>
-                                        <input type="text" id="parentPhone" placeholder="e.g., +256700000" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs">
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Batch Term</label>
+                                        <select id="batchTerm" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-white">
+                                            <option value="Term 1">Term 1</option>
+                                            <option value="Term 2">Term 2</option>
+                                            <option value="Term 3">Term 3</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Full Name</label>
-                                    <input type="text" id="studentName" placeholder="e.g., Kamya Oscar" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-xs">
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Upload Multiple PDFs</label>
+                                    <input type="file" id="batchPdfFiles" accept=".pdf" multiple class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
                                 </div>
-                                <button onclick="uploadReportCard()" class="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Publish Report Live</button>
+                                <div id="batchProgressContainer" class="hidden space-y-1">
+                                    <div class="flex justify-between text-xs font-medium text-slate-500">
+                                        <span id="batchStatusText">Processing bundle...</span>
+                                        <span id="batchProgressPercent">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                        <div id="batchProgressBar" class="bg-emerald-600 h-full w-0 transition-all duration-200"></div>
+                                    </div>
+                                </div>
+                                <button onclick="handleBatchReportsUpload()" id="batchSubmitBtn" class="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Deploy Batch Run</button>
                             </div>
                         </div>
                     </div>
@@ -306,7 +326,7 @@
             }
         }
 
-        // --- PARENT PORTAL 2FA DATA EXTRACTION ENGINE ---
+        // --- PARENT PORTAL 2FA ENGINE ---
         async function requestOTP() {
             const searchId = document.getElementById('parentSearchId').value.trim();
             const reqBtn = document.getElementById('otp-req-btn');
@@ -341,7 +361,7 @@
             const rawPhone = data.parent_phone || "+256 XXXXXXX";
             document.getElementById('phone-masked').innerText = rawPhone.slice(-4);
             const simulator = document.getElementById('test-sms-simulator');
-            simulator.innerHTML = `📡 [DEV SIMULATION SMS] To Parent Contact: <b>"Your ACADEMIX OTP is: ${generatedPin}"</b>`;
+            simulator.innerHTML = `📡 [DEV SIMULATION SMS] To Parent Contact: <b>"Your NHS Security PIN is: ${generatedPin}"</b>`;
             simulator.classList.remove('hidden');
             
             document.getElementById('2fa-step-1').classList.add('hidden');
@@ -396,7 +416,7 @@
             document.getElementById('parentOtpInput').value = '';
         }
 
-        // --- CLOUD DATABASE FETCH ENGINES ---
+        // --- CORE DATABASE FETCH ENGINES ---
         async function fetchPapers() {
             const searchQuery = document.getElementById('search-input').value;
             const adminSearchQuery = document.getElementById('admin-search-input').value;
@@ -489,98 +509,147 @@
             }
         }
 
-        async function handleUpload(e) {
+        // --- BULK BATCH PAST PAPERS UPLOAD LOGIC ---
+        async function handleBatchPapersUpload(e) {
             e.preventDefault();
-            alert("Upload execution mapped to storage engine.");
-        }
-
-        async function uploadReportCard() {
-            alert("Publishing payload straight to database framework.");
-        }
-        async function handleBatchUpload() {
-    const fileInput = document.getElementById('batchPdfFiles');
-    const year = document.getElementById('batchYear').value.trim();
-    const term = document.getElementById('batchTerm').value;
-    const progressContainer = document.getElementById('batchProgressContainer');
-    const progressBar = document.getElementById('batchProgressBar');
-    const statusText = document.getElementById('batchStatusText');
-    const progressPercent = document.getElementById('batchProgressPercent');
-    const submitBtn = document.getElementById('batchSubmitBtn');
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-        alert("Please select at least one PDF report card file.");
-        return;
-    }
-
-    const files = Array.from(fileInput.files);
-    const totalFiles = files.length;
-    
-    // Disable button and show progress bar
-    submitBtn.disabled = true;
-    progressContainer.classList.remove('hidden');
-
-    for (let i = 0; i < totalFiles; i++) {
-        const file = files[i];
-        
-        // 1. Automatically extract Student ID from the filename (removes '.pdf')
-        const studentId = file.name.replace(/\.[^/.]+$/, ""); 
-        
-        // Update status UI
-        statusText.innerText = `Uploading: ${file.name}`;
-        let percent = Math.round((i / totalFiles) * 100);
-        progressBar.style.width = `${percent}%`;
-        progressPercent.innerText = `${percent}%`;
-
-        // 2. Upload the PDF file to Supabase Storage Bucket named 'reports'
-        // Construct a unique path in storage: year/term/studentId.pdf
-        const filePath = `${year}/${term}/${file.name}`;
-        
-        const { data: uploadData, error: uploadError } = await _supabase.storage
-            .from('reports')
-            .upload(filePath, file, { upsert: true });
-
-        if (uploadError) {
-            console.error(`Error uploading file ${file.name}:`, uploadError);
-            continue; // Skip this file if it fails and move to the next
-        }
-
-        // 3. Get the public URL of the uploaded file
-        const { data: urlData } = _supabase.storage
-            .from('reports')
-            .getPublicUrl(filePath);
+            const fileInput = document.getElementById('up-files');
+            const grade = document.getElementById('up-grade').value;
+            const year = document.getElementById('up-year').value;
+            const subject = document.getElementById('up-subject').value;
             
-        const fileUrl = urlData.publicUrl;
+            const progressContainer = document.getElementById('paperProgressContainer');
+            const progressBar = document.getElementById('paperProgressBar');
+            const statusText = document.getElementById('paperStatusText');
+            const progressPercent = document.getElementById('paperProgressPercent');
+            const submitBtn = document.getElementById('paperSubmitBtn');
 
-        // 4. Insert or update the record into the 'report_cards' database table
-        // Guessing a generic name or leaving it to be updated, or using Student ID as placeholder name
-        const { error: dbError } = await _supabase
-            .from('report_cards')
-            .upsert({
-                student_id: studentId,
-                access_code: studentId, // Using the ID as the access code for parents
-                student_name: `Student (${studentId})`, // DOS can rename later or match via a students table
-                year: year,
-                term: term,
-                file_url: fileUrl,
-                parent_phone: "+256700000000" // Placeholder default phone number
-            }, { onConflict: 'student_id,year,term' }); // Prevents duplicates for the same term
+            if (!fileInput.files || fileInput.files.length === 0) return;
 
-        if (dbError) {
-            console.error(`Database linking failed for ${studentId}:`, dbError);
+            const files = Array.from(fileInput.files);
+            const totalFiles = files.length;
+            
+            submitBtn.disabled = true;
+            progressContainer.classList.remove('hidden');
+
+            for (let i = 0; i < totalFiles; i++) {
+                const file = files[i];
+                // Cleans the file name for the database layout title (e.g., "Math Mock" instead of "Math Mock.pdf")
+                const paperTitle = file.name.replace(/\.[^/.]+$/, "");
+                
+                statusText.innerText = `Deploying: ${file.name}`;
+                let percent = Math.round((i / totalFiles) * 100);
+                progressBar.style.width = `${percent}%`;
+                progressPercent.innerText = `${percent}%`;
+
+                // Upload file to 'past-papers' storage bucket
+                const filePath = `${grade}/${subject}/${year}_${file.name}`;
+                const { data: uploadData, error: uploadError } = await _supabase.storage
+                    .from('past-papers')
+                    .upload(filePath, file, { upsert: true });
+
+                if (uploadError) {
+                    console.error(uploadError);
+                    continue;
+                }
+
+                // Get public link
+                const { data: urlData } = _supabase.storage.from('past-papers').getPublicUrl(filePath);
+                
+                // Write directly to your 'past_papers' database table
+                await _supabase.from('past_papers').insert({
+                    title: paperTitle,
+                    grade: grade,
+                    year: year,
+                    subject: subject,
+                    file_url: urlData.publicUrl
+                });
+            }
+
+            progressBar.style.width = '100%';
+            progressPercent.innerText = '100%';
+            statusText.innerText = "All papers are now live on the library grid!";
+            submitBtn.disabled = false;
+            fileInput.value = '';
+            
+            // Instantly refresh elements so they go live immediately on the homepage layout
+            fetchPapers();
         }
-    }
 
-    // Completion UI update
-    progressBar.style.width = '100%';
-    progressPercent.innerText = '100%';
-    statusText.innerText = `Successfully deployed ${totalFiles} report cards live!`;
-    submitBtn.disabled = false;
-    
-    // Refresh the admin data table to show the new reports
-    if (activeAdminTab === 'reports') {
-        fetchAdminReportCards();
-    }
-}
+        // --- BULK BATCH REPORT CARDS UPLOAD LOGIC ---
+        async function handleBatchReportsUpload() {
+            const fileInput = document.getElementById('batchPdfFiles');
+            const year = document.getElementById('batchYear').value.trim();
+            const term = document.getElementById('batchTerm').value;
+            const progressContainer = document.getElementById('batchProgressContainer');
+            const progressBar = document.getElementById('batchProgressBar');
+            const statusText = document.getElementById('batchStatusText');
+            const progressPercent = document.getElementById('batchProgressPercent');
+            const submitBtn = document.getElementById('batchSubmitBtn');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("Please select at least one PDF report card file.");
+                return;
+            }
+
+            const files = Array.from(fileInput.files);
+            const totalFiles = files.length;
+            
+            submitBtn.disabled = true;
+            progressContainer.classList.remove('hidden');
+
+            for (let i = 0; i < totalFiles; i++) {
+                const file = files[i];
+                const studentId = file.name.replace(/\.[^/.]+$/, ""); 
+                
+                statusText.innerText = `Uploading: ${file.name}`;
+                let percent = Math.round((i / totalFiles) * 100);
+                progressBar.style.width = `${percent}%`;
+                progressPercent.innerText = `${percent}%`;
+
+                const filePath = `${year}/${term}/${file.name}`;
+                
+                const { data: uploadData, error: uploadError } = await _supabase.storage
+                    .from('reports')
+                    .upload(filePath, file, { upsert: true });
+
+                if (uploadError) {
+                    console.error(`Error uploading file ${file.name}:`, uploadError);
+                    continue; 
+                }
+
+                const { data: urlData } = _supabase.storage
+                    .from('reports')
+                    .getPublicUrl(filePath);
+                    
+                const fileUrl = urlData.publicUrl;
+
+                const { error: dbError } = await _supabase
+                    .from('report_cards')
+                    .upsert({
+                        student_id: studentId,
+                        access_code: studentId, 
+                        student_name: `Student (${studentId})`, 
+                        year: year,
+                        term: term,
+                        file_url: fileUrl,
+                        parent_phone: "+256700000000" 
+                    }, { onConflict: 'student_id,year,term' });
+
+                if (dbError) {
+                    console.error(`Database linking failed for ${studentId}:`, dbError);
+                }
+            }
+
+            progressBar.style.width = '100%';
+            progressPercent.innerText = '100%';
+            statusText.innerText = `Successfully deployed ${totalFiles} report cards live!`;
+            submitBtn.disabled = false;
+            fileInput.value = '';
+            
+            if (activeAdminTab === 'reports') {
+                fetchAdminReportCards();
+            }
+        }
     </script>
 </body>
 </html>
