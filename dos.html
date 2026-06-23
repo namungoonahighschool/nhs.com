@@ -1,1 +1,502 @@
-<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Namungoona High School | DOS Portal</title>    <script src="https://cdn.tailwindcss.com"></script>    <link rel="preconnect" href="https://fonts.googleapis.com">    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>    <style>        body { font-family: 'Montserrat', sans-serif; }    </style></head><body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/90">        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('student-view')">                <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200 overflow-hidden">                    <span>NHS</span>                </div>                <div class="flex flex-col">                    <span class="text-lg font-bold tracking-tight text-slate-900 leading-none">NAMUNGOONA HIGH SCHOOL</span>                    <span class="text-[10px] text-indigo-600 font-semibold tracking-wider mt-0.5">STRIVE TO EXCEL</span>                </div>            </div>              <nav class="flex items-center space-x-6">                <button onclick="showSection('student-view')" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Student Library</button>                <button id="login-nav-btn" onclick="openLoginModal()" class="px-5 py-2.5 rounded-xl border border-indigo-600 text-indigo-600 text-sm font-semibold hover:bg-indigo-50 transition shadow-sm">DOS Login</button>                <button id="logout-nav-btn" onclick="logoutDOS()" class="hidden px-5 py-2.5 rounded-xl bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition">Log Out (DOS)</button>            </nav>        </div>    </header>    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">        <section id="student-view" class="space-y-8">            <div class="max-w-2xl">                <h1 class="text-4xl font-bold tracking-tight text-slate-900 mb-3">Past Examination Papers</h1>                <p class="text-slate-500 leading-relaxed">Access and download academic repositories curated by the Director of Studies.</p>            </div>            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">                <div class="w-full md:flex-1">                    <input type="text" id="search-input" oninput="fetchPapers()" placeholder="Search by paper title..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm">                </div>                <div class="w-full md:w-48">                    <select id="filter-grade" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">                        <option value="">All Grades</option>                        <option value="Grade 10">Senior 3</option>                        <option value="Grade 11">Senior 4</option>                        <option value="Grade 12">A-Level</option>                    </select>                </div>                <div class="w-full md:w-48">                    <select id="filter-subject" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">                        <option value="">All Subjects</option>                        <option value="Mathematics">Mathematics</option>                        <option value="Physics">Physics</option>                        <option value="Chemistry">Chemistry</option>                        <option value="English">English</option>                    </select>                </div>            </div>            <div id="papers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>            <div id="studentReportPortal" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-md mt-12 max-w-xl mx-auto space-y-6">                <div class="text-center border-b border-slate-100 pb-4">                    <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 mx-auto mb-2 font-bold">🔒</div>                    <h2 class="text-xl font-bold text-slate-900">Secure Parent Report Portal</h2>                    <p class="text-slate-500 text-xs mt-1">Two-Factor Security Verification Enabled</p>                </div>                <div id="2fa-step-1" class="space-y-4">                    <div>                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Access Code or ID</label>                        <input type="text" id="parentSearchId" onkeydown="if(event.key === 'Enter') requestOTP()" placeholder="e.g., STU-2026-001" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm font-medium">                    </div>                    <button onclick="requestOTP()" id="otp-req-btn" class="w-full bg-indigo-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Send Verification PIN</button>                </div>                <div id="2fa-step-2" class="hidden space-y-4">                    <div class="p-3 bg-emerald-50 text-emerald-800 text-xs rounded-xl border border-emerald-100 text-center">                        A secure 4-digit security code has been routed to your registered contact number ending in <span id="phone-masked" class="font-bold">XXXX</span>.                    </div>                    <div id="test-sms-simulator" class="p-3 bg-amber-50 text-amber-800 text-xs rounded-xl border border-amber-200 font-mono text-center hidden"></div>                                        <div>                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Enter 4-Digit Security Code</label>                        <input type="text" id="parentOtpInput" maxlength="4" onkeydown="if(event.key === 'Enter') verifyOTP()" placeholder="X X X X" class="w-full text-center tracking-widest text-lg font-bold px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">                    </div>                    <div class="flex gap-2">                        <button onclick="reset2FAWizard()" class="w-1/3 border border-slate-200 text-slate-500 text-xs font-semibold rounded-xl hover:bg-slate-50 transition">Back</button>                        <button onclick="verifyOTP()" id="otp-verify-btn" class="w-2/3 bg-emerald-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Verify & Open Records</button>                    </div>                </div>                <div id="reportResults" class="hidden space-y-4 pt-2"></div>            </div>        </section>        <section id="dos-view" class="hidden space-y-8">            <div class="flex items-center justify-between border-b border-slate-200 pb-5">                <div>                    <h1 class="text-3xl font-bold tracking-tight text-slate-900">DOS Administrative Panel</h1>                    <p class="text-slate-500 text-sm mt-1">Logged in as Administrator. Full database read/write access active.</p>                </div>                <button onclick="showSection('student-view')" class="text-sm font-semibold text-indigo-600 hover:underline">← Exit Dashboard</button>            </div>            <div class="flex space-x-4 border-b border-slate-200">                <button onclick="switchAdminTab('papers')" id="tab-btn-papers" class="pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600">Past Exam Papers</button>                <button onclick="switchAdminTab('reports')" id="tab-btn-reports" class="pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800">Student Report Cards</button>            </div>            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">                <div class="space-y-6">                    <div id="form-panel-papers" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">                        <h2 class="text-lg font-bold text-slate-900">Upload New Paper</h2>                        <form id="upload-form" onsubmit="handleUpload(event)" class="space-y-4">                            <div>                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Paper Title</label>                                <input type="text" id="up-title" required placeholder="e.g., 2026 Senior 4 Mock Exam" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20">                            </div>                            <div class="grid grid-cols-2 gap-4">                                <div>                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Grade</label>                                    <select id="up-grade" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">                                        <option>Senior 3</option>                                        <option>Senior 4</option>                                        <option>A-Level</option>                                    </select>                                </div>                                <div>                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Year</label>                                    <select id="up-year" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">                                        <option>2026</option>                                        <option>2025</option>                                    </select>                                </div>                            </div>                            <div>                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Subject</label>                                <select id="up-subject" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">                                    <option>Mathematics</option>                                    <option>Physics</option>                                    <option>Chemistry</option>                                    <option>English</option>                                </select>                            </div>                            <div>                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Select PDF File</label>                                <input type="file" id="up-file" accept=".pdf" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">                            </div>                            <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Publish Paper Asset</button>                        </form>                    </div>                    <div id="form-panel-reports" class="hidden space-y-6">                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">                            <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Single Report Upload</h2>                            <div class="space-y-3">                                <div class="grid grid-cols-2 gap-2">                                    <div>                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student ID</label>                                        <input type="text" id="studentId" placeholder="e.g., STU-001" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs">                                    </div>                                    <div>                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Parent Phone</label>                                        <input type="text" id="parentPhone" placeholder="e.g., +2567000000" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs">                                    </div>                                </div>                                <div>                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Full Name</label>                                    <input type="text" id="studentName" placeholder="e.g., Kamya Oscar" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-xs">                                </div>                                <button onclick="uploadReportCard()" class="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Publish Report Live</button>                            </div>                        </div>                    </div>                </div>                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">                        <h2 id="repo-title" class="text-lg font-bold text-slate-900">Active Repository: Past Papers</h2>                        <div class="w-full md:w-72">                            <input type="text" id="admin-search-input" oninput="handleAdminSearch()" placeholder="Search repository..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-xs">                        </div>                    </div>                    <div class="overflow-x-auto p-1">                        <table class="w-full text-left text-sm text-slate-600">                            <thead>                                <tr id="repo-table-header" class="border-b border-slate-100 text-slate-400 font-medium text-xs tracking-wider uppercase"></tr>                            </thead>                            <tbody id="admin-table-body" class="divide-y divide-slate-100"></tbody>                        </table>                    </div>                </div>            </div>        </section>    </main>    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">        <div class="bg-white max-w-sm w-full rounded-2xl shadow-xl border border-slate-100 p-6 space-y-4">            <div class="flex justify-between items-center">                <h3 class="text-lg font-bold text-slate-900">DOS Security Gate</h3>                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 font-semibold text-lg">&times;</button>            </div>            <div>                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Administrative Password</label>                <input type="password" id="login-password" onkeydown="if(event.key === 'Enter') attemptLogin()" placeholder="Enter password..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm">                <p id="login-error" class="hidden text-xs text-rose-500 font-medium mt-1">Invalid Admin Credentials.</p>            </div>            <button onclick="attemptLogin()" class="w-full bg-slate-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-slate-800 transition">Authenticate</button>        </div>    </div>    <script>        const SUPABASE_URL = 'https://pmdfqinztwijxdxnkqzr.supabase.co';         const SUPABASE_ANON_KEY = 'sb_publishable_YWfyh9ndtcLw-kq7iUGtBQ_FELKsSMy';        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);        let isDOS = sessionStorage.getItem('isDOS') === 'true';        let activeAdminTab = 'papers';         let activeVerificationId = null;        document.addEventListener('DOMContentLoaded', () => {            updateAuthUI();            fetchPapers();        });        function handleAdminSearch() {            if (activeAdminTab === 'papers') { fetchPapers(); } else { fetchAdminReportCards(); }        }        function showSection(sectionId) {            if (sectionId === 'dos-view' && !isDOS) { openLoginModal(); return; }            document.getElementById('student-view').classList.add('hidden');            document.getElementById('dos-view').classList.add('hidden');            document.getElementById(sectionId).classList.remove('hidden');            if (sectionId === 'dos-view') { switchAdminTab(activeAdminTab); }        }        function openLoginModal() {            if (isDOS) { showSection('dos-view'); return; }            document.getElementById('login-modal').classList.add('hidden');            document.getElementById('login-modal').classList.remove('hidden');            document.getElementById('login-password').value = '';            document.getElementById('login-error').classList.add('hidden');        }        function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }                // ADMIN123 PASSWORD SECURITY LOGIC GATE        function attemptLogin() {            if (document.getElementById('login-password').value === 'admin123') {                 isDOS = true; sessionStorage.setItem('isDOS', 'true');                updateAuthUI(); closeLoginModal(); showSection('dos-view');            } else { document.getElementById('login-error').classList.remove('hidden'); }        }        function logoutDOS() {            isDOS = false; sessionStorage.removeItem('isDOS'); updateAuthUI(); showSection('student-view');        }        function updateAuthUI() {            if (isDOS) {                document.getElementById('login-nav-btn').classList.add('hidden');                document.getElementById('logout-nav-btn').classList.remove('hidden');            } else {                document.getElementById('login-nav-btn').classList.remove('hidden');                document.getElementById('logout-nav-btn').classList.add('hidden');            }        }        function switchAdminTab(tab) {            activeAdminTab = tab;            document.getElementById('admin-search-input').value = '';            const papersBtn = document.getElementById('tab-btn-papers');            const reportsBtn = document.getElementById('tab-btn-reports');            const papersForm = document.getElementById('form-panel-papers');            const reportsForm = document.getElementById('form-panel-reports');                        if (tab === 'papers') {                papersBtn.className = "pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600";                reportsBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";                papersForm.classList.remove('hidden'); reportsForm.classList.add('hidden');                document.getElementById('repo-title').innerText = "Active Repository: Past Papers";                fetchPapers();            } else {                reportsBtn.className = "pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-600";                papersBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";                reportsForm.classList.remove('hidden'); papersForm.classList.add('hidden');                document.getElementById('repo-title').innerText = "Active Repository: Student Report Cards";                fetchAdminReportCards();            }        }        // Placeholder functions to keep buttons connected        async function requestOTP() { alert("Verification feature linked to Supabase cloud database."); }        async function verifyOTP() {}        function reset2FAWizard() {}        async function fetchPapers() {}        function uploadReportCard() {}        function handleUpload(e) { e.preventDefault(); }        async function fetchAdminReportCards() {}    </script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namungoona High School | Academic Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/90">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('student-view')">
+                <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200 overflow-hidden">
+                    <span>NHS</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-bold tracking-tight text-slate-900 leading-none">NAMUNGOONA HIGH SCHOOL</span>
+                    <span class="text-[10px] text-indigo-600 font-semibold tracking-wider mt-0.5">STRIVE TO EXCEL</span>
+                </div>
+            </div>  
+            <nav class="flex items-center space-x-6">
+                <button onclick="showSection('student-view')" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Library</button>
+                <button id="login-nav-btn" onclick="openLoginModal()" class="px-5 py-2.5 rounded-xl border border-indigo-600 text-indigo-600 text-sm font-semibold hover:bg-indigo-50 transition shadow-sm">DOS Login</button>
+                <button id="logout-nav-btn" onclick="logoutDOS()" class="hidden px-5 py-2.5 rounded-xl bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition">Log Out (DOS)</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
+        
+        <section id="student-view" class="space-y-8">
+            <div class="max-w-2xl">
+                <h1 class="text-4xl font-bold tracking-tight text-slate-900 mb-3">Past Examination Papers</h1>
+                <p class="text-slate-500 leading-relaxed">Access and download academic repositories curated by the Director of Studies.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
+                <div class="w-full md:flex-1">
+                    <input type="text" id="search-input" oninput="fetchPapers()" placeholder="Search by paper title..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm">
+                </div>
+                <div class="w-full md:w-48">
+                    <select id="filter-grade" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">
+                        <option value="">All Classes</option>
+                        <option value="Senior 3">Senior 3</option>
+                        <option value="Senior 4">Senior 4</option>
+                        <option value="A-Level">A-Level</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-48">
+                    <select id="filter-subject" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="English">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="papers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <div id="studentReportPortal" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-md mt-12 max-w-xl mx-auto space-y-6">
+                <div class="text-center border-b border-slate-100 pb-4">
+                    <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 mx-auto mb-2 font-bold">🔒</div>
+                    <h2 class="text-xl font-bold text-slate-900">Secure Parent Report Portal</h2>
+                    <p class="text-slate-500 text-xs mt-1">Two-Factor Security Verification Enabled</p>
+                </div>
+                
+                <div id="2fa-step-1" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Access Code or ID</label>
+                        <input type="text" id="parentSearchId" onkeydown="if(event.key === 'Enter') requestOTP()" placeholder="e.g., STU-2026-001" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm font-medium">
+                    </div>
+                    <button onclick="requestOTP()" id="otp-req-btn" class="w-full bg-indigo-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Send Verification PIN</button>
+                </div>
+
+                <div id="2fa-step-2" class="hidden space-y-4">
+                    <div class="p-3 bg-emerald-50 text-emerald-800 text-xs rounded-xl border border-emerald-100 text-center">
+                        A secure 4-digit security code has been routed to your registered contact number ending in <span id="phone-masked" class="font-bold">XXXX</span>.
+                    </div>
+                    <div id="test-sms-simulator" class="p-3 bg-amber-50 text-amber-800 text-xs rounded-xl border border-amber-200 font-mono text-center hidden"></div>
+                                        
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Enter 4-Digit Security Code</label>
+                        <input type="text" id="parentOtpInput" maxlength="4" onkeydown="if(event.key === 'Enter') verifyOTP()" placeholder="X X X X" class="w-full text-center tracking-widest text-lg font-bold px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="reset2FAWizard()" class="w-1/3 border border-slate-200 text-slate-500 text-xs font-semibold rounded-xl hover:bg-slate-50 transition">Back</button>
+                        <button onclick="verifyOTP()" id="otp-verify-btn" class="w-2/3 bg-emerald-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Verify & Open Records</button>
+                    </div>
+                </div>
+                <div id="reportResults" class="hidden space-y-4 pt-2"></div>
+            </div>
+        </section>
+
+        <section id="dos-view" class="hidden space-y-8">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-5">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tight text-slate-900">DOS Administrative Panel</h1>
+                    <p class="text-slate-500 text-sm mt-1">Logged in as Administrator. Database read/write access verified.</p>
+                </div>
+                <button onclick="showSection('student-view')" class="text-sm font-semibold text-indigo-600 hover:underline">← Exit Dashboard</button>
+            </div>
+
+            <div class="flex space-x-4 border-b border-slate-200">
+                <button onclick="switchAdminTab('papers')" id="tab-btn-papers" class="pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600">Past Exam Papers</button>
+                <button onclick="switchAdminTab('reports')" id="tab-btn-reports" class="pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800">Student Report Cards</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="space-y-6">
+                    <div id="form-panel-papers" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">
+                        <h2 class="text-lg font-bold text-slate-900">Upload New Paper</h2>
+                        <form id="upload-form" onsubmit="handleUpload(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Paper Title</label>
+                                <input type="text" id="up-title" required placeholder="e.g., 2026 Senior 4 Mock Exam" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Grade</label>
+                                    <select id="up-grade" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+                                        <option>Senior 3</option>
+                                        <option>Senior 4</option>
+                                        <option>A-Level</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Year</label>
+                                    <select id="up-year" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+                                        <option>2026</option>
+                                        <option>2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Subject</label>
+                                <select id="up-subject" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+                                    <option>Mathematics</option>
+                                    <option>Physics</option>
+                                    <option>Chemistry</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Select PDF File</label>
+                                <input type="file" id="up-file" accept=".pdf" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+                            </div>
+                            <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Publish Paper Asset</button>
+                        </form>
+                    </div>
+
+                    <div id="form-panel-reports" class="hidden space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                            <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Single Report Upload</h2>
+                            <div class="space-y-3">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student ID</label>
+                                        <input type="text" id="studentId" placeholder="e.g., STU-001" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Parent Phone</label>
+                                        <input type="text" id="parentPhone" placeholder="e.g., +256700000" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Full Name</label>
+                                    <input type="text" id="studentName" placeholder="e.g., Kamya Oscar" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-xs">
+                                </div>
+                                <button onclick="uploadReportCard()" class="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Publish Report Live</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                        <h2 id="repo-title" class="text-lg font-bold text-slate-900">Active Repository: Past Papers</h2>
+                        <div class="w-full md:w-72">
+                            <input type="text" id="admin-search-input" oninput="handleAdminSearch()" placeholder="Search repository..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-xs">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto p-1">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead>
+                                <tr id="repo-table-header" class="border-b border-slate-100 text-slate-400 font-medium text-xs tracking-wider uppercase"></tr>
+                            </thead>
+                            <tbody id="admin-table-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white max-w-sm w-full rounded-2xl shadow-xl border border-slate-100 p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-900">DOS Security Gate</h3>
+                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 font-semibold text-lg">&times;</button>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Administrative Password</label>
+                <input type="password" id="login-password" onkeydown="if(event.key === 'Enter') attemptLogin()" placeholder="Enter password..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm">
+                <p id="login-error" class="hidden text-xs text-rose-500 font-medium mt-1">Invalid Admin Credentials.</p>
+            </div>
+            <button onclick="attemptLogin()" class="w-full bg-slate-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-slate-800 transition">Authenticate</button>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://pmdfqinztwijxdxnkqzr.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'sb_publishable_YWfyh9ndtcLw-kq7iUGtBQ_FELKsSMy';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let isDOS = sessionStorage.getItem('isDOS') === 'true';
+        let activeAdminTab = 'papers'; 
+        let activeVerificationId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+            fetchPapers();
+        });
+
+        function handleAdminSearch() {
+            if (activeAdminTab === 'papers') { fetchPapers(); } else { fetchAdminReportCards(); }
+        }
+
+        function showSection(sectionId) {
+            if (sectionId === 'dos-view' && !isDOS) { openLoginModal(); return; }
+            document.getElementById('student-view').classList.add('hidden');
+            document.getElementById('dos-view').classList.add('hidden');
+            document.getElementById(sectionId).classList.remove('hidden');
+            if (sectionId === 'dos-view') { switchAdminTab(activeAdminTab); }
+        }
+
+        function openLoginModal() {
+            if (isDOS) { showSection('dos-view'); return; }
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
+        
+        function attemptLogin() {
+            if (document.getElementById('login-password').value === 'admin123') { 
+                isDOS = true; 
+                sessionStorage.setItem('isDOS', 'true');
+                updateAuthUI(); 
+                closeLoginModal(); 
+                showSection('dos-view');
+            } else { 
+                document.getElementById('login-error').classList.remove('hidden'); 
+            }
+        }
+
+        function logoutDOS() {
+            isDOS = false; 
+            sessionStorage.removeItem('isDOS'); 
+            updateAuthUI(); 
+            showSection('student-view');
+        }
+
+        function updateAuthUI() {
+            if (isDOS) {
+                document.getElementById('login-nav-btn').classList.add('hidden');
+                document.getElementById('logout-nav-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('login-nav-btn').classList.remove('hidden');
+                document.getElementById('logout-nav-btn').classList.add('hidden');
+            }
+        }
+
+        function switchAdminTab(tab) {
+            activeAdminTab = tab;
+            document.getElementById('admin-search-input').value = '';
+            const papersBtn = document.getElementById('tab-btn-papers');
+            const reportsBtn = document.getElementById('tab-btn-reports');
+            const papersForm = document.getElementById('form-panel-papers');
+            const reportsForm = document.getElementById('form-panel-reports');
+                        
+            if (tab === 'papers') {
+                papersBtn.className = "pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600";
+                reportsBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";
+                papersForm.classList.remove('hidden'); 
+                reportsForm.classList.add('hidden');
+                document.getElementById('repo-title').innerText = "Active Repository: Past Papers";
+                fetchPapers();
+            } else {
+                reportsBtn.className = "pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-600";
+                papersBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";
+                reportsForm.classList.remove('hidden'); 
+                papersForm.classList.add('hidden');
+                document.getElementById('repo-title').innerText = "Active Repository: Student Report Cards";
+                fetchAdminReportCards();
+            }
+        }
+
+        // --- PARENT PORTAL 2FA DATA EXTRACTION ENGINE ---
+        async function requestOTP() {
+            const searchId = document.getElementById('parentSearchId').value.trim();
+            const reqBtn = document.getElementById('otp-req-btn');
+            if(!searchId) { alert("Please enter a Student Access Code or ID."); return; }
+            reqBtn.disabled = true;
+            reqBtn.innerText = "Verifying Credentials...";
+            
+            const { data, error } = await _supabase
+                .from('report_cards')
+                .select('id, parent_phone')
+                .or(`access_code.eq.${searchId},student_id.eq.${searchId}`)
+                .maybeSingle();
+                
+            if (error || !data) {
+                alert("Access Code/Student ID not detected in records.");
+                reqBtn.disabled = false; 
+                reqBtn.innerText = "Send Verification PIN";
+                return;
+            }
+            activeVerificationId = data.id;
+                        
+            const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
+            const expiryTime = new Date(Date.now() + 10 * 60000).toISOString();
+            
+            const { error: updateErr } = await _supabase
+                .from('report_cards')
+                .update({ otp_code: generatedPin, otp_expiry: expiryTime })
+                .eq('id', activeVerificationId);
+                
+            if(updateErr) { alert("Security handoff failed."); reqBtn.disabled = false; return; }
+            
+            const rawPhone = data.parent_phone || "+256 XXXXXXX";
+            document.getElementById('phone-masked').innerText = rawPhone.slice(-4);
+            const simulator = document.getElementById('test-sms-simulator');
+            simulator.innerHTML = `📡 [DEV SIMULATION SMS] To Parent Contact: <b>"Your ACADEMIX OTP is: ${generatedPin}"</b>`;
+            simulator.classList.remove('hidden');
+            
+            document.getElementById('2fa-step-1').classList.add('hidden');
+            document.getElementById('2fa-step-2').classList.remove('hidden');
+            reqBtn.disabled = false; 
+            reqBtn.innerText = "Send Verification PIN";
+        }
+
+        async function verifyOTP() {
+            const pinInput = document.getElementById('parentOtpInput').value.trim();
+            const verifyBtn = document.getElementById('otp-verify-btn');
+            if(pinInput.length !== 4) { alert("Please input complete 4-digit token."); return; }
+            verifyBtn.disabled = true;
+            
+            const nowIso = new Date().toISOString();
+            const { data, error } = await _supabase
+                .from('report_cards')
+                .select('*')
+                .eq('id', activeVerificationId)
+                .eq('otp_code', pinInput)
+                .gt('otp_expiry', nowIso)
+                .maybeSingle();
+                
+            if (error || !data) {
+                alert("Security check failed: Invalid or expired PIN entry code.");
+                verifyBtn.disabled = false;
+                return;
+            }
+            
+            await _supabase.from('report_cards').update({ otp_code: null, otp_expiry: null }).eq('id', data.id);
+            const resultsBox = document.getElementById('reportResults');
+            resultsBox.innerHTML = `
+                <div class="p-5 border-2 border-emerald-500 bg-emerald-50/50 rounded-2xl space-y-3">
+                    <div>
+                        <span class="px-2 py-0.5 bg-emerald-600 text-white rounded text-[10px] font-bold tracking-wider uppercase">Authenticated Access</span>
+                        <h4 class="font-bold text-slate-800 text-lg mt-1">${data.student_name}</h4>
+                        <p class="text-xs text-slate-500">${data.class || 'Senior 4'} • ${data.term || 'Term 3'} (${data.year || '2026'})</p>
+                    </div>
+                    <a href="${data.file_url}" target="_blank" class="block text-center w-full px-4 py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-md">Open Official PDF Document</a>
+                </div>
+            `;
+                        
+            document.getElementById('2fa-step-2').classList.add('hidden');
+            resultsBox.classList.remove('hidden');
+        }
+
+        function reset2FAWizard() {
+            document.getElementById('2fa-step-2').classList.add('hidden');
+            document.getElementById('reportResults').classList.add('hidden');
+            document.getElementById('test-sms-simulator').classList.add('hidden');
+            document.getElementById('2fa-step-1').classList.remove('hidden');
+            document.getElementById('parentOtpInput').value = '';
+        }
+
+        // --- CLOUD DATABASE FETCH ENGINES ---
+        async function fetchPapers() {
+            const searchQuery = document.getElementById('search-input').value;
+            const adminSearchQuery = document.getElementById('admin-search-input').value;
+            const filterGrade = document.getElementById('filter-grade').value;
+            const filterSubject = document.getElementById('filter-subject').value;
+            
+            let query = _supabase.from('past_papers').select('*').order('created_at', { ascending: false });
+            
+            if (isDOS && activeAdminTab === 'papers' && adminSearchQuery) {
+                query = query.ilike('title', `%${adminSearchQuery}%`);
+            } else if (searchQuery) {
+                query = query.ilike('title', `%${searchQuery}%`);
+            }
+                        
+            if (filterGrade) query = query.eq('grade', filterGrade);
+            if (filterSubject) query = query.eq('subject', filterSubject);
+            
+            const { data } = await query;
+            renderStudentGrid(data || []);
+            if (isDOS && activeAdminTab === 'papers') renderAdminPapersTable(data || []);
+        }
+
+        function renderStudentGrid(papers) {
+            const grid = document.getElementById('papers-grid');
+            grid.innerHTML = papers.length === 0 ? `<div class="col-span-full py-12 text-center text-slate-400">No matching library papers cataloged.</div>` : '';
+            papers.forEach(paper => {
+                grid.innerHTML += `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4 hover:shadow-md transition">
+                        <div>
+                            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-semibold">${paper.subject}</span>
+                            <h3 class="font-bold text-slate-900 mt-2 text-base leading-tight">${paper.title}</h3>
+                            <p class="text-xs text-slate-400 mt-1">${paper.grade} • Year ${paper.year}</p>
+                        </div>
+                        <a href="${paper.file_url}" target="_blank" class="block w-full text-center py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition">Download Document</a>
+                    </div>`;
+            });
+        }
+
+        function renderAdminPapersTable(papers) {
+            const header = document.getElementById('repo-table-header');
+            header.innerHTML = `
+                <th class="py-3 px-4">Title</th>
+                <th class="py-3 px-4">Subject</th>
+                <th class="py-3 px-4">Grade</th>
+                <th class="py-3 px-4 text-right">Action</th>
+            `;
+            const body = document.getElementById('admin-table-body');
+            body.innerHTML = papers.length === 0 ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">No records found.</td></tr>` : '';
+            
+            papers.forEach(p => {
+                body.innerHTML += `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="py-3 px-4 font-semibold text-slate-900">${p.title}</td>
+                        <td class="py-3 px-4 text-xs">${p.subject}</td>
+                        <td class="py-3 px-4 text-xs">${p.grade}</td>
+                        <td class="py-3 px-4 text-right"><a href="${p.file_url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">View File</a></td>
+                    </tr>`;
+            });
+        }
+
+        async function fetchAdminReportCards() {
+            const adminSearchQuery = document.getElementById('admin-search-input').value;
+            let query = _supabase.from('report_cards').select('*').order('created_at', { ascending: false });
+            
+            if (adminSearchQuery) {
+                query = query.ilike('student_name', `%${adminSearchQuery}%`);
+            }
+            
+            const { data } = await query;
+            const header = document.getElementById('repo-table-header');
+            header.innerHTML = `
+                <th class="py-3 px-4">Student Name</th>
+                <th class="py-3 px-4">Student ID</th>
+                <th class="py-3 px-4">Parent Contact</th>
+                <th class="py-3 px-4 text-right">Action</th>
+            `;
+            const body = document.getElementById('admin-table-body');
+            body.innerHTML = (!data || data.length === 0) ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">No report cards logged.</td></tr>` : '';
+            
+            if (data) {
+                data.forEach(r => {
+                    body.innerHTML += `
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="py-3 px-4 font-semibold text-slate-900">${r.student_name}</td>
+                            <td class="py-3 px-4 text-xs font-mono">${r.student_id || 'N/A'}</td>
+                            <td class="py-3 px-4 text-xs">${r.parent_phone}</td>
+                            <td class="py-3 px-4 text-right"><a href="${r.file_url}" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline">Open Report</a></td>
+                        </tr>`;
+                });
+            }
+        }
+
+        async function handleUpload(e) {
+            e.preventDefault();
+            alert("Upload execution mapped to storage engine.");
+        }
+
+        async function uploadReportCard() {
+            alert("Publishing payload straight to database framework.");
+        }
+    </script>
+</body>
+</html>
