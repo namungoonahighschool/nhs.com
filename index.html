@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namungoona High School | Excellence & Integrity</title>
+    <link rel="icon" type="image/png" href="SCHOOL BADGE.png">
+    <link rel="apple-touch-icon" href="SCHOOL BADGE.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #0a2a4b;
@@ -20,7 +23,7 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Montserrat', sans-serif; line-height: 1.6; color: var(--dark); background-color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
+        body {font-family: 'Montserrat', sans-serif; line-height: 1.6; color: var(--dark); background-color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 
         /* TOP CONTACT BAR */
@@ -63,50 +66,44 @@
         .nav-links a:hover { color: var(--secondary); }
         .logo-container img { height: 70px; transition: 0.3s; }
 
-        /* HERO SLIDESHOW SYSTEM */
-        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; color: white; text-align: center; overflow: hidden; }
-        
-        .slideshow {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .contact-container {
+            padding: 100px 10%;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+            background: white;
+        }
+
+        .contact-info h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .contact-form-wrapper {
+            background: var(--light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .contact-form-wrapper .form-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form-wrapper textarea {
             width: 100%;
-            height: 100%;
-            z-index: -2;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            min-height: 150px;
+            resize: vertical;
         }
 
-        .slide { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-size: cover; 
-            background-position: center; 
-            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; 
-            opacity: 0; 
-            transform: scale(1);
+        @media (max-width: 992px) {
+            .contact-container { grid-template-columns: 1fr; padding: 60px 5%; }
         }
-        .slide.active { opacity: 1; transform: scale(1.05); }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10,42,75,0.7), rgba(0,0,0,0.4)); z-index: -1; }
-        .hero-content { z-index: 10; max-width: 900px; padding: 20px; }
-        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1rem; }
-
-        .btn {
-            padding: 12px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-        }
-        .btn-red { background: var(--secondary); color: white; }
-        .btn-gold { background: var(--accent); color: var(--primary); }
 
         .menu-toggle {
             display: none;
@@ -124,6 +121,24 @@
             border-radius: 3px;
             transition: 0.4s;
         }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2999;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-to-top:hover { background: var(--secondary); transform: scale(1.1); }
 
         .side-menu { 
             position: fixed; 
@@ -145,6 +160,7 @@
         .side-menu#mobileNav.active { left: 0; }
         
         .close-menu { position: absolute; top: 25px; right: 30px; font-size: 2rem; cursor: pointer; color: var(--accent); }
+        #mobileNav .close-menu { left: auto; right: 30px; }
 
         .side-triggers { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 999; display: flex; flex-direction: column; gap: 5px; }
         .trigger-btn { background: var(--secondary); color: white; padding: 15px 8px; border-radius: 0 8px 8px 0; cursor: pointer; writing-mode: vertical-rl; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; transition: 0.3s; text-align: center; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
@@ -172,79 +188,225 @@
         .side-menu a { color: white; text-decoration: none; font-weight: 600; width: 100%; display: block; }
         .side-menu li:hover a { color: var(--primary); }
 
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        .wa-menu {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+            z-index: 3001;
+            border: 1px solid #eee;
+            min-width: 220px;
+        }
+        .wa-menu.active { display: flex; animation: fadeIn 0.3s ease; }
+
+        .wa-option {
+            text-decoration: none;
+            color: #333;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            border-bottom: 1px solid #eee;
+        }
+        .wa-option:last-child { border-bottom: none; }
+        .wa-option:hover { background: #f0f0f0; border-radius: 8px; color: #25d366; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; color: white; text-align: center; overflow: hidden; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; transition: 1.5s ease-in-out; opacity: 0; z-index: -1; }
+        .slide.active { opacity: 1; transform: scale(1.05); }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10,42,75,0.7), rgba(0,0,0,0.4)); }
+        .hero-content { z-index: 10; max-width: 900px; padding: 20px; }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1rem; }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        .btn-red { background: var(--secondary); color: white; }
+        .btn-gold { background: var(--accent); color: var(--primary); }
+
+        .stats-bar { background: var(--primary); color: white; display: flex; justify-content: space-around; padding: 60px 5%; flex-wrap: wrap; gap: 30px; text-align: center; }
+        .stat-item h2 { font-size: 3rem; color: var(--accent); }
+       
+        .sector-section { padding: 80px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .info-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; text-align: center; }
+        .info-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card-img { width: 100%; height: 250px; object-fit: cover; }
+        .card-body { padding: 30px; }
+        .card-body h3 { color: var(--primary); margin-bottom: 15px; }
+
+        .admission-section { padding: 100px 10%; background: var(--light); }
+        .portal-info { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-bottom: 60px; align-items: center; }
+        .admission-form { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .admission-form h2 { grid-column: span 2; margin-bottom: 20px; color: var(--primary); text-align: center; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--primary); }
+        .form-group input, .form-group select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        .form-full { grid-column: span 2; }
+        .submit-btn { grid-column: span 2; background: var(--secondary); color: white; padding: 18px; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+        .submit-btn:hover { background: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .mis-card { background: var(--primary); color: white; padding: 45px; border-radius: 20px; position: relative; overflow: hidden; }
+        .mis-card h3 { color: var(--accent); margin-bottom: 20px; font-size: 1.8rem; }
+        .mis-card ul { list-style: none; margin: 20px 0; }
+        .mis-card li { margin-bottom: 15px; display: flex; align-items: center; gap: 15px; font-size: 0.95rem; }
+        .mis-card i { color: var(--accent); font-size: 1.2rem; }
+
+        .footer-logo { height: 110px; margin-bottom: 25px; filter: brightness(0) invert(1); }
+        .footer-contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .footer-contact-item i { color: orange; width: 25px; font-size: 1.1rem; }
+        .footer-link { color:orange; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 10px; }
+        .footer-link:hover { color: var(--accent); padding-left: 5px; }
+
+        .teachers-section { padding: 100px 10%; background-color: var(--light); }
+        .teachers-container { max-width: 1200px; margin: 0 auto; }
+        .teachers-header { text-align: center; margin-bottom: 60px; }
+        .teachers-header h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .teachers-header p { color: #666; font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+        .teachers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .teacher-card { background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #eee; transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease; display: flex; flex-direction: column; }
+        .teacher-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .teacher-image-wrapper { position: relative; width: 100%; height: 320px; overflow: hidden; background-color: #f0f0f0; }
+        .teacher-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.5s ease; }
+        .teacher-card:hover .teacher-img { transform: scale(1.05); }
+        .teacher-socials { position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); background: var(--glass); backdrop-filter: blur(5px); padding: 10px 20px; border-radius: 30px; display: flex; gap: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .teacher-card:hover .teacher-socials { bottom: 20px; }
+        .teacher-socials a { color: var(--primary); font-size: 1.1rem; transition: color 0.2s ease; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .teacher-socials a:hover { color: var(--secondary); background: rgba(0, 0, 0, 0.04); }
+        .teacher-info { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
+        .teacher-info h3 { color: var(--primary); font-size: 1.35rem; margin-bottom: 5px; }
+        .teacher-title { color: var(--secondary); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 15px; }
+        .teacher-bio { font-size: 0.9rem; color: #555; line-height: 1.5; margin-bottom: 20px; }
+        .teacher-tags { margin-top: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+        .teacher-tags span { background: var(--light); color: var(--primary); padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; border: 1px solid #eef0f2; }
+
+        /* Admin Section Styling */
+        .admin-dashboard-section { padding: 80px 10%; background: #071e36; color: white; display: none; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; margin-top: 30px; }
+        .admin-panel-card { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .admin-panel-card h3 { color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif; }
+        .admin-input { width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0,0,0,0.3); color: white; border-radius: 8px; margin-bottom: 15px; font-family: inherit; }
+        .admin-btn { padding: 10px 20px; background: var(--accent); color: var(--primary); border: none; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .admin-btn:hover { background: white; }
+        .admin-btn-danger { background: var(--secondary); color: white; margin-left: 5px; }
+        .submissions-list { max-height: 400px; overflow-y: auto; }
+        .submission-item { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 10px; font-size: 0.85rem; position: relative; }
+        
+        .bursary-alert-container { max-width: 1200px; margin: 40px auto; background: linear-gradient(135deg, var(--primary) 0%, #154575 100%); color: white; padding: 30px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; gap: 30px; box-shadow: 0 10px 30px rgba(10,42,75,0.15); }
+        .bursary-icon i { font-size: 3.5rem; color: var(--accent); }
+        .bursary-text h3 { color: var(--accent); font-size: 1.5rem; margin-bottom: 8px; }
+        .bursary-text p { font-size: 0.95rem; opacity: 0.9; max-width: 700px; }
+
+        /* Success & Form Sections */
+        #success-section { display: none; background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1); width: 100%; grid-column: span 2; }
+        #success-section i { font-size: 4rem; color: #25d366; margin-bottom: 20px; }
+        #success-section h2 { color: var(--primary); margin-bottom: 15px; }
+
+        /* News Section Layout styling */
+        .news-section { padding: 80px 10%; background: white; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .news-card { background: var(--light); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .news-card img { width: 100%; height: 200px; object-fit: cover; }
+        .news-card-body { padding: 25px; }
+        .news-date { color: var(--secondary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .news-card-body h3 { color: var(--primary); margin-bottom: 12px; font-size: 1.4rem; }
+
         @media (max-width: 992px) { 
             .top-bar { display: none; } 
             .header { top: 0; }
             .nav-links { display: none; }
             .menu-toggle { display: flex; }
+            .portal-info { grid-template-columns: 1fr; }
+            .admission-form { grid-template-columns: 1fr; }
+            .admission-form h2, .form-full, .submit-btn { grid-column: span 1; }
+            .teachers-section { padding: 60px 5%; }
+            .teachers-header h2 { font-size: 2rem; }
+            .admin-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 576px) {
+            .teachers-grid { grid-template-columns: 1fr; }
+            .teacher-image-wrapper { height: 280px; }
+            .teacher-socials { bottom: 20px; } 
         }
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <div>
-        <span>
-            <i class="fas fa-phone"></i> 
-            <a href="tel:+256700627960" style="color: inherit; text-decoration: none;">+256 700 627 960</a> / 
-            <a href="tel:+256788772660" style="color: inherit; text-decoration: none;">+256 788 772 660</a>
-        </span>
-        <span>
-            <i class="fas fa-envelope"></i> 
-            <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
-        </span>
-    </div>
-    <div><span><i class="fas fa-map-marker-alt"></i> Located 5 Km along Hoima Road, 100 Meters off Nakibinge Stage, Kampala</span></div>
-</div>
 
-<header class="header" id="header">
-    <div class="logo-container">
-        <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
-    </div>
-     
-    <nav class="nav-links">
-        <a href="#home">Home</a>
-        <a href="#director">Director</a>
-        <a href="#sectors">Sectors</a>
-        <a href="#admissions">Admissions</a>
-        <a href="school%20magazine.html">School Magazine</a>
-        <a href="school gallery.html">School Gallery</a>
-        <a href="dos.html">Past Papers & Report Cards</a>
-        <a href="https://mis.nhs.ac.ug">MIS Portal</a>
-    </nav>
-
-   <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="btn btn-gold desktop-only" onclick="toggleMenu('anthemMenu')">Anthem</button>
-        <div class="menu-toggle" onclick="toggleMenu('mobileNav')">
-            <span></span>
-            <span></span>
-            <span></span>
+    <div class="top-bar">
+        <div>
+           <span>
+                <i class="fas fa-phone"></i> 
+                <a href="tel:+256700627960" style="color: inherit; text-decoration: none;">+256 700 627 960</a> / 
+                <a href="tel:+256788772660" style="color: inherit; text-decoration: none;">+256 788 772 660</a>
+            </span>
+            <span>
+                <i class="fas fa-envelope"></i> 
+                <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
+            </span>
         </div>
+        <div><span><i class="fas fa-map-marker-alt"></i> Located 5 Km along Hoima Road, 100 Meters off Nakibinge Stage, Kampala</span></div>
     </div>
-</header>
 
-<div class="side-triggers">
-    <div class="trigger-btn" onclick="toggleMenu('clubsMenu')">SCHOOL CLUBS</div>
-    <div class="trigger-btn anthem-trigger" onclick="toggleMenu('anthemMenu')">SCHOOL ANTHEM</div>
-</div>
-
-<div class="side-menu" id="mobileNav">
-    <span class="close-menu" onclick="toggleMenu('mobileNav')">×</span>
-    <h3 style="color: var(--accent); margin-bottom: 20px;">Main Menu</h3>
-    <ul>
-        <li><a href="#home" onclick="toggleMenu('mobileNav')"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#director" onclick="toggleMenu('mobileNav')"><i class="fas fa-user-tie"></i> Director's Desk</a></li>
-        <li><a href="#values" onclick="toggleMenu('mobileNav')"><i class="fas fa-lightbulb"></i> Our Vision & Mission</a></li>
-        <li><a href="#sectors" onclick="toggleMenu('mobileNav')"><i class="fas fa-users"></i> Our Community</a></li>
-        <li><a href="#events-news" onclick="toggleMenu('mobileNav')"><i class="fas fa-newspaper"></i> Events & News</a></li>
-        <li><a href="#admissions" onclick="toggleMenu('mobileNav')"><i class="fas fa-pen-alt"></i> Admissions</a></li>
-        <li><a href="school%20magazine.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-book-open"></i> School Magazine</a></li>
-        <li><a href="school gallery.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-images"></i> Gallery</a></li>
-        <li><a href="dos.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-file-invoice"></i> Past Papers & Reports</a></li>
-        <li><a href="https://mis.nhs.ac.ug" target="_blank"><i class="fas fa-user-graduate"></i> MIS Portal</a></li>
-        <li onclick="toggleMenu('clubsMenu')"><i class="fas fa-star"></i> School Clubs</li>
-        <li onclick="toggleMenu('anthemMenu')"><i class="fas fa-music"></i> School Anthem</li>
-    </ul>
-</div>
+    <div class="side-menu" id="mobileNav">
+        <span class="close-menu" onclick="toggleMenu('mobileNav')">×</span>
+        <h3 style="color: var(--accent); margin-bottom: 20px;">Main Menu</h3>
+        <ul>
+            <li><a href="#home" onclick="toggleMenu('mobileNav')"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#director" onclick="toggleMenu('mobileNav')"><i class="fas fa-user-tie"></i> Director's Desk</a></li>
+            <li><a href="#sectors" onclick="toggleMenu('mobileNav')"><i class="fas fa-users"></i> Our Community</a></li>
+            <li><a href="#admissions" onclick="toggleMenu('mobileNav')"><i class="fas fa-pen-alt"></i> Admissions</a></li>
+            <li><a href="MAGAZINE.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-file-alt"></i> Magazine</a></li>
+            <li><a href="SCHOOL GALLERY.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-images"></i> Gallery</a></li>
+            <li><a href="dos.html" onclick="toggleMenu('mobileNav')"><i class="fas fa-book"></i> Past Papers</a></li>
+            <li><a href="https://mis.nhs.ac.ug"><i class="fas fa-user-graduate"></i> MIS Portal</a></li>
+            <li onclick="toggleMenu('clubsMenu')"><i class="fas fa-star"></i> School Clubs</li>
+            <li onclick="toggleMenu('anthemMenu')"><i class="fas fa-music"></i> School Anthem</li>
+            <li onclick="promptAdminLogin()" style="background: rgba(251, 192, 45, 0.2); border: 1px solid var(--accent);"><i class="fas fa-lock"></i> Administration Panel</li>
+        </ul>
+    </div>
 
     <div class="side-menu" id="clubsMenu">
         <span class="close-menu" onclick="toggleMenu('clubsMenu')">×</span>
@@ -274,26 +436,55 @@
         <div style="font-style: italic; line-height: 1.8; font-size: 0.9rem;">
             <p><strong>Verse 1:</strong><br>We are the trainees, of tomorrow.<br>At NAMUNGOONA HIGH SCHOOL,<br>The school of brilliant ladies and gentlemen, <br>It caters for those in need, <br>You can enter and enjoy its our pleasure,<br>Education is the key wherever the world.</p>
             <br>
-            <p><strong>Verse 2:</strong><br>We have a motto,<br>In our school.<br>We still Strive to Excel,<br>Support us whenever we call for help, <br>To fulfil our motto, <br>Let us struggle and raise our standards, <br>With all efforts which can be applied.</p>
-            <br>
+            <p><strong>Verse 2:</strong><br>We have a motto,<br>In our school.<br>We still Strive to Excel,<br>Support us whenever we call for help, <br>To fulfill our motto, <br>Let us struggle and raise our standards, <br>With all efforts which can be applied.</p><br>
             <p><strong>Verse 3:</strong><br>Lord Almighty,<br>Bless our school.<br>Without your power no one can stand,<br>We hand our school in your hands, <br>So that you may embrace it, <br>Keep us in peace in our school, <br>Of NAMUNGOONA HIGH SCHOOL.</p>
         </div>
     </div>
 
+    <header class="header" id="header">
+        <div class="logo-container">
+            <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#director">Director</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#admissions">Admissions</a>
+            <a href="MAGAZINE.html">Magazine</a>
+            <a href="SCHOOL GALLERY.html">Gallery</a>
+            <a href="dos.html">Past Papers</a>
+            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="btn btn-gold" onclick="toggleMenu('anthemMenu')">Anthem</button>
+            <div class="menu-toggle" onclick="toggleMenu('mobileNav')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="side-triggers">
+        <div class="trigger-btn" onclick="toggleMenu('clubsMenu')">SCHOOL CLUBS</div>
+        <div class="trigger-btn anthem-trigger" onclick="toggleMenu('anthemMenu')">SCHOOL ANTHEM</div>
+    </div>
+
     <section class="hero" id="home"> 
         <div class="hero-overlay"></div>
-        
         <div class="slideshow">
-            <div class="slide active" style="background-image: url('seseco.webp');"></div>
-            <div class="slide" style="background-image: url('WE.jpg');"></div>
-            <div class="slide" style="background-image: url('mimi.jpg');"></div>
+            <div class="slide active" style="background-image: url('slide1.jpg');"></div>
+            <div class="slide" style="background-image: url('slide2.jpg');"></div>
+            <div class="slide" style="background-image: url('slide3.jpg');"></div>
         </div>
 
         <div class="hero-content">
             <h1>Namungoona High School</h1>
             <p><i>Strive to Excel</i>, Securing Futures since 1999</p>
             <p><i>UNEB CENTER NO.</i>, U1256</p>
-            <div class="hero-buttons" style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
+            <div class="hero-buttons" style="margin-top: 20px;">
                 <a href="#admissions" class="btn btn-red">Enroll Now</a>
                 <button onclick="toggleMenu('clubsMenu')" class="btn btn-gold">Explore Clubs</button>
             </div>
@@ -331,16 +522,16 @@
     <section id="values" style="padding: 80px 10%; background: var(--light); text-align: center;">
         <h2 style="font-size: 2.5rem; margin-bottom: 50px;">Our Vision, Mission & Values</h2>
         <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
-            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 300px;">
-                <h3 style="color: var(--primary);">Our Vision</h3>
+            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 300px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Our Vision</h3>
                 <p>To become a leading center of academic excellence in secondary education.</p>
             </div>
-            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 300px;">
-                <h3 style="color: var(--primary);">Our Mission</h3>
+            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 300px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Our Mission</h3>
                 <p>Impact affordable qualitative skilled knowledge through viable and reliable means for sustainable learners.</p>
             </div>
-            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 300px;">
-                <h3 style="color: var(--primary);">Core Values</h3>
+            <div style="background: white; padding: 30px; border-radius: 15px; max-width: 300px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Core Values</h3>
                 <p>Excellence, Integrity, Discipline, Responsibility, Transparency, Quality performance and Godliness.</p>
             </div>
         </div>
@@ -359,146 +550,102 @@
             </div>
             <div style="background: var(--light); padding: 30px; border-radius: 15px; max-width: 300px;">
                 <p>"A school that truly lives by its motto: Strive to Excel."</p>
-                <h4 style="margin-top: 15px; color: var(--primary);">— Guardian</h4>
+                <h4 style="margin-top: 15px; color: var(--primary);">— Alumnus</h4>
             </div>
         </div>
     </section>
 
-    <section id="sectors" style="background: var(--light); padding: 80px 0;">
-        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; font-family: 'Playfair Display', serif;">School Community</h2>
-        <div class="sector-section">
-            <div class="info-card">
-                <img src="seseco.webp" alt="School Staff" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Our+Staff'">
-                <div class="card-body">
-                    <h3>Academic Staff</h3>
-                    <p>A team of over 70 highly qualified, dedicated teachers and non-teaching staff committed to student success.</p>
-                </div>
-            </div>
-            <div class="info-card">
-                <img src="prefects.webp" alt="Prefects Cabinet" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Prefects+Cabinet'">
-                <div class="card-body">
-                    <h3>Prefects Cabinet</h3>
-                    <p>Our student leadership body consists of 50+ disciplined leaders who bridge the gap between students and administration.</p>
-                </div>
-            </div>
-            <div class="info-card">
-                <img src="choir.webp" alt="School Choir" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=School+Choir'">
-                <div class="card-body">
-                    <h3>School Choir</h3>
-                    <p>The voices of Namungoona. Our choir leads in worship, MDD competitions, and school ceremonies with angelic melodies.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="events-news" style="padding: 80px 10%; background: var(--light);">
-        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px;">Events & News</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
-            <div class="info-card">
-                <img src="https://via.placeholder.com/400x250?text=School+Event" class="card-img" alt="Event">
-                <div class="card-body">
-                    <h3>Annual Sports Day</h3>
-                    <p style="font-size: 0.85rem; color: gray; margin-bottom: 10px;">March 15, 2026</p>
-                    <p>Students showcased their athletic talents in various competitions, promoting teamwork and school spirit.</p>
-                </div>
-            </div>
-            <div class="info-card">
-                <img src="https://via.placeholder.com/400x250?text=School+News" class="card-img" alt="News">
-                <div class="card-body">
-                    <h3>UCE Results Excellence</h3>
-                    <p style="font-size: 0.85rem; color: gray; margin-bottom: 10px;">February 2026</p>
-                    <p>Namungoona High School celebrates outstanding performance in UCE exams with top national rankings.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section class="sector-section" id="sectors">
         <div class="info-card">
-            <img src="https://via.placeholder.com/400x250?text=Debate+Competition" class="card-img" alt="Debate">
+            <img src="OLEVEL.jpg" alt="O Level" class="card-img" onerror="this.src='https://via.placeholder.com/400x250?text=O+Level+Section'">
             <div class="card-body">
-                <h3>Inter-Class Talent Show Contest</h3>
-                <p style="font-size: 0.85rem; color: gray; margin-bottom: 10px;">29th April, 2026</p>
-                <p>Our Debate Society emerged among the best, showcasing critical thinking and public speaking excellence.</p>
+                <h3>O' Level Section</h3>
+                <p>Lower secondary curriculum emphasizing fundamental sciences, humanities, and critical hands-on vocational modules.</p>
             </div>
         </div>
-
-    </div>
-
-</section>
-
-<section class="teachers-section" id="ourTeachers">
-    <div class="teachers-container">
-        
-        <div class="teachers-header">
-            <h2>Meet Our Dedicated Educators</h2>
-            <p>The academic pillars guiding the future generation at Namungoona High School</p>
+        <div class="info-card">
+            <img src="ALEVEL.jpg" alt="A Level" class="card-img" onerror="this.src='https://via.placeholder.com/400x250?text=A+Level+Section'">
+            <div class="card-body">
+                <h3>A' Level Section</h3>
+                <p>Advanced secondary curriculum focusing on specialized subject combinations in sciences and arts to pave ways for university careers.</p>
+            </div>
         </div>
+        <div class="info-card">
+            <img src="BOARDING.jpg" alt="Boarding" class="card-img" onerror="this.src='https://via.placeholder.com/400x250?text=Boarding+Facilities'">
+            <div class="card-body">
+                <h3>Boarding Sector</h3>
+                <p>Safe, secure, and highly disciplined residential facilities providing a comfortable home environment away from home.</p>
+            </div>
+        </div>
+    </section>
 
-        <div class="teachers-grid">
+    <section class="teachers-section">
+        <div class="teachers-container">
+            <div class="teachers-header">
+                <h2>Our Administrators & Teachers</h2>
+                <p>Meet the dedicated team guiding our students toward excellence and academic success.</p>
+            </div>
             
-<section id="alumni" style="padding: 80px 10%; background: white; text-align: center;">
+            <div class="teachers-grid">
+                <div class="teacher-card">
+                    <div class="teacher-image-wrapper">
+                        <img src="HM.jpg" alt="Head Teacher" class="teacher-img" onerror="this.src='https://via.placeholder.com/400x400?text=Head+Teacher'">
+                        <div class="teacher-socials">
+                            <a href="tel:+256700627960"><i class="fas fa-phone"></i></a>
+                            <a href="mailto:namungoonahighschool@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="teacher-info">
+                        <h3>Mr. Katumba Gerald</h3>
+                        <span class="teacher-title">Head Teacher</span>
+                        <p class="teacher-bio">Managing overall school administration, systems compliance, academic performance tracking, and disciplinary frameworks across all terms.</p>
+                        <div class="teacher-tags">
+                            <span>Administration</span>
+                            <span>Leadership</span>
+                        </div>
+                    </div>
+                </div>
 
-    <h2 style="font-size: 2.5rem; margin-bottom: 50px;">
-        Our Alumni
-    </h2>
+                <div class="teacher-card">
+                    <div class="teacher-image-wrapper">
+                        <img src="DHM.jpg" alt="Deputy Head Teacher" class="teacher-img" onerror="this.src='https://via.placeholder.com/400x400?text=Deputy+Head+Teacher'">
+                        <div class="teacher-socials">
+                            <a href="tel:+256700627960"><i class="fas fa-phone"></i></a>
+                        </div>
+                    </div>
+                    <div class="teacher-info">
+                        <h3>Mr. Kisekka Ronald</h3>
+                        <span class="teacher-title">Deputy Head Teacher</span>
+                        <p class="teacher-bio">Supervising general student welfare, daily operations routines, institutional order, and strategic co-curricular implementation protocols.</p>
+                        <div class="teacher-tags">
+                            <span>Operations</span>
+                            <span>Welfare</span>
+                        </div>
+                    </div>
+                </div>
 
-    <p style="max-width: 700px; margin: auto; margin-bottom: 40px;">
-        Our alumni are making an impact in various fields across the country and beyond. We take pride in shaping future leaders.
-    </p>
-
-    <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
-
-        <div style="background: var(--light); padding: 25px; border-radius: 15px; max-width: 250px;">
-            <h3 style="color: var(--primary);">Kakooza Charles</h3>
-            <p>Choir Patron</p>
+                <div class="teacher-card">
+                    <div class="teacher-image-wrapper">
+                        <img src="DOS.jpg" alt="Director of Studies" class="teacher-img" onerror="this.src='https://via.placeholder.com/400x400?text=Director+of+Studies'">
+                        <div class="teacher-socials">
+                            <a href="tel:+256788772660"><i class="fas fa-phone"></i></a>
+                        </div>
+                    </div>
+                    <div class="teacher-info">
+                        <h3>Mr. Ssebadduka Christopher</h3>
+                        <span class="teacher-title">Director of Studies (D.O.S)</span>
+                        <p class="teacher-bio">Overseeing curriculum distribution arrays, examinations processing engines, internal assessment schedules, and UNEB standards compatibility verification maps.</p>
+                        <div class="teacher-tags">
+                            <span>Academics</span>
+                            <span>UNEB Maps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div style="background: var(--light); padding: 25px; border-radius: 15px; max-width: 250px;">
-            <h3 style="color: var(--primary);">Njuki Joseph</h3>
-            <p>Media Coverage</p>
-        </div>
-
-        <div style="background: var(--light); padding: 25px; border-radius: 15px; max-width: 250px;">
-            <h3 style="color: var(--primary);">Kayongo Fahim</h3>
-            <p>Tours and Academic trips</p>
-        </div>
-
-    </div>
-
-</section>
-
-<section id="faq" style="padding: 80px 10%; background: var(--light);">
-
-    <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px;">
-        Frequently Asked Questions
-    </h2>
-
-    <div style="max-width: 800px; margin: auto;">
-
-        <div style="margin-bottom: 20px;">
-            <h4>How can I apply?</h4>
-            <p>Use the online admission form on this website or visit the school physically.</p>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <h4>What payment methods are accepted?</h4>
-            <p>We accept MTN MoMo, Airtel Money, and SchoolPay.</p>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <h4>Does the school offer boarding?</h4>
-            <p>Yes, both boarding and day sections are available.</p>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <h4>Where is the school located?</h4>
-            <p>5 Km along Hoima Road, 100 meters off Nakibinge Stage, Kampala.</p>
-        </div>
-
-    </div>
-
-</section>
-
-    <section class="admission-section" id="admissions">
+   <section class="admission-section" id="admissions">
         <div class="portal-info">
             <div class="mis-card">
                 <h3>Digital School Management (MIS)</h3>
@@ -511,150 +658,102 @@
                 </ul>
                 <a href="https://mis.nhs.ac.ug" target="_blank" class="submit-btn" style="background:var(--accent); color:var(--primary); margin-top:25px; text-decoration:none; display:block; text-align:center;">Go to MIS Portal </a>
             </div>
-<form action="https://formspree.io/f/mojrlqgw" method="POST" class="admission-form">
-    <h2>Online Admission Form</h2>
-    
-    <div class="form-group">
-        <label>Student's Full Name</label>
-        <!-- Added name="Student_Name" -->
-        <input type="text" name="Student_Name" placeholder="As it appears on PLE/UCE" required>
-    </div>
 
-    <div class="form-group">
-        <label>Gender</label>
-        <!-- Added name="Gender" -->
-        <select name="Gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-    </div>
+            <div id="admission-form-section" style="width: 100%;">
+                <form id="main-admission-form" class="admission-form">
+                    <h2>Online Admission Form</h2>
+                    
+                    <div class="form-group">
+                        <label>Student's Full Name</label>
+                        <input type="text" id="student-name" name="Student_Name" placeholder="As it appears on PLE/UCE" required>
+                    </div>
 
- <div class="form-group">
-        <label>Date of Birth</label>
-        <!-- Added name="DOB" -->
-        <input type="date" name="DOB" required>
-    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="student-gender" name="Gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
 
-    <div class="form-group">
-        <label>Class Applying For</label>
-        <!-- Added name="Class" -->
-        <select name="Class">
-            <option value="S1">Senior 1</option>
-            <option value="S2">Senior 2</option>
-            <option value="S3">Senior 3</option>
-            <option value="S4">Senior 4</option>
-            <option value="S5">Senior 5</option>
-            <option value="S6">Senior 6</option>
-        </select>
-    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="student-dob" name="DOB" required>
+                    </div>
 
-<div class="form-group">
-        <label>Combination</label>
-        <!-- Added name="Combination" -->
-        <input type="text" name=" A' level Student Combination" placeholder="As it is registered.">
-    </div>
-    <div class="form-full form-group">
-        <label>Former School Name</label>
-        <input type="text" name="Former_School" placeholder="Where was the student previously?">
-    </div>
+                    <div class="form-group">
+                        <label>Class Applying For</label>
+                        <select id="student-class" name="Class">
+                            <option value="S1">Senior 1</option>
+                            <option value="S2">Senior 2</option>
+                            <option value="S3">Senior 3</option>
+                            <option value="S4">Senior 4</option>
+                            <option value="S5">Senior 5</option>
+                            <option value="S6">Senior 6</option>
+                        </select>
+                    </div>
 
-    <div class="form-group">
-        <label>UNEB Index Number</label>
-        <input type="text" name="Index_Number" placeholder="e.g. U0001/001">
-    </div>
+                    <div class="form-group">
+                        <label>Combination</label>
+                        <input type="text" id="student-combination" name="Combination" placeholder="As it is registered.">
+                    </div>
+                    
+                    <div class="form-full form-group">
+                        <label>Former School Name</label>
+                        <input type="text" id="prev-school" name="Former_School" placeholder="Where was the student previously?">
+                    </div>
 
-    <div class="form-group">
-        <label>Aggregates/Points</label>
-        <input type="number" name="Aggregates" placeholder="Total Agreggate">
-    </div>
+                    <div class="form-group">
+                        <label>UNEB Index Number</label>
+                        <input type="text" id="index-number" name="Index_Number" placeholder="e.g. U1256/001">
+                    </div>
 
-    <div class="form-group">
-        <label>Guardian/Parent's Name</label>
-        <input type="text" name="Parent_Name" required>
-    </div>
+                    <div class="form-group">
+                        <label>Aggregates/Points</label>
+                        <input type="number" id="aggregates" name="Aggregates" placeholder="Total Aggregate">
+                    </div>
 
-    <div class="form-group">
-        <label>Primary Phone Number</label>
-        <input type="tel" name="Phone_1" placeholder="+256..." required>
-    </div>
+                    <div class="form-group">
+                        <label>Guardian/Parent's Name</label>
+                        <input type="text" id="parent-name" name="Parent_Name" required>
+                    </div>
 
-    <div class="form-group">
-        <label>Secondary Phone Number</label>
-        <input type="tel" name="Phone_2" placeholder="+256..." required>
-    </div>
+                    <div class="form-group">
+                        <label>Primary Phone Number</label>
+                        <input type="tel" id="parent-contact" name="Phone_1" placeholder="+256..." required>
+                    </div>
 
-    <div class="form-group">
-        <label>Current Address</label>
-        <input type="text" name="Address" placeholder="District/Town">
-    </div>
+                    <div class="form-group">
+                        <label>Secondary Phone Number</label>
+                        <input type="tel" id="parent-contact-2" name="Phone_2" placeholder="+256...">
+                    </div>
 
-    <div class="form-full form-group">
-        <label>Guardian's Email</label>
-        <input type="email" name="Email" placeholder="example@mail.com">
-    </div>
+                    <div class="form-group">
+                        <label>Current Address</label>
+                        <input type="text" id="current-address" name="Address" placeholder="District/Town">
+                    </div>
 
-    <button type="submit" class="submit-btn">Submit Application</button>
-</form>
+                    <div class="form-full form-group">
+                        <label>Guardian's Email</label>
+                        <input type="email" id="parent-email" name="Email" placeholder="example@mail.com">
+                    </div>
+                    <button type="submit" class="submit-btn" id="admSubmitButton">Send Application Packet</button>
+                </form>
+            </div>
+
+            <div id="success-section">
+                <i class="fas fa-check-circle"></i>
+                <h2>Application Packet Transmitted!</h2>
+                <p>Thank you. Your request parameter files have been queued inside the central server framework pipeline. Registry officers will read, verify, and cross-examine metrics indices then contact you within 24 working hours.</p>
+                <button class="btn btn-gold" style="margin-top: 20px;" onclick="resetAdmissionView()">Submit Another Application</button>
+            </div>
         </div>
-    </form>
-</div>
-<div id="success-section" style="display: none; text-align: center; padding: 100px; font-family: 'Poppins', sans-serif;">
-    <img src="SCHOOL BADGE.png" width="100">
-    <h1 style="color: #0a2a4b;">Submission Successful!</h1>
-    <p>Thank you for choosing Namungoona High School.</p>
-    <p>Your data has been sent to our registrar. We shall reach out to you soon.</p>
-    <a href="javascript:void(0)" onclick="location.reload()" class="btn-home">Back to Home</a>
-</div>
     </section>
 
-<section id="fees" style="padding: 80px 10%; background: white; text-align: center;">
-
-    <h2 style="font-size: 2.5rem; margin-bottom: 40px;">
-        School Fees Payment
-    </h2>
-
-    <p style="font-size: 1.1rem; margin-bottom: 40px;">
-        Conveniently pay school fees using Mobile Money or SchoolPay.
-    </p>
-
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
-
-        <div style="background: var(--light); padding: 30px; border-radius: 15px; max-width: 280px;">
-            <img src="mtn.jpg" 
-                 alt="MTN MoMo" style="height:50px; margin-bottom:15px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">MTN Mobile Money</h3>
-            <p><strong>Dial:</strong> *165#</p>
-            <p><strong>Merchant Code:</strong> XXXXX</p>
-            <p style="font-size: 0.85rem; margin-top: 10px;">
-                Select Pay Bill → Enter Code → Confirm Payment
-            </p>
-        </div>
-
-        <div style="background: var(--light); padding: 30px; border-radius: 15px; max-width: 280px;">
-            <img src="airtel.jpg" 
-                 alt="Airtel Money" style="height:50px; margin-bottom:15px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">Airtel Money</h3>
-            <p><strong>Dial:</strong> *185#</p>
-            <p><strong>Merchant Code:</strong> XXXXX</p>
-            <p style="font-size: 0.85rem; margin-top: 10px;">
-                Pay Bills → Enter Code → Confirm
-            </p>
-        </div>
-
-        <div style="background: var(--light); padding: 30px; border-radius: 15px; max-width: 280px;">
-            <img src="School Pay.png" 
-                 alt="SchoolPay" style="height:50px; margin-bottom:15px;">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">SchoolPay</h3>
-            <p>Secure online payment platform for school fees.</p>
-            
-            <a href="https://schoolpay.co.ug/" target="_blank" class="btn btn-red" style="margin-top: 15px;">
-    Pay via SchoolPay
-</a>
-        </div>
-
-    </div>
-
-</section>
+    <section class="news-section" id="news-section-deck">
+        <h2 style="font-size: 2.5rem; text-align: center; color: var(--primary);">News & Events Feed</h2>
+        <div class="news-grid" id="newsArticlesContainer"></div>
+    </section>
 
 <section id="contact-us" class="contact-container">
     <div class="contact-info">
@@ -667,9 +766,9 @@
         </div>
         <div class="footer-contact-item" style="color: var(--dark);">
             <i class="fas fa-envelope-open-text" style="color: var(--secondary);"></i>
-             <span>
-    <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
-</span>
+            <span>
+                <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
+            </span>
         </div>
     </div>
 
@@ -678,7 +777,6 @@
             <input type="hidden" name="_next" value="success.html">
             
             <div class="admission-form" style="box-shadow: none; padding: 0; background: transparent; display: block;">
-                
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" name="name" placeholder="Enter your name" required>
@@ -711,230 +809,338 @@
     </div>
 </section>
 
-<div class="back-to-top" id="toTop"><i class="fas fa-arrow-up"></i></div>
-   <section id="location" style="padding: 60px 10%; background: var(--light); text-align: center;">
-
-    <h2 style="font-size: 2.5rem; margin-bottom: 30px;">
-        Find Us
-    </h2>
-
-    <p style="margin-bottom: 20px;">
-        Located 5 Km along Hoima Road, 100 meters off Nakibinge Stage, Kampala.
-    </p>
-
-    <a href="https://www.google.com/maps" target="_blank" class="btn btn-gold">
-        Open in Google Maps
-    </a>
+<section id="location" style="padding: 60px 10%; background: var(--light); text-align: center;">
+    <h2 style="font-size: 2.5rem; margin-bottom: 30px;">Find Us</h2>
+    <p style="margin-bottom: 20px;">Located 5 Km along Hoima Road, 100 meters off Nakibinge Stage, Kampala.</p>
+    <a href="https://www.google.com/maps" target="_blank" class="btn btn-gold">Open in Google Maps</a>
 </section>
- <footer id="contact" style="background: var(--primary); color: white; padding: 80px 5% 40px;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 50px;">
-         <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 15px;">
-    <div style="width: 80px; height: 80px; background: var(--bg-white); border-radius: 50%; padding: 5px; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center;">
-        <img src="SCHOOL BADGE.png" alt="NHS Badge" style="width: 100%; color:white; height: 100%; object-fit: contain;" onerror="this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=150&q=80';">
-    </div>
 
-    <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 5px; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase;">
-        Namungoona High School
-    </h3>
-
-    <p style="color: #E2E8F0; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
-        "Founded on the pillars of Excellence and Integrity, we are dedicated to nurturing holistic leaders ready to impact the world." 
-        <br><br>
-        <strong style="color: var(--accent-light); font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 1px;">I LOVE NAMUNGOONA HIGH SCHOOL</strong>
-    </p>
-</div>
-            <div>
-                <h3 style="margin-bottom: 25px;">Quick Navigation</h3>
-                <a href="#home" class="footer-link">Home Page</a>
-                <a href="#admissions" class="footer-link">Admission Portal</a>
-                <a href="#director" class="footer-link">Director's Desk</a>
-                <a href="https://mis.nhs.ac.ug" class="footer-link">MIS Login</a>
+<section class="admin-dashboard-section" id="adminConsoleDeck">
+    <h2 style="font-family: 'Montserrat', sans-serif; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;">NHS CENTRAL ADMINISTRATION MANAGEMENT CONSOLE</h2>
+    <button class="admin-btn admin-btn-danger" style="float: right; margin-top: -60px;" onclick="logoutAdminSystem()">Secure Exit Terminals</button>
+    
+    <div class="admin-grid">
+        <div class="admin-panel-card">
+            <h3>Publish News Feed Metric</h3>
+            <div class="form-group">
+                <label style="color: white; font-size:0.75rem;">ARTICLE CARD TITLE STRING</label>
+                <input type="text" id="adm-news-title" class="admin-input" placeholder="E.g., Term 2 Visitation Day Announcement">
             </div>
-            <div>
-                <h3 style="margin-bottom: 25px;">Get In Touch</h3>
-                <div class="footer-contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Hoima Road, 5 Km, Kampala, UG</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fas fa-phone-alt"></i>
-                  <span> 
-    <a href="tel:+256700627960" style="color: inherit; text-decoration: none;">+256 700 627 960</a> / 
-    <a href="tel:+256788772660" style="color: inherit; text-decoration: none;">+256 788 772 660</a>
-</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>
-    <a href="mailto:namungoonahighschool@gmail.com" style="color: inherit; text-decoration: none;">namungoonahighschool@gmail.com</a>
-</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fab fa-facebook-f"></i>
-                  <span>
-    <a href="https://www.facebook.com/NamungoonaHighSchool" target="_blank" style="color: inherit; text-decoration: none;">@NamungoonaHighSchool</a>
-</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fab fa-tiktok"></i>
-                   <span>
-    <a href="https://www.tiktok.com/@namungoonahighschool1" target="_blank" style="color: inherit; text-decoration: none;">@namungoonahighschool1</a>
-</span>
-                </div> </div>
-       
-        <div style="text-align: center; margin-top: 40px; opacity: 0.6; font-size: 0.85rem;">
-            <p>© 2026 Namungoona High School. All Rights Reserved.</p>
-            <p style="color: var(--accent); margin-top: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Developed By: Kamya Oscar & Waibi Daniel, S.4K</p>
+            <div class="form-group">
+                <label style="color: white; font-size:0.75rem;">DATE METRIC TEXT</label>
+                <input type="text" id="adm-news-date" class="admin-input" placeholder="E.g., June 15, 2026">
+            </div>
+            <div class="form-group">
+                <label style="color: white; font-size:0.75rem;">OPTIONAL BACKGROUND CARD IMAGE FILENAME / URL</label>
+                <input type="text" id="adm-news-img" class="admin-input" placeholder="E.g., event.jpg or leave empty">
+            </div>
+            <div class="form-group">
+                <label style="color: white; font-size:0.75rem;">DESCRIPTION BLOCK STRINGS CONTENT</label>
+                <textarea id="adm-news-desc" class="admin-input" style="min-height: 100px; resize: vertical;" placeholder="Type detailed publication sentences here..."></textarea>
+            </div>
+            <button class="admin-btn" onclick="publishNewsCardRuntime()">Execute Broadcaster Runtime</button>
         </div>
-    </footer>
-<div class="wa-menu" id="waMenu">
-    <a href="https://wa.me/256700627960" target="_blank" class="wa-option">
-        <i class="fab fa-whatsapp"></i> Admissions Office
-    </a>
-    <a href="https://wa.me/256793749880" target="_blank" class="wa-option">
-        <i class="fab fa-whatsapp"></i> Administration
-    </a>
-<a href="https://wa.me/256704817611" target="_blank" class="wa-option">
-        <i class="fab fa-whatsapp"></i> Administration
-    </a>
-</div>
-<div class="whatsapp-float" onclick="toggleWhatsApp()">
-    <i class="fab fa-whatsapp"></i>
-</div>
-
-<script>
-// 1. NAVIGATION & MENUS (Side menus handling system)
-function toggleMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    if (!menu) return;
-    
-    if (menu.classList.contains('active')) {
-        menu.classList.remove('active');
-    } else {
-        // Close other panels first
-        document.querySelectorAll('.side-menu').forEach(m => m.classList.remove('active'));
-        menu.classList.add('active');
-    }
-}
-
-// 2. SCROLL EFFECTS (Header & Back to Top)
-window.addEventListener('scroll', () => {
-    const header = document.getElementById('header');
-    const toTop = document.getElementById('toTop');
-    
-    // Header transformation
-    if (header) {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-            if(window.innerWidth > 992) header.style.top = "0";
-        } else {
-            header.classList.remove('scrolled');
-            if(window.innerWidth > 992) header.style.top = "35px";
-        }
-    }
-
-    // Show/Hide Back to Top button
-    if (toTop) {
-        toTop.style.display = (window.scrollY > 500) ? 'flex' : 'none';
-    }
-});
-
-const toTopBtn = document.getElementById('toTop');
-if (toTopBtn) {
-    toTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// 3. WORKING ROTATING RUNTIME SLIDESHOW 
-let currentSlideIndex = 0;
-const slides = document.querySelectorAll('.slide');
-
-if (slides.length > 0) {
-    function showNextSlide() {
-        slides[currentSlideIndex].classList.remove('active');
-        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-        slides[currentSlideIndex].classList.add('active');
-    }
-    // Changes picture automatically every 5 seconds (5000ms)
-    setInterval(showNextSlide, 5000);
-}
-
-// 4. WHATSAPP LOGIC
-const waFloat = document.querySelector('.whatsapp-float');
-const waMenu = document.getElementById('waMenu');
-
-if (waFloat && waMenu) {
-    waFloat.onclick = (e) => {
-        e.stopPropagation();
-        waMenu.classList.toggle('active');
-    };
-
-    window.addEventListener('click', (e) => {
-        if (!waMenu.contains(e.target) && !waFloat.contains(e.target)) {
-            waMenu.classList.remove('active');
-        }
-    });
-}
-
-// 5. FORM SUBMISSION (FORMSPREE JSON FIX)
-const admissionForm = document.querySelector('.admission-form');
-
-if (admissionForm) {
-    admissionForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
         
-        const submitBtn = this.querySelector('.submit-btn');
-        const originalText = submitBtn.innerText;
-        
-        // Show loading state
-        submitBtn.disabled = true;
-        submitBtn.innerText = "SENDING...";
+        <div class="admin-panel-card">
+            <h3>Live Admissions Ledger Data Pipeline</h3>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px;">Synchronized items stored within the live data cluster system infrastructure parameters.</p>
+            <div class="submissions-list" id="adminDataLedgerWrapper"></div>
+        </div>
+    </div>
+</section>
 
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
+<footer style="background: #031222; color: white; padding: 60px 5% 30px 5%; font-size: 0.9rem; border-top: 4px solid var(--secondary);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+        <div>
+            <img src="SCHOOL BADGE.png" alt="Badge" class="footer-logo" onerror="this.src='https://via.placeholder.com/80'">
+            <p style="opacity: 0.8; line-height: 1.8;">Namungoona High School is a premier educational institution providing quality learning metrics with strong spiritual foundations, deep structural disciplines, and unparalleled academic excellence arrays continuously since 1999.</p>
+        </div>
+        <div>
+            <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">Quick Link Matrices</h3>
+            <a href="#home" class="footer-link">Portal Home Base</a>
+            <a href="#director" class="footer-link">Director's Office Desk</a>
+            <a href="#sectors" class="footer-link">Sectors & Curriculum</a>
+            <a href="#admissions" class="footer-link">Online Admissions desk</a>
+            <a href="https://mis.nhs.ac.ug" class="footer-link">MIS Portal Systems</a>
+        </div>
+        <div>
+            <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">Contact Matrix Channels</h3>
+            <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+256 700 627 960<br>+256 788 772 660</span></div>
+            <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>namungoonahighschool@gmail.com</span></div>
+            <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Hoima Road, Nakibinge Stage,<br>Kampala, Uganda.</span></div>
+        </div>
+    </div>
+    <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.7;">
+        <p>© 2026 Namungoona High School. All Rights Reserved. Strive to Excel.</p>
+    </div>
+</footer>
 
-        try {
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
+<div class="back-to-top" id="scrollTopBtn" onclick="scrollToTopHead()"><i class="fas fa-arrow-up"></i></div>
 
-            if (response.ok) {
-                alert('Success! Your application has been sent to Namungoona High School.');
-                this.reset();
-                window.location.href = 'success.html'; // Sends them to the new page
+<div class="whatsapp-float" onclick="toggleWhatsAppMenu()"><i class="fab fa-whatsapp"></i></div>
+<div class="wa-menu" id="waConnectMenu">
+    <a href="https://wa.me/256700627960?text=Hello%20Namungoona%20High%20School%20Admissions%20Office" target="_blank" class="wa-option"><i class="fab fa-whatsapp" style="color:#25d366;"></i> Admissions Office</a>
+    <a href="https://wa.me/256788772660?text=Hello%20Namungoona%20High%20School%20Bursar%20Office" target="_blank" class="wa-option"><i class="fab fa-whatsapp" style="color:#25d366;"></i> Academics & Bursaries</a>
+</div>
+
+    <script>
+        // SUPABASE DATABASE RUNTIME ENGINE DEFINITIONS
+        const SUPABASE_URL = "https://qyzjjxnjieyinqtiolyw.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_QowhVrnPfN-_IYe0_zwFZA_HTIMRqoi";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Hero background slideshow transitions initialization engine
+        let currentSlideIndex = 0;
+        const heroSlides = document.querySelectorAll('.hero .slide');
+        function cycleHeroSlideshow() {
+            if(heroSlides.length === 0) return;
+            heroSlides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (currentSlideIndex + 1) % heroSlides.length;
+            heroSlides[currentSlideIndex].classList.add('active');
+        }
+        setInterval(cycleHeroSlideshow, 5000);
+
+        // UI Scroll Monitor Frameworks
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+                scrollTopBtn.style.display = 'flex';
             } else {
-                alert('Oops! There was a problem. Please check your internet connection.');
+                header.classList.remove('scrolled');
+                scrollTopBtn.style.display = 'none';
             }
-        } catch (error) {
-            alert('Submission failed. Please try again later.');
-        } finally {
-            if (submitBtn) {
+        });
+
+        // Toggle elements systems
+        function toggleMenu(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+
+        function toggleWhatsAppMenu() {
+            document.getElementById('waConnectMenu').classList.toggle('active');
+        }
+
+        function scrollToTopHead() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ADMISSIONS DATABASE OPERATIONS INTERFACES (SUPABASE PIPELINE MAPPING)
+        document.getElementById('main-admission-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('admSubmitButton');
+            const originalText = submitBtn.innerText;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = "TRANSMITTING DATA PACKET...";
+
+            // Match exact assigned DOM node parameters values
+            const name = document.getElementById('student-name').value.trim();
+            const gender = document.getElementById('student-gender').value;
+            const classLevel = document.getElementById('student-class').value;
+            const pName = document.getElementById('parent-name').value.trim();
+            const parentContact = document.getElementById('parent-contact').value.trim();
+            const pEmail = document.getElementById('parent-email').value.trim() || 'N/A';
+            const prevSchool = document.getElementById('prev-school').value.trim() || 'N/A';
+            const dob = document.getElementById('student-dob').value;
+            const comb = document.getElementById('student-combination').value.trim() || 'N/A';
+            const indexNo = document.getElementById('index-number').value.trim() || 'N/A';
+            const agg = document.getElementById('aggregates').value || null;
+
+            try {
+                // Open index.html, find the .insert([ ... ]) block, and replace it with this:
+const payload = {
+    student_name: name,
+    gender: gender,
+    class_level: classLevel,
+    parent_name: pName,
+    parent_contact: parentContact,
+    parent_email: pEmail,
+    previous_school: prevSchool,
+    date_of_birth: dob,
+    combination: comb,
+    index_number: indexNo,
+    created_at: new Date().toISOString()
+};
+
+// Only attach aggregates if the column exists or to bypass schema errors
+if (agg) {
+    payload.aggregates = agg; 
+}
+
+const { data, error } = await supabaseClient
+    .from('applications')
+    .insert([payload]);
+
+                // Toggle views upon successful transaction pipelines completion
+                document.getElementById('admission-form-section').style.display = 'none';
+                document.getElementById('success-section').style.display = 'block';
+                document.getElementById('main-admission-form').reset();
+                
+                // If admin terminal is running inline, hot-reload active viewport grids layout elements 
+                if(document.getElementById('adminConsoleDeck').style.display === 'block') {
+                    renderAdminLedgerData();
+                }
+            } catch (err) {
+                console.error("Pipeline failure metrics context:", err);
+                alert("Database transmission failed: " + err.message + ". Please verify database schema and tables.");
+            } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
             }
+        });
+
+        function resetAdmissionView() {
+            document.getElementById('success-section').style.display = 'none';
+            document.getElementById('admission-form-section').style.display = 'block';
         }
-    });
-}
 
-// Fallback Local Admission Form Handling
-const mainAdmissionForm = document.getElementById('main-admission-form');
-if (mainAdmissionForm) {
-    mainAdmissionForm.addEventListener('submit', function(e) {
-        e.preventDefault(); 
+        // ADMINISTRATION MANAGEMENT SECURITY PORTALS RUNTIMES
+        function promptAdminLogin() {
+            const pass = prompt("Enter Administration Terminal Access Keyphrase Metric:");
+            if (pass === "nhsadmin2026") {
+                alert("Identity verified. Booting Admin Console Workspace.");
+                toggleMenu('mobileNav');
+                document.getElementById('adminConsoleDeck').style.display = 'block';
+                renderAdminLedgerData();
+                document.getElementById('adminConsoleDeck').scrollIntoView({ behavior: 'smooth' });
+            } else if (pass !== null) {
+                alert("Access keyphrase invalid. Intruding telemetry recorded.");
+            }
+        }
 
-        const formSection = document.getElementById('admission-form-section');
-        const successSection = document.getElementById('success-section');
+        function logoutAdminSystem() {
+            document.getElementById('adminConsoleDeck').style.display = 'none';
+            alert("Terminal sessions disconnected safely.");
+            scrollToTopHead();
+        }
 
-        if (formSection) formSection.style.display = 'none';
-        if (successSection) successSection.style.display = 'block';
-        
-        window.scrollTo(0, 0);
-    });
-}
-</script>
+        // FETCH FROM LIVE SUPABASE REPOSITORY TO ADMIN LEDGER
+        async function renderAdminLedgerData() {
+            const container = document.getElementById('adminDataLedgerWrapper');
+            container.innerHTML = "<p style='color:var(--accent); font-size:0.85rem;'>Querying remote rows tables stream index data matrices...</p>";
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('applications')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = "<p style='opacity:0.6; font-size:0.85rem; padding:10px;'>No admission request rows mapped inside tables array yet.</p>";
+                    return;
+                }
+
+                container.innerHTML = "";
+                data.forEach((item) => {
+                    const formattedDate = item.created_at ? new Date(item.created_at).toLocaleString() : 'N/A';
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'submission-item';
+                    itemDiv.innerHTML = `
+                        <button class="admin-btn admin-btn-danger" style="position:absolute; right:10px; top:10px; padding:3px 8px; font-size:0.7rem;" onclick="deleteApplicationItem('${item.id}')">Purge Row</button>
+                        <strong>Candidate:</strong> ${item.student_name}<br>
+                        <strong>Gender:</strong> ${item.gender} | <strong>Class:</strong> ${item.class_level}<br>
+                        <strong>Parent:</strong> ${item.parent_name || 'N/A'} (${item.parent_contact})<br>
+                        <strong>Email:</strong> ${item.parent_email || 'N/A'}<br>
+                        <strong>School Origin:</strong> ${item.previous_school}<br>
+                        <span style='opacity:0.5; font-size:0.7rem;'>Timestamp Matrix: ${formattedDate}</span>
+                    `;
+                    container.appendChild(itemDiv);
+                });
+            } catch (err) {
+                container.innerHTML = `<p style='color:var(--secondary); font-size:0.85rem;'>Ledger Synchronization Failure: ${err.message}</p>`;
+            }
+        }
+
+        async function deleteApplicationItem(id) {
+            if (confirm("Are you sure you want to permanently delete this application row from the remote database?")) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('applications')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+                    
+                    alert("Row purged successfully from Supabase.");
+                    renderAdminLedgerData();
+                } catch (err) {
+                    alert("Failed to purge row item: " + err.message);
+                }
+            }
+        }
+
+        // Local Storage news publishing runtime routines
+        function renderNewsArticles() {
+            const container = document.getElementById('newsArticlesContainer');
+            if(!container) return;
+            
+            let articles = JSON.parse(localStorage.getItem('nhs_articles')) || [];
+            if(articles.length === 0) {
+                container.innerHTML = `
+                    <div class="news-card">
+                        <img src="slide1.jpg" alt="News Image" onerror="this.src='https://via.placeholder.com/400x250?text=Namungoona+High+School'">
+                        <div class="news-card-body">
+                            <span class="news-date">Admissions Office Desk</span>
+                            <h3>Term 2 Registration Open</h3>
+                            <p>Admissions for new students across both O and A levels are smoothly ongoing for the current term block layouts parameters ecosystem maps loop.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = "";
+            articles.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <img src="${item.img}" alt="News Image" onerror="this.src='https://via.placeholder.com/400x250?text=Namungoona+High+School'">
+                    <div class="news-card-body">
+                        <span class="news-date">${item.date}</span>
+                        <h3>${item.title}</h3>
+                        <p>${item.desc}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function publishNewsCardRuntime() {
+            const title = document.getElementById('adm-news-title').value.trim();
+            const date = document.getElementById('adm-news-date').value.trim();
+            const img = document.getElementById('adm-news-img').value.trim();
+            const desc = document.getElementById('adm-news-desc').value.trim();
+
+            if(!title || !date || !desc) {
+                alert("Please fill out Title, Date, and Description strings to map live feed parameters packages properly.");
+                return;
+            }
+
+            const fallbackImg = img || "https://via.placeholder.com/400x250?text=Namungoona+High+School";
+            const newObj = { id: Date.now(), title, date, img: fallbackImg, desc };
+
+            let currentArticles = JSON.parse(localStorage.getItem('nhs_articles')) || [];
+            currentArticles.unshift(newObj);
+            localStorage.setItem('nhs_articles', JSON.stringify(currentArticles));
+
+            // Clear configuration terminal inputs fields values metrics
+            document.getElementById('adm-news-title').value = '';
+            document.getElementById('adm-news-date').value = '';
+            document.getElementById('adm-news-img').value = '';
+            document.getElementById('adm-news-desc').value = '';
+
+            alert("New card published successfully to news and events feed!");
+            renderNewsArticles();
+        }
+
+        // INITIAL DEPLOYMENT TRIGGER RUNTIME INTRINSIC COMPILER
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNewsArticles();
+        });
+    </script>
 </body>
 </html>
