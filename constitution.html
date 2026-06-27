@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namungoona High School Constitution</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fbc02d'%3E%3Cpath d='M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z'/%3E%3C/svg%3E">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0a2a4b;
+            --secondary: #d32f2f;
+            --accent: #fbc02d;
+            --light: #f8f9fa;
+            --dark: #1a1a1a;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            background-color: #f4f7f6;
+            color: #2d3748;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Announcement Marquee Ticker Section */
+        .announcement-ticker {
+            background-color: #fbc02d;
+            color: #0a2a4b;
+            padding: 8px 0;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-bottom: 2px solid #e6b022;
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+            z-index: 1001;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marqueeEffect 25s linear infinite;
+        }
+
+        .marquee-content span {
+            margin-right: 50px;
+        }
+
+        @keyframes marqueeEffect {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* REQUESTED CUSTOM HEADER CONFIGURATION */
+        .header {
+            background: var(--glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(10, 42, 75, 0.05);
+        }
+
+        .logo-container img {
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Gold Action Button Style */
+        .btn {
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: 0.3s ease;
+        }
+
+        .btn-gold {
+            background-color: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(251, 192, 45, 0.2);
+        }
+
+        .btn-gold:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Menu Hamburger Bars */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+            transition: 0.3s ease;
+        }
+
+        /* Mobile Viewport Navigation Active Layouts */
+        .mobile-nav-panel {
+            display: none;
+            flex-direction: column;
+            background: var(--primary);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-nav-panel a {
+            color: white;
+            padding: 12px 0;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .header.mobile-active .mobile-nav-panel {
+            display: flex;
+        }
+
+        /* Institutional Hero Banner Section */
+        .hero-banner {
+            position: relative;
+            background: linear-gradient(rgba(10, 42, 75, 0.9), rgba(10, 42, 75, 0.9)), 
+                        url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+            color: #f7fafc;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+        }
+
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .hero-banner p.motto {
+            font-size: 1.3rem;
+            color: var(--accent);
+            font-style: italic;
+            margin: 10px 0 25px 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Typing Effect Container */
+        .typing-container {
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 25px;
+            min-height: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: var(--accent);
+            margin-left: 4px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hero-meta-grid {
+            display: inline-grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 15px 40px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 18px 35px;
+            border-radius: 12px;
+            border: 1px solid rgba(251, 192, 45, 0.2);
+            font-size: 0.85em;
+            text-align: left;
+        }
+
+        .hero-meta-grid span strong {
+            color: var(--accent);
+        }
+
+        /* Main Structured Layout Split */
+        .main-container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 40px;
+            flex: 1;
+        }
+
+        /* Chapter Quick Navigation Menu Widget */
+        .chapters-widget {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 15px 35px rgba(10, 42, 75, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 6px solid var(--primary);
+            height: calc(100vh - 180px);
+            position: sticky;
+            top: 140px;
+            overflow-y: auto;
+        }
+
+        .widget-title {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 8px;
+        }
+
+        .widget-menu {
+            list-style: none;
+        }
+
+        .widget-link {
+            display: block;
+            padding: 8px 12px;
+            color: #2d3748;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            margin-bottom: 4px;
+        }
+
+        .widget-link:hover {
+            background-color: var(--light);
+            color: var(--secondary);
+            padding-left: 18px;
+            transform: translateX(4px);
+        }
+
+        /* Content Document Block Card */
+        .content-card {
+            background-color: #ffffff;
+            border-radius: 25px;
+            padding: 45px;
+            box-shadow: 0 15px 35px rgba(10, 42, 75, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Scroll Animation Transitions */
+        section {
+            scroll-margin-top: 140px;
+            margin-bottom: 55px;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        section.reveal-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        /* Typographic Framework Styling */
+        h2.section-title {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        h3.subsection-title {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 12px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 0.92rem;
+            color: #4a5568;
+        }
+
+        /* Mission and Vision Grid Cards */
+        .mission-vision-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .mv-card {
+            background-color: var(--light);
+            border-top: 4px solid var(--primary);
+            padding: 22px;
+            border-radius: 12px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
+        .mv-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(10, 42, 75, 0.06);
+            border-top-color: var(--secondary);
+        }
+
+        .mv-card h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+        .mv-card p {
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        /* Legal Block Quote Components */
+        .quote-box {
+            background-color: #fcf9f2;
+            border-left: 5px solid var(--accent);
+            padding: 25px;
+            font-style: italic;
+            margin: 35px 0;
+            border-radius: 0 16px 16px 0;
+            transition: 0.3s ease;
+        }
+
+        .quote-box:hover {
+            border-left-color: var(--primary);
+            background-color: #f4f7f9;
+        }
+
+        .quote-box strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            font-size: 0.92rem;
+            color: #4a5568;
+        }
+
+        .nested-details {
+            margin-left: 15px;
+            font-size: 0.88rem;
+            color: #718096;
+            list-style-type: circle;
+            margin-top: 5px;
+        }
+
+        /* Schedule Tables */
+        .program-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .program-table th, .program-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+        }
+
+        .program-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .program-table tr:nth-child(even) {
+            background-color: var(--light);
+        }
+
+        .program-table tr:hover td {
+            background-color: #f1f5f9;
+        }
+
+        /* REQUESTED CUSTOM FOOTER CONFIGURATION STYLES */
+        .footer-link {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            transition: 0.3s ease;
+        }
+        .footer-link:hover {
+            color: var(--accent);
+            padding-left: 6px;
+        }
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .footer-contact-item i {
+            color: var(--accent);
+            margin-top: 4px;
+        }
+        .footer-logo {
+            height: 70px;
+            margin-bottom: 15px;
+            object-fit: contain;
+        }
+
+        /* Responsive UI Optimizations */
+        @media (max-width: 1100px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                width: 95%;
+            }
+            .chapters-widget {
+                position: relative;
+                top: 0;
+                width: 100%;
+                height: auto;
+                max-height: 250px;
+            }
+            .hero-banner h1 {
+                font-size: 1.8rem;
+            }
+            .hero-meta-grid {
+                grid-template-columns: 1fr;
+                padding: 15px 20px;
+            }
+            .mission-vision-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-ticker">
+        <div class="marquee-content">
+            <span>📢 Admissions Open for the New Academic Term!</span>
+            <span>📝 National Exam Prep Registrations Ongoing at the Academic Desk.</span>
+            <span>⚖️ Judicial Branch Trial Dates Published by the Court Clerk.</span>
+            <span>🌟 Namungoona High School Constitution — First Edition (Published 27th June 2026).</span>
+        </div>
+    </div>
+
+    <header class="header" id="header">
+        <div class="logo-container">
+            <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#director">Director</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#admissions">Admissions</a>
+            <a href="MAGAZINE.html">Magazine</a>
+            <a href="SCHOOL GALLERY.html">Gallery</a>
+            <a href="dos.html">Past Papers</a>
+            <a href="constitution.html" style="color: var(--secondary);">Constitution</a>
+            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="btn btn-gold" onclick="toggleMenu('anthemMenu')">Anthem</button>
+            <div class="menu-toggle" onclick="toggleMenu('header')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div class="mobile-nav-panel" id="mobileNav">
+            <a href="#home">Home</a>
+            <a href="#director">Director</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#admissions">Admissions</a>
+            <a href="MAGAZINE.html">Magazine</a>
+            <a href="SCHOOL GALLERY.html">Gallery</a>
+            <a href="dos.html">Past Papers</a>
+            <a href="constitution.html">Constitution</a>
+            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
+        </div>
+    </header>
+    
+    <header class="hero-banner" id="home">
+        <h1>Namungoona High School Constitution</h1>
+        <center><p class="motto">“Strive to Excel”</p></center>
+        
+        <div class="typing-container">
+            <span id="typing-text"></span><span class="typing-cursor"></span>
+        </div>
+        
+        <div class="hero-meta-grid">
+            <span><strong>Institution:</strong> Namungoona High School</span>
+            <span><strong>Document:</strong> Formal Legal Framework & Student Constitution</span>
+            <span><strong>Authority:</strong> School Administration & Student Leadership Body</span>
+            <span><strong>Edition:</strong> First Edition (Published 27th June 2026)</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        
+        <aside class="chapters-widget">
+            <h3 class="widget-title">Table of Contents</h3>
+            <ul class="widget-menu">
+                <li><a href="#preamble" class="widget-link">Preamble & Charter</a></li>
+                <li><a href="#programmes" class="widget-link">Daily Routines & Schedules</a></li>
+                <li><a href="#chapter1" class="widget-link">Ch. 1: General Principles & Core Values</a></li>
+                <li><a href="#chapter2" class="widget-link">Ch. 2: School Court Structure</a></li>
+                <li><a href="#chapter3" class="widget-link">Ch. 3: Detailed Roles of Court Officials</a></li>
+                <li><a href="#chapter4" class="widget-link">Ch. 4: Constitutional Rights of Students</a></li>
+                <li><a href="#chapter5" class="widget-link">Ch. 5: Core Responsibilities & Duties</a></li>
+                <li><a href="#chapter6" class="widget-link">Ch. 6: Prohibited Behaviors & Sanctions</a></li>
+                <li><a href="#prefects" class="widget-link">Ch. 7: Prefectorial Code of Conduct</a></li>
+                <li><a href="#unsa" class="widget-link">Ch. 8: National Student Association (UNSA)</a></li>
+                <li><a href="#chapter7" class="widget-link">Ch. 9: Judicial Processes & Trial Rules</a></li>
+                <li><a href="#chapter8" class="widget-link">Ch. 10: Official Communication Rules</a></li>
+                <li><a href="#chapter9" class="widget-link">Ch. 11: Amendments & Execution</a></li>
+            </ul>
+        </aside>
+
+        <div class="content-card">
+            
+            <section id="preamble">
+                <h2 class="section-title">Preamble & Institutional Charter</h2>
+                <p>We, the students of Namungoona High School, commit ourselves to discipline, respect, responsibility, and academic excellence. These articles guide conduct, and any violation shall attract corrective disciplinary action aimed at building character.</p>
+                
+                <div class="mission-vision-box">
+                    <div class="mv-card">
+                        <h4>Our Mission</h4>
+                        <p>To provide quality education in a disciplined environment, nurturing responsible citizens who strive to excel and contribute positively to society.</p>
+                    </div>
+                    <div class="mv-card">
+                        <h4>Our Vision</h4>
+                        <p>To be a centre of academic excellence and character development, recognized for shaping future leaders with integrity, innovation, and purpose.</p>
+                    </div>
+                </div>
+
+                <h3 class="subsection-title">Our Discipline Code (Core Values & Rules)</h3>
+                <ul>
+                    <li>We respect ourselves, others, and school property.</li>
+                    <li>We are punctual, prepared, and committed to learning.</li>
+                    <li>We Uphold honesty, integrity, and responsibility in all we do.</li>
+                    <li>We maintain a clean, safe, and orderly environment.</li>
+                    <li>We follow school rules and accept consequences.</li>
+                    <li>We reject corruption, bullying, and all forms of misconduct.</li>
+                    <li>We wear our uniform with pride and act as ambassadors of the school.</li>
+                </ul>
+            </section>
+
+            <section id="programmes">
+                <h2 class="section-title">Daily Routines & Institutional Programs</h2>
+                <p>From the time you register with Namungoona High School to the time you leave, your education and welfare are the primary concern of the school. In a community such as this, it is necessary and essential that every member pays absolute regard to the institutional schedule. Common sense dictates that skipping these slots is a major breach of school rules.</p>
+                
+                <h3 class="subsection-title">School Daily Programme</h3>
+                <table class="program-table">
+                    <thead>
+                        <tr>
+                            <th>Time Block</th>
+                            <th>Mandatory Activity Scheduled</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>5:30 AM</td><td>Morning Preps Begin</td></tr>
+                        <tr><td>8:00 AM</td><td>Lessons Begin</td></tr>
+                        <tr><td>10:40 AM – 11:00 AM</td><td>Break Time Block</td></tr>
+                        <tr><td>11:00 AM – 1:00 PM</td><td>Mid-Morning Academic Lessons</td></tr>
+                        <tr><td>1:00 PM – 2:00 PM</td><td>Lunch Time Break</td></tr>
+                        <tr><td>2:00 PM – 4:40 PM</td><td>Afternoon Academic Lessons</td></tr>
+                        <tr><td>4:40 PM – 5:00 PM</td><td>Co-Curricular Activities & Games</td></tr>
+                        <tr><td>7:00 PM – 9:30 PM</td><td>Night Preps Session</td></tr>
+                        <tr><td>11:00 PM</td><td>Boarders Observe Strict Lights Off</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="chapter1">
+                <h2 class="section-title">CHAPTER ONE: GENERAL PRINCIPLES</h2>
+                <h3 class="subsection-title">Article 1: Core Values Expansion</h3>
+                <ul>
+                    <li><strong>Discipline:</strong> Ensures students follow rules, manage behavior, and remain focused on goals, creating an environment where learning thrives.</li>
+                    <li><strong>Respect:</strong> Promotes positive relationships among students, teachers, and leaders, encouraging understanding, tolerance, and proper conduct.</li>
+                    <li><strong>Integrity:</strong> Requires honesty and moral uprightness, ensuring students act truthfully and uphold ethical standards.</li>
+                    <li><strong>Responsibility:</strong> Ensures students are accountable for their actions, duties, and choices.</li>
+                    <li><strong>Justice:</strong> Ensures fairness in all decisions, guaranteeing equal treatment and unbiased judgment.</li>
+                </ul>
+            </section>
+
+            <section id="chapter2">
+                <h2 class="section-title">CHAPTER TWO: STRUCTURE OF THE SCHOOL COURT</h2>
+                <p>To systematically manage discipline, the school institutes a formal judicial branch consisting of specialized desks:</p>
+                <ul>
+                    <li>Chief Judge</li>
+                    <li>Deputy Chief Judge</li>
+                    <li>Prosecutor / Attorney General</li>
+                    <li>Court Clerk</li>
+                    <li>Deputy Court Clerk</li>
+                    <li>The Intelligence Desk System</li>
+                    <li>Advocates / Defense Lawyers</li>
+                    <li>Court Spokesperson</li>
+                </ul>
+            </section>
+
+            <section id="chapter3">
+                <h2 class="section-title">CHAPTER THREE: DETAILED ROLES OF COURT OFFICIALS</h2>
+                
+                <h3 class="subsection-title">Article 3: The Chief Judge</h3>
+                <p>Presides over all court sessions, reviews complex case files, maintains strict order within hearings, delivers final fair judgments based on facts, and oversees the overall execution of duties by other court officials.</p>
+
+                <h3 class="subsection-title">Article 4: The Deputy Chief Judge</h3>
+                <p>Assists the Chief Judge in organizing legal files, supervises the general professional conduct of court members, and steps in to preside over sessions when the Chief Judge is unavailable.</p>
+
+                <h3 class="subsection-title">Article 5: The Prosecutor / Attorney General</h3>
+                <p>The Prosecutor represents the school in legal cases, presenting charges against accused individuals and ensuring justice through proper legal procedures.</p>
+
+                <h3 class="subsection-title">Article 6: The Court Clerk & Deputy Court Clerk</h3>
+                <p>The Court Clerk coordinates records, manages safety structures for court archives, and tracks timeline metrics securely.</p>
+
+                <h3 class="subsection-title">Article 7: The Intelligence Desk</h3>
+                <p>Conducts objective investigations, interviews witnesses regarding incidents, compiles comprehensive investigation findings, and provides early tracking to prevent behavioral misconduct.</p>
+            </section>
+
+            <section id="chapter4">
+                <h2 class="section-title">CHAPTER FOUR: RIGHTS OF STUDENTS</h2>
+                <ul>
+                    <li><strong>Right to a Fair Hearing:</strong> No disciplinary sanction may be applied without a formal investigation and evidentiary hearing.</li>
+                    <li><strong>Right to Legal Representation:</strong> Access to representation by an appointed student advocate/lawyer during trials.</li>
+                    <li><strong>Right to Respectful Treatment:</strong> Absolute protection against abusive language or degrading punishment.</li>
+                </ul>
+            </section>
+
+            <section id="chapter5">
+                <h2 class="section-title">CHAPTER FIVE: DUTIES & RESPONSIBILITIES</h2>
+                <ul>
+                    <li><strong>Obey School Rules:</strong> Unconditionally obey all established parameters outlined in this framework.</li>
+                    <li><strong>Respect Authority Figures:</strong> Demonstrate absolute respect to teachers, administrative staff, and student leadership structures.</li>
+                    <li><strong>Consistent Academic Attendance:</strong> Attend all scheduled classes, preps, assemblies, and official institutional activities.</li>
+                </ul>
+            </section>
+
+            <section id="chapter6">
+                <h2 class="section-title">CHAPTER SIX: PROHIBITED BEHAVIORS & SANCTIONS</h2>
+                <h3 class="subsection-title">Section A: Prohibited Behaviors</h3>
+                <ul>
+                    <li><strong>Drug & Substance Abuse:</strong> Possession or consumption of alcohol, cigarettes, or narcotics. <em>Sanction:</em> Immediate suspension and probation.</li>
+                    <li><strong>Theft:</strong> Stealing personal or institutional properties. <em>Sanction:</em> Restitution and suspension.</li>
+                    <li><strong>Violence & Bullying:</strong> Fighting or harassment. <em>Sanction:</em> Manual work allocation and warning.</li>
+                    <li><strong>Unauthorized Electronics:</strong> Phones, smart gadgets, or radios. <em>Sanction:</em> Confiscation until returned to parents.</li>
+                </ul>
+            </section>
+
+            <section id="prefects">
+                <h2 class="section-title">CHAPTER SEVEN: PREFECTORIAL CODE OF CONDUCT</h2>
+                <p>This Leadership Charter defines the rules governing student leaders (prefects), religious leaders, dormitory leaders, and form captains appointed to assist the staff in ensuring efficient administration of the school.</p>
+                <ul>
+                    <li><strong>The Head Prefect:</strong> Overall student leader and chief representative of the student body.</li>
+                    <li><strong>Deputy Head Prefect:</strong> Assists the Head Prefect directly and assumes authority in their absence.</li>
+                    <li><strong>Discipline Prefect & Deputy:</strong> Assists the staff directly in enforcing school rules across the campus.</li>
+                </ul>
+            </section>
+
+            <section id="unsa">
+                <h2 class="section-title">CHAPTER EIGHT: UGANDA NATIONAL STUDENTS ASSOCIATION (UNSA)</h2>
+                <p>Namungoona High School maintains full compliance with national student leadership frameworks. The UNSA branch represents national student integration interests inside our boundary walls.</p>
+            </section>
+
+            <section id="chapter7">
+                <h2 class="section-title">CHAPTER NINE: JUDICIAL PROCESSES & TRIAL MECHANICS</h2>
+                <p>Cases require clear factual verification by the Intelligence Desk and Prosecutor before trials can proceed. Accused students have the right to full defense parameters, cross-examination loops, and appeals through the office of the Headmaster.</p>
+            </section>
+
+            <section id="chapter8">
+                <h2 class="section-title">CHAPTER TEN: COMMUNICATION RULES</h2>
+                <p>All official notifications or briefings concerning the judicial court updates must pass explicitly through the authorized Court Spokesperson to avoid misinformation or campus rumors.</p>
+            </section>
+
+            <section id="chapter9">
+                <h2 class="section-title">CHAPTER ELEVEN: AMENDMENTS & ENFORCEMENT</h2>
+                <p>Structural alterations to this constitution require mutual approval from both the school administration board and the student council body to guarantee legitimacy.</p>
+                
+                <div class="quote-box">
+                    <strong>Strong Discipline Quote:</strong> 
+                    “Discipline is choosing between what you want now and what you want most in the future.”
+                </div>
+                
+                <p style="text-align: center; font-size: 0.85em; color: #718096; margin-top: 25px;">
+                    Edited and presented by the First School Court of Namungoona High School in 2026.<br>
+                    Headed by <strong>Chief Judge Ssenyonjo Ian Richard</strong> and the Intelligence Desk headed by <strong>Ssemuwemba Henry James</strong>.
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <footer style="background: #031222; color: white; padding: 60px 5% 30px 5%; font-size: 0.9rem; border-top: 4px solid var(--secondary);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+            <div>
+                <img src="SCHOOL BADGE.png" alt="Badge" class="footer-logo" onerror="this.src='https://via.placeholder.com/80'">
+                <p style="opacity: 0.8; line-height: 1.8;">Namungoona High School is a premier educational institution providing quality learning metrics with strong spiritual foundations, deep structural disciplines, and unparalleled academic excellence arrays continuously since 1999.</p>
+            </div>
+            <div>
+                <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">Quick Link Matrices</h3>
+                <a href="#home" class="footer-link">Portal Home Base</a>
+                <a href="#director" class="footer-link">Director's Office Desk</a>
+                <a href="#sectors" class="footer-link">Sectors & Curriculum</a>
+                <a href="#admissions" class="footer-link">Online Admissions desk</a>
+                <a href="https://mis.nhs.ac.ug" class="footer-link">MIS Portal Systems</a>
+            </div>
+            <div>
+                <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">Contact Matrix Channels</h3>
+                <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+256 700 627 960<br>+256 788 772 660</span></div>
+                <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>namungoonahighschool@gmail.com</span></div>
+                <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Hoima Road, Nakibinge Stage,<br>Kampala, Uganda.</span></div>
+            </div>
+        </div>
+        <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.7;">
+            <p>© 2026 Namungoona High School. All Rights Reserved. Strive to Excel.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* Mobile Navbar Toggle Controller */
+        function toggleMenu(menuId) {
+            const headerElement = document.getElementById('header');
+            if (menuId === 'header') {
+                headerElement.classList.toggle('mobile-active');
+            } else if (menuId === 'anthemMenu') {
+                alert("Playing Namungoona High School Anthem audio matrix...");
+            }
+        }
+
+        /* Dynamic Typing Effect for Homepage Welcome Message */
+        const textTarget = document.getElementById('typing-text');
+        const welcomeMessage = "Welcome to the Official Student Legal Charter and Guidelines. Read carefully to uphold our institutional parameters.";
+        let charIndex = 0;
+
+        function playTypingEffect() {
+            if (charIndex < welcomeMessage.length) {
+                textTarget.textContent += welcomeMessage.charAt(charIndex);
+                charIndex++;
+                setTimeout(playTypingEffect, 35);
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', playTypingEffect);
+
+        /* Intersection Observer for Section Reveal Effects */
+        const sections = document.querySelectorAll('section');
+        const revealOptions = {
+            threshold: 0.05,
+            rootMargin: "0px 0px -40px 0px"
+        };
+
+        const sectionObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    </script>
+</body>
+</html>
