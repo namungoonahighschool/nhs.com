@@ -3,1301 +3,840 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namungoona High School | Academic Portal</title>
+    <title>Namungoona High School | Academic Portal Base</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namungoona High School | Academic Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: 'Montserrat', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
-
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/90">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('student-view')">
-                <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200 overflow-hidden">
-                    <span>NHS</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-lg font-bold tracking-tight text-slate-900 leading-none">NAMUNGOONA HIGH SCHOOL</span>
-                    <span class="text-[10px] text-indigo-600 font-semibold tracking-wider mt-0.5">STRIVE TO EXCEL</span>
-                </div>
-            </div>  
-            <nav class="flex items-center space-x-6">
-                <button onclick="showSection('student-view')" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Library</button>
-                <button id="login-nav-btn" onclick="openLoginModal()" class="px-5 py-2.5 rounded-xl border border-indigo-600 text-indigo-600 text-sm font-semibold hover:bg-indigo-50 transition shadow-sm">DOS Login</button>
-                <button id="logout-nav-btn" onclick="logoutDOS()" class="hidden px-5 py-2.5 rounded-xl bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition">Log Out (DOS)</button>
-            </nav>
-        </div>
-    </header>
-
-    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
-        
-        <section id="student-view" class="space-y-8">
-            <div class="max-w-2xl">
-                <h1 class="text-4xl font-bold tracking-tight text-slate-900 mb-3">Past Examination Papers</h1>
-                <p class="text-slate-500 leading-relaxed">Access and download academic repositories curated by the Director of Studies.</p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
-                <div class="w-full md:flex-1">
-                    <input type="text" id="search-input" oninput="fetchPapers()" placeholder="Search by paper title..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm">
-                </div>
-                <div class="w-full md:w-48">
-                    <select id="filter-grade" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">
-                        <option value="">All Classes</option>
-                        <option value="Senior 3">Senior 3</option>
-                        <option value="Senior 4">Senior 4</option>
-                        <option value="A-Level">A-Level</option>
-                    </select>
-                </div>
-                <div class="w-full md:w-48">
-                    <select id="filter-subject" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">
-                        <option value="">All Subjects</option>
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Physics">Physics</option>
-                        <option value="Chemistry">Chemistry</option>
-                        <option value="English">English</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="papers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-            <div id="studentReportPortal" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-md mt-12 max-w-xl mx-auto space-y-6">
-                <div class="text-center border-b border-slate-100 pb-4">
-                    <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 mx-auto mb-2 font-bold">🔒</div>
-                    <h2 class="text-xl font-bold text-slate-900">Secure Parent Report Portal</h2>
-                    <p class="text-slate-500 text-xs mt-1">Two-Factor Security Verification Enabled</p>
-                </div>
-                
-                <div id="2fa-step-1" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Access Code or ID</label>
-                        <input type="text" id="parentSearchId" onkeydown="if(event.key === 'Enter') requestOTP()" placeholder="e.g., STU-2026-001" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm font-medium">
-                    </div>
-                    <button onclick="requestOTP()" id="otp-req-btn" class="w-full bg-indigo-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Send Verification PIN</button>
-                </div>
-
-                <div id="2fa-step-2" class="hidden space-y-4">
-                    <div class="p-3 bg-emerald-50 text-emerald-800 text-xs rounded-xl border border-emerald-100 text-center">
-                        A secure 4-digit security code has been routed to your registered contact number ending in <span id="phone-masked" class="font-bold">XXXX</span>.
-                    </div>
-                    <div id="test-sms-simulator" class="p-3 bg-amber-50 text-amber-800 text-xs rounded-xl border border-amber-200 font-mono text-center hidden"></div>
-                                        
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Enter 4-Digit Security Code</label>
-                        <input type="text" id="parentOtpInput" maxlength="4" onkeydown="if(event.key === 'Enter') verifyOTP()" placeholder="X X X X" class="w-full text-center tracking-widest text-lg font-bold px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="reset2FAWizard()" class="w-1/3 border border-slate-200 text-slate-500 text-xs font-semibold rounded-xl hover:bg-slate-50 transition">Back</button>
-                        <button onclick="verifyOTP()" id="otp-verify-btn" class="w-2/3 bg-emerald-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Verify & Open Records</button>
-                    </div>
-                </div>
-                <div id="reportResults" class="hidden space-y-4 pt-2"></div>
-            </div>
-        </section>
-
-        <section id="dos-view" class="hidden space-y-8">
-            <div class="flex items-center justify-between border-b border-slate-200 pb-5">
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight text-slate-900">DOS Administrative Panel</h1>
-                    <p class="text-slate-500 text-sm mt-1">Logged in as Administrator. Database read/write access verified.</p>
-                </div>
-                <button onclick="showSection('student-view')" class="text-sm font-semibold text-indigo-600 hover:underline">← Exit Dashboard</button>
-            </div>
-
-            <div class="flex space-x-4 border-b border-slate-200">
-                <button onclick="switchAdminTab('papers')" id="tab-btn-papers" class="pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600">Past Exam Papers</button>
-                <button onclick="switchAdminTab('reports')" id="tab-btn-reports" class="pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800">Student Report Cards</button>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="space-y-6">
-                    <div id="form-panel-papers" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">
-                        <h2 class="text-lg font-bold text-slate-900 text-indigo-600">📚 Bulk Paper Uploader</h2>
-                        <form id="upload-form" onsubmit="handleBatchPapersUpload(event)" class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Grade</label>
-                                    <select id="up-grade" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-                                        <option>Senior 3</option>
-                                        <option>Senior 4</option>
-                                        <option>A-Level</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Year</label>
-                                    <select id="up-year" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-                                        <option>2026</option>
-                                        <option>2025</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Subject</label>
-                                <select id="up-subject" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-                                    <option>Mathematics</option>
-                                    <option>Physics</option>
-                                    <option>Chemistry</option>
-                                    <option>English</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Select PDF Files</label>
-                                <input type="file" id="up-files" accept=".pdf" multiple required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
-                            </div>
-                            
-                            <div id="paperProgressContainer" class="hidden space-y-1">
-                                <div class="flex justify-between text-xs font-medium text-slate-500">
-                                    <span id="paperStatusText">Uploading documents...</span>
-                                    <span id="paperProgressPercent">0%</span>
-                                </div>
-                                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                    <div id="paperProgressBar" class="bg-indigo-600 h-full w-0 transition-all duration-200"></div>
-                                </div>
-                            </div>
-
-                            <button type="submit" id="paperSubmitBtn" class="w-full bg-indigo-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Deploy Papers Live</button>
-                        </form>
-                    </div>
-
-                    <div id="form-panel-reports" class="hidden space-y-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-                            <h2 class="text-lg font-bold text-slate-900 text-emerald-600">⚡ Bulk Report Uploader</h2>
-                            <div class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Batch Year</label>
-                                        <input type="text" id="batchYear" value="2026" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Batch Term</label>
-                                        <select id="batchTerm" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-white">
-                                            <option value="Term 1">Term 1</option>
-                                            <option value="Term 2">Term 2</option>
-                                            <option value="Term 3">Term 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Upload Multiple PDFs</label>
-                                    <input type="file" id="batchPdfFiles" accept=".pdf" multiple class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
-                                </div>
-                                <div id="batchProgressContainer" class="hidden space-y-1">
-                                    <div class="flex justify-between text-xs font-medium text-slate-500">
-                                        <span id="batchStatusText">Processing bundle...</span>
-                                        <span id="batchProgressPercent">0%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                        <div id="batchProgressBar" class="bg-emerald-600 h-full w-0 transition-all duration-200"></div>
-                                    </div>
-                                </div>
-                                <button onclick="handleBatchReportsUpload()" id="batchSubmitBtn" class="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Deploy Batch Run</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                        <h2 id="repo-title" class="text-lg font-bold text-slate-900">Active Repository: Past Papers</h2>
-                        <div class="w-full md:w-72">
-                            <input type="text" id="admin-search-input" oninput="handleAdminSearch()" placeholder="Search repository..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-xs">
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto p-1">
-                        <table class="w-full text-left text-sm text-slate-600">
-                            <thead>
-                                <tr id="repo-table-header" class="border-b border-slate-100 text-slate-400 font-medium text-xs tracking-wider uppercase"></tr>
-                            </thead>
-                            <tbody id="admin-table-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white max-w-sm w-full rounded-2xl shadow-xl border border-slate-100 p-6 space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-slate-900">DOS Security Gate</h3>
-                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 font-semibold text-lg">&times;</button>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Administrative Password</label>
-                <input type="password" id="login-password" onkeydown="if(event.key === 'Enter') attemptLogin()" placeholder="Enter password..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm">
-                <p id="login-error" class="hidden text-xs text-rose-500 font-medium mt-1">Invalid Admin Credentials.</p>
-            </div>
-            <button onclick="attemptLogin()" class="w-full bg-slate-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-slate-800 transition">Authenticate</button>
-        </div>
-    </div>
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script>
-        const SUPABASE_URL = 'https://pmdfqinztwijxdxnkqzr.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'sb_publishable_YWfyh9ndtcLw-kq7iUGtBQ_FELKsSMy';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        let isDOS = sessionStorage.getItem('isDOS') === 'true';
-        let activeAdminTab = 'papers'; 
-        let activeVerificationId = null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateAuthUI();
-            fetchPapers();
-        });
-
-        function handleAdminSearch() {
-            if (activeAdminTab === 'papers') { fetchPapers(); } else { fetchAdminReportCards(); }
-        }
-
-        function showSection(sectionId) {
-            if (sectionId === 'dos-view' && !isDOS) { openLoginModal(); return; }
-            document.getElementById('student-view').classList.add('hidden');
-            document.getElementById('dos-view').classList.add('hidden');
-            document.getElementById(sectionId).classList.remove('hidden');
-            if (sectionId === 'dos-view') { switchAdminTab(activeAdminTab); }
-        }
-
-        function openLoginModal() {
-            if (isDOS) { showSection('dos-view'); return; }
-            document.getElementById('login-modal').classList.remove('hidden');
-            document.getElementById('login-password').value = '';
-            document.getElementById('login-error').classList.add('hidden');
-        }
-
-        function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
-        
-        function attemptLogin() {
-            if (document.getElementById('login-password').value === 'admin123') { 
-                isDOS = true; 
-                sessionStorage.setItem('isDOS', 'true');
-                updateAuthUI(); 
-                closeLoginModal(); 
-                showSection('dos-view');
-            } else { 
-                document.getElementById('login-error').classList.remove('hidden'); 
-            }
-        }
-
-        function logoutDOS() {
-            isDOS = false; 
-            sessionStorage.removeItem('isDOS'); 
-            updateAuthUI(); 
-            showSection('student-view');
-        }
-
-        function updateAuthUI() {
-            if (isDOS) {
-                document.getElementById('login-nav-btn').classList.add('hidden');
-                document.getElementById('logout-nav-btn').classList.remove('hidden');
-            } else {
-                document.getElementById('login-nav-btn').classList.remove('hidden');
-                document.getElementById('logout-nav-btn').classList.add('hidden');
-            }
-        }
-
-        function switchAdminTab(tab) {
-            activeAdminTab = tab;
-            document.getElementById('admin-search-input').value = '';
-            const papersBtn = document.getElementById('tab-btn-papers');
-            const reportsBtn = document.getElementById('tab-btn-reports');
-            const papersForm = document.getElementById('form-panel-papers');
-            const reportsForm = document.getElementById('form-panel-reports');
-                        
-            if (tab === 'papers') {
-                papersBtn.className = "pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600";
-                reportsBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";
-                papersForm.classList.remove('hidden'); 
-                reportsForm.classList.add('hidden');
-                document.getElementById('repo-title').innerText = "Active Repository: Past Papers";
-                fetchPapers();
-            } else {
-                reportsBtn.className = "pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-600";
-                papersBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";
-                reportsForm.classList.remove('hidden'); 
-                papersForm.classList.add('hidden');
-                document.getElementById('repo-title').innerText = "Active Repository: Student Report Cards";
-                fetchAdminReportCards();
-            }
-        }
-
-        // --- PARENT PORTAL 2FA ENGINE ---
-        async function requestOTP() {
-            const searchId = document.getElementById('parentSearchId').value.trim();
-            const reqBtn = document.getElementById('otp-req-btn');
-            if(!searchId) { alert("Please enter a Student Access Code or ID."); return; }
-            reqBtn.disabled = true;
-            reqBtn.innerText = "Verifying Credentials...";
-            
-            const { data, error } = await _supabase
-                .from('report_cards')
-                .select('id, parent_phone')
-                .or(`access_code.eq.${searchId},student_id.eq.${searchId}`)
-                .maybeSingle();
-                
-            if (error || !data) {
-                alert("Access Code/Student ID not detected in records.");
-                reqBtn.disabled = false; 
-                reqBtn.innerText = "Send Verification PIN";
-                return;
-            }
-            activeVerificationId = data.id;
-                        
-            const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
-            const expiryTime = new Date(Date.now() + 10 * 60000).toISOString();
-            
-            const { error: updateErr } = await _supabase
-                .from('report_cards')
-                .update({ otp_code: generatedPin, otp_expiry: expiryTime })
-                .eq('id', activeVerificationId);
-                
-            if(updateErr) { alert("Security handoff failed."); reqBtn.disabled = false; return; }
-            
-            const rawPhone = data.parent_phone || "+256 XXXXXXX";
-            document.getElementById('phone-masked').innerText = rawPhone.slice(-4);
-            const simulator = document.getElementById('test-sms-simulator');
-            simulator.innerHTML = `📡 [DEV SIMULATION SMS] To Parent Contact: <b>"Your NHS Security PIN is: ${generatedPin}"</b>`;
-            simulator.classList.remove('hidden');
-            
-            document.getElementById('2fa-step-1').classList.add('hidden');
-            document.getElementById('2fa-step-2').classList.remove('hidden');
-            reqBtn.disabled = false; 
-            reqBtn.innerText = "Send Verification PIN";
-        }
-
-        async function verifyOTP() {
-            const pinInput = document.getElementById('parentOtpInput').value.trim();
-            const verifyBtn = document.getElementById('otp-verify-btn');
-            if(pinInput.length !== 4) { alert("Please input complete 4-digit token."); return; }
-            verifyBtn.disabled = true;
-            
-            const nowIso = new Date().toISOString();
-            const { data, error } = await _supabase
-                .from('report_cards')
-                .select('*')
-                .eq('id', activeVerificationId)
-                .eq('otp_code', pinInput)
-                .gt('otp_expiry', nowIso)
-                .maybeSingle();
-                
-            if (error || !data) {
-                alert("Security check failed: Invalid or expired PIN entry code.");
-                verifyBtn.disabled = false;
-                return;
-            }
-            
-            await _supabase.from('report_cards').update({ otp_code: null, otp_expiry: null }).eq('id', data.id);
-            const resultsBox = document.getElementById('reportResults');
-            resultsBox.innerHTML = `
-                <div class="p-5 border-2 border-emerald-500 bg-emerald-50/50 rounded-2xl space-y-3">
-                    <div>
-                        <span class="px-2 py-0.5 bg-emerald-600 text-white rounded text-[10px] font-bold tracking-wider uppercase">Authenticated Access</span>
-                        <h4 class="font-bold text-slate-800 text-lg mt-1">${data.student_name}</h4>
-                        <p class="text-xs text-slate-500">${data.class || 'Senior 4'} • ${data.term || 'Term 3'} (${data.year || '2026'})</p>
-                    </div>
-                    <a href="${data.file_url}" target="_blank" class="block text-center w-full px-4 py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-md">Open Official PDF Document</a>
-                </div>
-            `;
-                        
-            document.getElementById('2fa-step-2').classList.add('hidden');
-            resultsBox.classList.remove('hidden');
-        }
-
-        function reset2FAWizard() {
-            document.getElementById('2fa-step-2').classList.add('hidden');
-            document.getElementById('reportResults').classList.add('hidden');
-            document.getElementById('test-sms-simulator').classList.add('hidden');
-            document.getElementById('2fa-step-1').classList.remove('hidden');
-            document.getElementById('parentOtpInput').value = '';
-        }
-
-        // --- CORE DATABASE FETCH ENGINES ---
-        async function fetchPapers() {
-            const searchQuery = document.getElementById('search-input').value;
-            const adminSearchQuery = document.getElementById('admin-search-input').value;
-            const filterGrade = document.getElementById('filter-grade').value;
-            const filterSubject = document.getElementById('filter-subject').value;
-            
-            let query = _supabase.from('past_papers').select('*').order('created_at', { ascending: false });
-            
-            if (isDOS && activeAdminTab === 'papers' && adminSearchQuery) {
-                query = query.ilike('title', `%${adminSearchQuery}%`);
-            } else if (searchQuery) {
-                query = query.ilike('title', `%${searchQuery}%`);
-            }
-                        
-            if (filterGrade) query = query.eq('grade', filterGrade);
-            if (filterSubject) query = query.eq('subject', filterSubject);
-            
-            const { data } = await query;
-            renderStudentGrid(data || []);
-            if (isDOS && activeAdminTab === 'papers') renderAdminPapersTable(data || []);
-        }
-
-        function renderStudentGrid(papers) {
-            const grid = document.getElementById('papers-grid');
-            grid.innerHTML = papers.length === 0 ? `<div class="col-span-full py-12 text-center text-slate-400">No matching library papers cataloged.</div>` : '';
-            papers.forEach(paper => {
-                grid.innerHTML += `
-                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4 hover:shadow-md transition">
-                        <div>
-                            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-semibold">${paper.subject}</span>
-                            <h3 class="font-bold text-slate-900 mt-2 text-base leading-tight">${paper.title}</h3>
-                            <p class="text-xs text-slate-400 mt-1">${paper.grade} • Year ${paper.year}</p>
-                        </div>
-                        <a href="${paper.file_url}" target="_blank" class="block w-full text-center py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition">Download Document</a>
-                    </div>`;
-            });
-        }
-
-        function renderAdminPapersTable(papers) {
-            const header = document.getElementById('repo-table-header');
-            header.innerHTML = `
-                <th class="py-3 px-4">Title</th>
-                <th class="py-3 px-4">Subject</th>
-                <th class="py-3 px-4">Grade</th>
-                <th class="py-3 px-4 text-right">Action</th>
-            `;
-            const body = document.getElementById('admin-table-body');
-            body.innerHTML = papers.length === 0 ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">No records found.</td></tr>` : '';
-            
-            papers.forEach(p => {
-                body.innerHTML += `
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="py-3 px-4 font-semibold text-slate-900">${p.title}</td>
-                        <td class="py-3 px-4 text-xs">${p.subject}</td>
-                        <td class="py-3 px-4 text-xs">${p.grade}</td>
-                        <td class="py-3 px-4 text-right"><a href="${p.file_url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">View File</a></td>
-                    </tr>`;
-            });
-        }
-
-        async function fetchAdminReportCards() {
-            const adminSearchQuery = document.getElementById('admin-search-input').value;
-            let query = _supabase.from('report_cards').select('*').order('created_at', { ascending: false });
-            
-            if (adminSearchQuery) {
-                query = query.ilike('student_name', `%${adminSearchQuery}%`);
-            }
-            
-            const { data } = await query;
-            const header = document.getElementById('repo-table-header');
-            header.innerHTML = `
-                <th class="py-3 px-4">Student Name</th>
-                <th class="py-3 px-4">Student ID</th>
-                <th class="py-3 px-4">Parent Contact</th>
-                <th class="py-3 px-4 text-right">Action</th>
-            `;
-            const body = document.getElementById('admin-table-body');
-            body.innerHTML = (!data || data.length === 0) ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">No report cards logged.</td></tr>` : '';
-            
-            if (data) {
-                data.forEach(r => {
-                    body.innerHTML += `
-                        <tr class="hover:bg-slate-50/80 transition">
-                            <td class="py-3 px-4 font-semibold text-slate-900">${r.student_name}</td>
-                            <td class="py-3 px-4 text-xs font-mono">${r.student_id || 'N/A'}</td>
-                            <td class="py-3 px-4 text-xs">${r.parent_phone}</td>
-                            <td class="py-3 px-4 text-right"><a href="${r.file_url}" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline">Open Report</a></td>
-                        </tr>`;
-                });
-            }
-        }
-
-        // --- BULK BATCH PAST PAPERS UPLOAD LOGIC ---
-        async function handleBatchPapersUpload(e) {
-            e.preventDefault();
-            const fileInput = document.getElementById('up-files');
-            const grade = document.getElementById('up-grade').value;
-            const year = document.getElementById('up-year').value;
-            const subject = document.getElementById('up-subject').value;
-            
-            const progressContainer = document.getElementById('paperProgressContainer');
-            const progressBar = document.getElementById('paperProgressBar');
-            const statusText = document.getElementById('paperStatusText');
-            const progressPercent = document.getElementById('paperProgressPercent');
-            const submitBtn = document.getElementById('paperSubmitBtn');
-
-            if (!fileInput.files || fileInput.files.length === 0) return;
-
-            const files = Array.from(fileInput.files);
-            const totalFiles = files.length;
-            
-            submitBtn.disabled = true;
-            progressContainer.classList.remove('hidden');
-
-            for (let i = 0; i < totalFiles; i++) {
-                const file = files[i];
-                const paperTitle = file.name.replace(/\.[^/.]+$/, "");
-                
-                statusText.innerText = `Deploying: ${file.name}`;
-                let percent = Math.round((i / totalFiles) * 100);
-                progressBar.style.width = `${percent}%`;
-                progressPercent.innerText = `${percent}%`;
-
-                const filePath = `${grade}/${subject}/${year}_${file.name}`;
-                const { data: uploadData, error: uploadError } = await _supabase.storage
-                    .from('past-papers')
-                    .upload(filePath, file, { upsert: true });
-
-                if (uploadError) {
-                    console.error(uploadError);
-                    continue;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
                 }
-
-                const { data: urlData } = _supabase.storage.from('past-papers').getPublicUrl(filePath);
-                
-                // FIXED: Wrapped payload inside an array []
-                await _supabase.from('past_papers').insert([{
-                    title: paperTitle,
-                    grade: grade,
-                    year: year,
-                    subject: subject,
-                    file_url: urlData.publicUrl
-                }]);
-            }
-
-            progressBar.style.width = '100%';
-            progressPercent.innerText = '100%';
-            statusText.innerText = "All papers are now live on the library grid!";
-            submitBtn.disabled = false;
-            fileInput.value = '';
-            
-            fetchPapers();
-        }
-
-        // --- BULK BATCH REPORT CARDS UPLOAD LOGIC ---
-        async function handleBatchReportsUpload() {
-            const fileInput = document.getElementById('batchPdfFiles');
-            const year = document.getElementById('batchYear').value.trim();
-            const term = document.getElementById('batchTerm').value;
-            const progressContainer = document.getElementById('batchProgressContainer');
-            const progressBar = document.getElementById('batchProgressBar');
-            const statusText = document.getElementById('batchStatusText');
-            const progressPercent = document.getElementById('batchProgressPercent');
-            const submitBtn = document.getElementById('batchSubmitBtn');
-
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert("Please select at least one PDF report card file.");
-                return;
-            }
-
-            const files = Array.from(fileInput.files);
-            const totalFiles = files.length;
-            
-            submitBtn.disabled = true;
-            progressContainer.classList.remove('hidden');
-
-            for (let i = 0; i < totalFiles; i++) {
-                const file = files[i];
-                const studentId = file.name.replace(/\.[^/.]+$/, ""); 
-                
-                statusText.innerText = `Uploading: ${file.name}`;
-                let percent = Math.round((i / totalFiles) * 100);
-                progressBar.style.width = `${percent}%`;
-                progressPercent.innerText = `${percent}%`;
-
-                const filePath = `${year}/${term}/${file.name}`;
-                
-                const { data: uploadData, error: uploadError } = await _supabase.storage
-                    .from('reports')
-                    .upload(filePath, file, { upsert: true });
-
-                if (uploadError) {
-                    console.error(`Error uploading file ${file.name}:`, uploadError);
-                    continue; 
-                }
-
-                const { data: urlData } = _supabase.storage
-                    .from('reports')
-                    .getPublicUrl(filePath);
-                    
-                const fileUrl = urlData.publicUrl;
-
-                // FIXED: Wrapped payload inside an array []
-                const { error: dbError } = await _supabase
-                    .from('report_cards')
-                    .upsert([{
-                        student_id: studentId,
-                        access_code: studentId, 
-                        student_name: `Student (${studentId})`, 
-                        year: year,
-                        term: term,
-                        file_url: fileUrl,
-                        parent_phone: "+256700000000" 
-                    }], { onConflict: 'student_id,year,term' });
-
-                if (dbError) {
-                    console.error(`Database linking failed for ${studentId}:`, dbError);
-                }
-            }
-
-            progressBar.style.width = '100%';
-            progressPercent.innerText = '100%';
-            statusText.innerText = `Successfully deployed ${totalFiles} report cards live!`;
-            submitBtn.disabled = false;
-            fileInput.value = '';
-            
-            if (activeAdminTab === 'reports') {
-                fetchAdminReportCards();
             }
         }
     </script>
-</body>
-</html>
-        body { font-family: 'Montserrat', sans-serif; }
+    
+    <style>
+        :root {
+            --primary: #0a2a4b;
+            --secondary: #d32f2f;
+            --accent: #fbc02d;
+            --light: #f8f9fa;
+            --dark: #1a1a1a;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8fafc; 
+        }
+
+        .announcement-ticker {
+            background-color: #fbc02d;
+            color: #0a2a4b;
+            padding: 8px 0;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-bottom: 2px solid #e6b022;
+            overflow: hidden;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marqueeEffect 25s linear infinite;
+        }
+
+        .marquee-content span {
+            margin-right: 50px;
+        }
+
+        @keyframes marqueeEffect {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .header {
+            background: var(--glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(10, 42, 75, 0.05);
+        }
+
+        .logo-container img {
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: 0.3s ease;
+        }
+
+        .btn-gold {
+            background-color: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(251, 192, 45, 0.2);
+        }
+
+        .btn-gold:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+            transition: 0.3s ease;
+        }
+
+        .mobile-nav-panel {
+            display: none;
+            flex-direction: column;
+            background: var(--primary);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .mobile-nav-panel a {
+            color: white;
+            padding: 12px 0;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .header.mobile-active .mobile-nav-panel {
+            display: flex;
+        }
+
+        .footer-link {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            transition: 0.3s ease;
+        }
+        .footer-link:hover {
+            color: var(--accent);
+            padding-left: 6px;
+        }
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .footer-contact-item i {
+            color: var(--accent);
+            margin-top: 4px;
+        }
+        .footer-logo {
+            height: 70px;
+            margin-bottom: 15px;
+            object-fit: contain;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.reveal-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hover-card-trigger {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+        .hover-card-trigger:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(10, 42, 75, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/90">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('student-view')">
-                <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200 overflow-hidden">
-                    <span>NHS</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-lg font-bold tracking-tight text-slate-900 leading-none">NAMUNGOONA HIGH SCHOOL</span>
-                    <span class="text-[10px] text-indigo-600 font-semibold tracking-wider mt-0.5">STRIVE TO EXCEL</span>
-                </div>
-            </div>  
-            <nav class="flex items-center space-x-6">
-                <button onclick="showSection('student-view')" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Library</button>
-                <button id="login-nav-btn" onclick="openLoginModal()" class="px-5 py-2.5 rounded-xl border border-indigo-600 text-indigo-600 text-sm font-semibold hover:bg-indigo-50 transition shadow-sm">DOS Login</button>
-                <button id="logout-nav-btn" onclick="logoutDOS()" class="hidden px-5 py-2.5 rounded-xl bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition">Log Out (DOS)</button>
-            </nav>
-        </div>
-    </header>
-
-    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
-        
-        <section id="student-view" class="space-y-8">
-            <div class="max-w-2xl">
-                <h1 class="text-4xl font-bold tracking-tight text-slate-900 mb-3">Past Examination Papers</h1>
-                <p class="text-slate-500 leading-relaxed">Access and download academic repositories curated by the Director of Studies.</p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
-                <div class="w-full md:flex-1">
-                    <input type="text" id="search-input" oninput="fetchPapers()" placeholder="Search by paper title..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm">
-                </div>
-                <div class="w-full md:w-48">
-                    <select id="filter-grade" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">
-                        <option value="">All Classes</option>
-                        <option value="Senior 3">Senior 3</option>
-                        <option value="Senior 4">Senior 4</option>
-                        <option value="A-Level">A-Level</option>
-                    </select>
-                </div>
-                <div class="w-full md:w-48">
-                    <select id="filter-subject" onchange="fetchPapers()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-600 font-medium">
-                        <option value="">All Subjects</option>
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Physics">Physics</option>
-                        <option value="Chemistry">Chemistry</option>
-                        <option value="English">English</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="papers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-            <div id="studentReportPortal" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-md mt-12 max-w-xl mx-auto space-y-6">
-                <div class="text-center border-b border-slate-100 pb-4">
-                    <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 mx-auto mb-2 font-bold">🔒</div>
-                    <h2 class="text-xl font-bold text-slate-900">Secure Parent Report Portal</h2>
-                    <p class="text-slate-500 text-xs mt-1">Two-Factor Security Verification Enabled</p>
-                </div>
-                
-                <div id="2fa-step-1" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Access Code or ID</label>
-                        <input type="text" id="parentSearchId" onkeydown="if(event.key === 'Enter') requestOTP()" placeholder="e.g., STU-2026-001" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm font-medium">
-                    </div>
-                    <button onclick="requestOTP()" id="otp-req-btn" class="w-full bg-indigo-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Send Verification PIN</button>
-                </div>
-
-                <div id="2fa-step-2" class="hidden space-y-4">
-                    <div class="p-3 bg-emerald-50 text-emerald-800 text-xs rounded-xl border border-emerald-100 text-center">
-                        A secure 4-digit security code has been routed to your registered contact number ending in <span id="phone-masked" class="font-bold">XXXX</span>.
-                    </div>
-                    <div id="test-sms-simulator" class="p-3 bg-amber-50 text-amber-800 text-xs rounded-xl border border-amber-200 font-mono text-center hidden"></div>
-                                        
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Enter 4-Digit Security Code</label>
-                        <input type="text" id="parentOtpInput" maxlength="4" onkeydown="if(event.key === 'Enter') verifyOTP()" placeholder="X X X X" class="w-full text-center tracking-widest text-lg font-bold px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="reset2FAWizard()" class="w-1/3 border border-slate-200 text-slate-500 text-xs font-semibold rounded-xl hover:bg-slate-50 transition">Back</button>
-                        <button onclick="verifyOTP()" id="otp-verify-btn" class="w-2/3 bg-emerald-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Verify & Open Records</button>
-                    </div>
-                </div>
-                <div id="reportResults" class="hidden space-y-4 pt-2"></div>
-            </div>
-        </section>
-
-        <section id="dos-view" class="hidden space-y-8">
-            <div class="flex items-center justify-between border-b border-slate-200 pb-5">
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight text-slate-900">DOS Administrative Panel</h1>
-                    <p class="text-slate-500 text-sm mt-1">Logged in as Administrator. Database read/write access verified.</p>
-                </div>
-                <button onclick="showSection('student-view')" class="text-sm font-semibold text-indigo-600 hover:underline">← Exit Dashboard</button>
-            </div>
-
-            <div class="flex space-x-4 border-b border-slate-200">
-                <button onclick="switchAdminTab('papers')" id="tab-btn-papers" class="pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600">Past Exam Papers</button>
-                <button onclick="switchAdminTab('reports')" id="tab-btn-reports" class="pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800">Student Report Cards</button>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="space-y-6">
-                    <div id="form-panel-papers" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">
-                        <h2 class="text-lg font-bold text-slate-900 text-indigo-600">📚 Bulk Paper Uploader</h2>
-                        <form id="upload-form" onsubmit="handleBatchPapersUpload(event)" class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Grade</label>
-                                    <select id="up-grade" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-                                        <option>Senior 3</option>
-                                        <option>Senior 4</option>
-                                        <option>A-Level</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Year</label>
-                                    <select id="up-year" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-                                        <option>2026</option>
-                                        <option>2025</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Subject</label>
-                                <select id="up-subject" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
-                                    <option>Mathematics</option>
-                                    <option>Physics</option>
-                                    <option>Chemistry</option>
-                                    <option>English</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Select PDF Files</label>
-                                <input type="file" id="up-files" accept=".pdf" multiple required class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
-                            </div>
-                            
-                            <div id="paperProgressContainer" class="hidden space-y-1">
-                                <div class="flex justify-between text-xs font-medium text-slate-500">
-                                    <span id="paperStatusText">Uploading documents...</span>
-                                    <span id="paperProgressPercent">0%</span>
-                                </div>
-                                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                    <div id="paperProgressBar" class="bg-indigo-600 h-full w-0 transition-all duration-200"></div>
-                                </div>
-                            </div>
-
-                            <button type="submit" id="paperSubmitBtn" class="w-full bg-indigo-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">Deploy Papers Live</button>
-                        </form>
-                    </div>
-
-                    <div id="form-panel-reports" class="hidden space-y-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-                            <h2 class="text-lg font-bold text-slate-900 text-emerald-600">⚡ Bulk Report Uploader</h2>
-                            <div class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Batch Year</label>
-                                        <input type="text" id="batchYear" value="2026" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Batch Term</label>
-                                        <select id="batchTerm" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-white">
-                                            <option value="Term 1">Term 1</option>
-                                            <option value="Term 2">Term 2</option>
-                                            <option value="Term 3">Term 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Upload Multiple PDFs</label>
-                                    <input type="file" id="batchPdfFiles" accept=".pdf" multiple class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
-                                </div>
-                                <div id="batchProgressContainer" class="hidden space-y-1">
-                                    <div class="flex justify-between text-xs font-medium text-slate-500">
-                                        <span id="batchStatusText">Processing bundle...</span>
-                                        <span id="batchProgressPercent">0%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                        <div id="batchProgressBar" class="bg-emerald-600 h-full w-0 transition-all duration-200"></div>
-                                    </div>
-                                </div>
-                                <button onclick="handleBatchReportsUpload()" id="batchSubmitBtn" class="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-md">Deploy Batch Run</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                        <h2 id="repo-title" class="text-lg font-bold text-slate-900">Active Repository: Past Papers</h2>
-                        <div class="w-full md:w-72">
-                            <input type="text" id="admin-search-input" oninput="handleAdminSearch()" placeholder="Search repository..." class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-xs">
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto p-1">
-                        <table class="w-full text-left text-sm text-slate-600">
-                            <thead>
-                                <tr id="repo-table-header" class="border-b border-slate-100 text-slate-400 font-medium text-xs tracking-wider uppercase"></tr>
-                            </thead>
-                            <tbody id="admin-table-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div id="login-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white max-w-sm w-full rounded-2xl shadow-xl border border-slate-100 p-6 space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-slate-900">DOS Security Gate</h3>
-                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 font-semibold text-lg">&times;</button>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Administrative Password</label>
-                <input type="password" id="login-password" onkeydown="if(event.key === 'Enter') attemptLogin()" placeholder="Enter password..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm">
-                <p id="login-error" class="hidden text-xs text-rose-500 font-medium mt-1">Invalid Admin Credentials.</p>
-            </div>
-            <button onclick="attemptLogin()" class="w-full bg-slate-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-slate-800 transition">Authenticate</button>
+    <div class="announcement-ticker">
+        <div class="marquee-content">
+            <span>📢 Termly Past Papers & Revision Schemes Updated.</span>
+            <span>📝 Check out the new UNEB Mock Assessment Matrix below.</span>
+            <span>🌟 Secure Student Report Card Portal Access Available 24/7.</span>
         </div>
     </div>
 
-    <script>
-        const SUPABASE_URL = 'https://pmdfqinztwijxdxnkqzr.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'sb_publishable_YWfyh9ndtcLw-kq7iUGtBQ_FELKsSMy';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <header class="header" id="header">
+        <div class="logo-container">
+            <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
+        </div>
         
-        let isDOS = sessionStorage.getItem('isDOS') === 'true';
-        let activeAdminTab = 'papers'; 
-        let activeVerificationId = null;
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#director">Director</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#admissions">Admissions</a>
+            <a href="MAGAZINE.html">Magazine</a>
+            <a href="SCHOOL GALLERY.html">Gallery</a>
+            <a href="dos.html" style="color: var(--secondary);">Past Papers</a>
+            <a href="constitution.html">Constitution</a>
+            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
+        </nav>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateAuthUI();
-            fetchPapers();
-        });
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="btn btn-gold" onclick="toggleMenu('anthemMenu')">Anthem</button>
+            <div class="menu-toggle" onclick="toggleMenu('header')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
 
-        function handleAdminSearch() {
-            if (activeAdminTab === 'papers') { fetchPapers(); } else { fetchAdminReportCards(); }
-        }
+        <div class="mobile-nav-panel" id="mobileNav">
+            <a href="#home">Home</a>
+            <a href="#director">Director</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#admissions">Admissions</a>
+            <a href="MAGAZINE.html">Magazine</a>
+            <a href="SCHOOL GALLERY.html">Gallery</a>
+            <a href="dos.html">Past Papers</a>
+            <a href="constitution.html">Constitution</a>
+            <a href="https://mis.nhs.ac.ug">MIS Portal</a>
+        </div>
+    </header>
 
-        function showSection(sectionId) {
-            if (sectionId === 'dos-view' && !isDOS) { openLoginModal(); return; }
-            document.getElementById('student-view').classList.add('hidden');
-            document.getElementById('dos-view').classList.add('hidden');
-            document.getElementById(sectionId).classList.remove('hidden');
-            if (sectionId === 'dos-view') { switchAdminTab(activeAdminTab); }
-        }
-
-        function openLoginModal() {
-            if (isDOS) { showSection('dos-view'); return; }
-            document.getElementById('login-modal').classList.remove('hidden');
-            document.getElementById('login-password').value = '';
-            document.getElementById('login-error').classList.add('hidden');
-        }
-
-        function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
-        function attemptLogin() {
-            if (document.getElementById('login-password').value === 'admin123') { 
-                isDOS = true; 
-                sessionStorage.setItem('isDOS', 'true');
-                updateAuthUI(); 
-                closeLoginModal(); 
-                showSection('dos-view');
-            } else { 
-                document.getElementById('login-error').classList.remove('hidden'); 
-            }
-        }
+        <div class="flex justify-center space-x-4 mb-10 border-b border-slate-200 pb-4">
+            <button onclick="switchTab('student')" id="tab-btn-student" class="px-6 py-2.5 font-bold text-sm uppercase rounded-lg bg-[#0a2a4b] text-white shadow-sm transition">
+                <i class="fas fa-graduation-cap mr-2"></i>Student Resource Desk
+            </button>
+            <button onclick="switchTab('admin')" id="tab-btn-admin" class="px-6 py-2.5 font-bold text-sm uppercase rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+                <i class="fas fa-user-shield mr-2"></i>Director of Studies Office
+            </button>
+        </div>
 
-        function logoutDOS() {
-            isDOS = false; 
-            sessionStorage.removeItem('isDOS'); 
-            updateAuthUI(); 
-            showSection('student-view');
-        }
-
-        function updateAuthUI() {
-            if (isDOS) {
-                document.getElementById('login-nav-btn').classList.add('hidden');
-                document.getElementById('logout-nav-btn').classList.remove('hidden');
-            } else {
-                document.getElementById('login-nav-btn').classList.remove('hidden');
-                document.getElementById('logout-nav-btn').classList.add('hidden');
-            }
-        }
-
-        function switchAdminTab(tab) {
-            activeAdminTab = tab;
-            document.getElementById('admin-search-input').value = '';
-            const papersBtn = document.getElementById('tab-btn-papers');
-            const reportsBtn = document.getElementById('tab-btn-reports');
-            const papersForm = document.getElementById('form-panel-papers');
-            const reportsForm = document.getElementById('form-panel-reports');
-                        
-            if (tab === 'papers') {
-                papersBtn.className = "pb-3 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600";
-                reportsBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";
-                papersForm.classList.remove('hidden'); 
-                reportsForm.classList.add('hidden');
-                document.getElementById('repo-title').innerText = "Active Repository: Past Papers";
-                fetchPapers();
-            } else {
-                reportsBtn.className = "pb-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-600";
-                papersBtn.className = "pb-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800";
-                reportsForm.classList.remove('hidden'); 
-                papersForm.classList.add('hidden');
-                document.getElementById('repo-title').innerText = "Active Repository: Student Report Cards";
-                fetchAdminReportCards();
-            }
-        }
-
-        // --- PARENT PORTAL 2FA ENGINE ---
-        async function requestOTP() {
-            const searchId = document.getElementById('parentSearchId').value.trim();
-            const reqBtn = document.getElementById('otp-req-btn');
-            if(!searchId) { alert("Please enter a Student Access Code or ID."); return; }
-            reqBtn.disabled = true;
-            reqBtn.innerText = "Verifying Credentials...";
+        <div id="student-panel" class="space-y-12">
             
-            const { data, error } = await _supabase
-                .from('report_cards')
-                .select('id, parent_phone')
-                .or(`access_code.eq.${searchId},student_id.eq.${searchId}`)
-                .maybeSingle();
-                
-            if (error || !data) {
-                alert("Access Code/Student ID not detected in records.");
-                reqBtn.disabled = false; 
-                reqBtn.innerText = "Send Verification PIN";
-                return;
-            }
-            activeVerificationId = data.id;
-                        
-            const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
-            const expiryTime = new Date(Date.now() + 10 * 60000).toISOString();
-            
-            const { error: updateErr } = await _supabase
-                .from('report_cards')
-                .update({ otp_code: generatedPin, otp_expiry: expiryTime })
-                .eq('id', activeVerificationId);
-                
-            if(updateErr) { alert("Security handoff failed."); reqBtn.disabled = false; return; }
-            
-            const rawPhone = data.parent_phone || "+256 XXXXXXX";
-            document.getElementById('phone-masked').innerText = rawPhone.slice(-4);
-            const simulator = document.getElementById('test-sms-simulator');
-            simulator.innerHTML = `📡 [DEV SIMULATION SMS] To Parent Contact: <b>"Your NHS Security PIN is: ${generatedPin}"</b>`;
-            simulator.classList.remove('hidden');
-            
-            document.getElementById('2fa-step-1').classList.add('hidden');
-            document.getElementById('2fa-step-2').classList.remove('hidden');
-            reqBtn.disabled = false; 
-            reqBtn.innerText = "Send Verification PIN";
-        }
-
-        async function verifyOTP() {
-            const pinInput = document.getElementById('parentOtpInput').value.trim();
-            const verifyBtn = document.getElementById('otp-verify-btn');
-            if(pinInput.length !== 4) { alert("Please input complete 4-digit token."); return; }
-            verifyBtn.disabled = true;
-            
-            const nowIso = new Date().toISOString();
-            const { data, error } = await _supabase
-                .from('report_cards')
-                .select('*')
-                .eq('id', activeVerificationId)
-                .eq('otp_code', pinInput)
-                .gt('otp_expiry', nowIso)
-                .maybeSingle();
-                
-            if (error || !data) {
-                alert("Security check failed: Invalid or expired PIN entry code.");
-                verifyBtn.disabled = false;
-                return;
-            }
-            
-            await _supabase.from('report_cards').update({ otp_code: null, otp_expiry: null }).eq('id', data.id);
-            const resultsBox = document.getElementById('reportResults');
-            resultsBox.innerHTML = `
-                <div class="p-5 border-2 border-emerald-500 bg-emerald-50/50 rounded-2xl space-y-3">
-                    <div>
-                        <span class="px-2 py-0.5 bg-emerald-600 text-white rounded text-[10px] font-bold tracking-wider uppercase">Authenticated Access</span>
-                        <h4 class="font-bold text-slate-800 text-lg mt-1">${data.student_name}</h4>
-                        <p class="text-xs text-slate-500">${data.class || 'Senior 4'} • ${data.term || 'Term 3'} (${data.year || '2026'})</p>
-                    </div>
-                    <a href="${data.file_url}" target="_blank" class="block text-center w-full px-4 py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-md">Open Official PDF Document</a>
+            <section class="fade-in-section max-w-2xl mx-auto bg-white rounded-2xl p-8 shadow-sm border border-slate-100 text-center">
+                <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-file-invoice text-amber-500 text-2xl"></i>
                 </div>
-            `;
-                        
-            document.getElementById('2fa-step-2').classList.add('hidden');
-            resultsBox.classList.remove('hidden');
-        }
-
-        function reset2FAWizard() {
-            document.getElementById('2fa-step-2').classList.add('hidden');
-            document.getElementById('reportResults').classList.add('hidden');
-            document.getElementById('test-sms-simulator').classList.add('hidden');
-            document.getElementById('2fa-step-1').classList.remove('hidden');
-            document.getElementById('parentOtpInput').value = '';
-        }
-
-        // --- CORE DATABASE FETCH ENGINES ---
-        async function fetchPapers() {
-            const searchQuery = document.getElementById('search-input').value;
-            const adminSearchQuery = document.getElementById('admin-search-input').value;
-            const filterGrade = document.getElementById('filter-grade').value;
-            const filterSubject = document.getElementById('filter-subject').value;
-            
-            let query = _supabase.from('past_papers').select('*').order('created_at', { ascending: false });
-            
-            if (isDOS && activeAdminTab === 'papers' && adminSearchQuery) {
-                query = query.ilike('title', `%${adminSearchQuery}%`);
-            } else if (searchQuery) {
-                query = query.ilike('title', `%${searchQuery}%`);
-            }
-                        
-            if (filterGrade) query = query.eq('grade', filterGrade);
-            if (filterSubject) query = query.eq('subject', filterSubject);
-            
-            const { data } = await query;
-            renderStudentGrid(data || []);
-            if (isDOS && activeAdminTab === 'papers') renderAdminPapersTable(data || []);
-        }
-
-        function renderStudentGrid(papers) {
-            const grid = document.getElementById('papers-grid');
-            grid.innerHTML = papers.length === 0 ? `<div class="col-span-full py-12 text-center text-slate-400">No matching library papers cataloged.</div>` : '';
-            papers.forEach(paper => {
-                grid.innerHTML += `
-                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4 hover:shadow-md transition">
+                <h2 class="text-xl font-extrabold text-[#0a2a4b] uppercase tracking-wide mb-2">Check Report Cards Online</h2>
+                <p class="text-xs text-slate-500 mb-6 font-medium">Enter your assigned secure credentials to fetch termly report card packages</p>
+                
+                <div class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Student Access Code / ID</label>
+                        <input type="text" id="chk-student-id" placeholder="e.g. NHS/2026/041" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0a2a4b] transition">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-semibold">${paper.subject}</span>
-                            <h3 class="font-bold text-slate-900 mt-2 text-base leading-tight">${paper.title}</h3>
-                            <p class="text-xs text-slate-400 mt-1">${paper.grade} • Year ${paper.year}</p>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Academic Year</label>
+                            <select id="chk-year" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0a2a4b]">
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                            </select>
                         </div>
-                        <a href="${paper.file_url}" target="_blank" class="block w-full text-center py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition">Download Document</a>
-                    </div>`;
-            });
-        }
-
-        function renderAdminPapersTable(papers) {
-            const header = document.getElementById('repo-table-header');
-            header.innerHTML = `
-                <th class="py-3 px-4">Title</th>
-                <th class="py-3 px-4">Subject</th>
-                <th class="py-3 px-4">Grade</th>
-                <th class="py-3 px-4 text-right">Action</th>
-            `;
-            const body = document.getElementById('admin-table-body');
-            body.innerHTML = papers.length === 0 ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">No records found.</td></tr>` : '';
-            
-            papers.forEach(p => {
-                body.innerHTML += `
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="py-3 px-4 font-semibold text-slate-900">${p.title}</td>
-                        <td class="py-3 px-4 text-xs">${p.subject}</td>
-                        <td class="py-3 px-4 text-xs">${p.grade}</td>
-                        <td class="py-3 px-4 text-right"><a href="${p.file_url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">View File</a></td>
-                    </tr>`;
-            });
-        }
-
-        async function fetchAdminReportCards() {
-            const adminSearchQuery = document.getElementById('admin-search-input').value;
-            let query = _supabase.from('report_cards').select('*').order('created_at', { ascending: false });
-            
-            if (adminSearchQuery) {
-                query = query.ilike('student_name', `%${adminSearchQuery}%`);
-            }
-            
-            const { data } = await query;
-            const header = document.getElementById('repo-table-header');
-            header.innerHTML = `
-                <th class="py-3 px-4">Student Name</th>
-                <th class="py-3 px-4">Student ID</th>
-                <th class="py-3 px-4">Parent Contact</th>
-                <th class="py-3 px-4 text-right">Action</th>
-            `;
-            const body = document.getElementById('admin-table-body');
-            body.innerHTML = (!data || data.length === 0) ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">No report cards logged.</td></tr>` : '';
-            
-            if (data) {
-                data.forEach(r => {
-                    body.innerHTML += `
-                        <tr class="hover:bg-slate-50/80 transition">
-                            <td class="py-3 px-4 font-semibold text-slate-900">${r.student_name}</td>
-                            <td class="py-3 px-4 text-xs font-mono">${r.student_id || 'N/A'}</td>
-                            <td class="py-3 px-4 text-xs">${r.parent_phone}</td>
-                            <td class="py-3 px-4 text-right"><a href="${r.file_url}" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline">Open Report</a></td>
-                        </tr>`;
-                });
-            }
-        }
-
-        // --- BULK BATCH PAST PAPERS UPLOAD LOGIC ---
-        async function handleBatchPapersUpload(e) {
-            e.preventDefault();
-            const fileInput = document.getElementById('up-files');
-            const grade = document.getElementById('up-grade').value;
-            const year = document.getElementById('up-year').value;
-            const subject = document.getElementById('up-subject').value;
-            
-            const progressContainer = document.getElementById('paperProgressContainer');
-            const progressBar = document.getElementById('paperProgressBar');
-            const statusText = document.getElementById('paperStatusText');
-            const progressPercent = document.getElementById('paperProgressPercent');
-            const submitBtn = document.getElementById('paperSubmitBtn');
-
-            if (!fileInput.files || fileInput.files.length === 0) return;
-
-            const files = Array.from(fileInput.files);
-            const totalFiles = files.length;
-            
-            submitBtn.disabled = true;
-            progressContainer.classList.remove('hidden');
-
-            for (let i = 0; i < totalFiles; i++) {
-                const file = files[i];
-                const paperTitle = file.name.replace(/\.[^/.]+$/, "");
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Term</label>
+                            <select id="chk-term" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#0a2a4b]">
+                                <option value="Term 1">Term 1</option>
+                                <option value="Term 2">Term 2</option>
+                                <option value="Term 3">Term 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="checkReportCard()" class="w-full mt-2 bg-[#0a2a4b] hover:bg-slate-800 text-white font-bold text-xs uppercase py-3.5 rounded-xl transition shadow-sm tracking-wider">
+                        <i class="fas fa-search mr-2"></i>Verify and Fetch Report
+                    </button>
+                </div>
                 
-                statusText.innerText = `Deploying: ${file.name}`;
-                let percent = Math.round((i / totalFiles) * 100);
-                progressBar.style.width = `${percent}%`;
-                progressPercent.innerText = `${percent}%`;
+                <div id="report-card-result" class="mt-6 pt-6 border-t border-slate-100 hidden"></div>
+            </section>
 
-                const filePath = `${grade}/${subject}/${year}_${file.name}`;
-                const { data: uploadData, error: uploadError } = await _supabase.storage
-                    .from('past-papers')
-                    .upload(filePath, file, { upsert: true });
+            <section class="fade-in-section space-y-6">
+                <div class="text-center max-w-xl mx-auto">
+                    <h2 class="text-2xl font-extrabold text-[#0a2a4b] uppercase tracking-wide">Revision Repository</h2>
+                    <p class="text-sm text-slate-500 font-medium mt-1">Download official school past papers, holiday assignments, and test arrays.</p>
+                </div>
 
-                if (uploadError) {
-                    console.error(uploadError);
-                    continue;
-                }
+                <div class="flex justify-center space-x-3">
+                    <button onclick="filterPapers('all')" id="paper-filter-all" class="px-5 py-2 rounded-full text-xs font-bold uppercase transition bg-[#0a2a4b] text-white">All Papers</button>
+                    <button onclick="filterPapers('O-Level')" id="paper-filter-olevel" class="px-5 py-2 rounded-full text-xs font-bold uppercase transition bg-white text-slate-600 border border-slate-200">O-Level (S1-S4)</button>
+                    <button onclick="filterPapers('A-Level')" id="paper-filter-alevel" class="px-5 py-2 rounded-full text-xs font-bold uppercase transition bg-white text-slate-600 border border-slate-200">A-Level (S5-S6)</button>
+                </div>
 
-                const { data: urlData } = _supabase.storage.from('past-papers').getPublicUrl(filePath);
-                
-                // Wrapped fields inside bracket array notation array format [{...}]
-                await _supabase.from('past_papers').insert([{
-                    title: paperTitle,
-                    grade: grade,
-                    year: year,
-                    subject: subject,
-                    file_url: urlData.publicUrl
-                }]);
-            }
+                <div id="papers-student-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4"></div>
+            </section>
+        </div>
 
-            progressBar.style.width = '100%';
-            progressPercent.innerText = '100%';
-            statusText.innerText = "All papers are now live on the library grid!";
-            submitBtn.disabled = false;
-            fileInput.value = '';
+        <div id="admin-panel" class="hidden space-y-8 fade-in-section">
             
-            fetchPapers();
+            <div id="admin-gate" class="max-w-md mx-auto bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center">
+                <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-red-500 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-extrabold text-[#0a2a4b] uppercase mb-4">DOS Office Authorization</h3>
+                <input type="password" id="admin-passkey" placeholder="Enter Secure Master Passkey" class="w-full px-4 py-3 border border-slate-200 bg-slate-50 text-center font-bold tracking-widest text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0a2a4b] mb-4">
+                <button onclick="verifyAdminAccess()" class="w-full bg-[#0a2a4b] text-white text-xs font-bold uppercase py-3 rounded-xl shadow-md transition hover:bg-slate-800">
+                    Gain Console Access
+                </button>
+            </div>
+
+            <div id="admin-workspace" class="hidden space-y-10">
+                <div class="bg-amber-50 border border-amber-200 rounded-xl px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-emerald-600 text-lg"></i>
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Secure Session Authenticated Successfully</span>
+                    </div>
+                    <button onclick="logoutAdmin()" class="text-xs font-bold text-red-600 hover:underline uppercase">Revoke Access</button>
+                </div>
+
+                <div class="flex space-x-4 border-b border-slate-200 pb-2">
+                    <button onclick="switchAdminSubTab('papers')" id="subtab-btn-papers" class="border-b-2 border-[#0a2a4b] px-4 py-2 text-xs font-bold uppercase text-[#0a2a4b]">Manage Past Papers</button>
+                    <button onclick="switchAdminSubTab('reports')" id="subtab-btn-reports" class="px-4 py-2 text-xs font-bold uppercase text-slate-500 hover:text-slate-800">Deploy Report Cards</button>
+                </div>
+
+                <div id="admin-sub-papers" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm space-y-4 h-fit">
+                        <h4 class="text-sm font-extrabold text-[#0a2a4b] uppercase border-b pb-2 mb-2">Publish Revision Resource</h4>
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Resource Title (Includes Subject Name)</label>
+                            <input type="text" id="p-title" placeholder="e.g. S4 Mathematics Mid Term Exam" class="w-full px-3 py-2 border rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#0a2a4b]">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Level Group</label>
+                                <select id="p-level" class="w-full px-3 py-2 border rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#0a2a4b]">
+                                    <option value="O-Level">O-Level (S1-S4)</option>
+                                    <option value="A-Level">A-Level (S5-S6)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Academic Year</label>
+                                <input type="text" id="p-year" value="2026" class="w-full px-3 py-2 border rounded-lg text-xs font-semibold text-center">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Term Block</label>
+                            <select id="p-term" class="w-full px-3 py-2 border rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#0a2a4b]">
+                                <option value="Term 1">Term 1</option>
+                                <option value="Term 2">Term 2</option>
+                                <option value="Term 3">Term 3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Select File from Storage</label>
+                            <input type="file" id="p-file-upload" class="w-full text-xs font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-[#0a2a4b] hover:file:bg-slate-200 cursor-pointer border rounded-lg p-1 bg-slate-50">
+                        </div>
+
+                        <button onclick="handlePaperUpload()" id="uploadPaperBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase py-3 rounded-lg shadow-md transition">
+                            <i class="fas fa-cloud-upload-alt mr-2"></i>Publish File Live
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-100 shadow-sm overflow-x-auto">
+                        <h4 class="text-sm font-extrabold text-[#0a2a4b] uppercase border-b pb-2 mb-4">Active Files Dashboard</h4>
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 uppercase font-bold border-b border-slate-200">
+                                    <th class="p-3">File Title Details</th>
+                                    <th class="p-3">Level Classification</th>
+                                    <th class="p-3">Timeline Matrix</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-papers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="admin-sub-reports" class="hidden max-w-xl mx-auto bg-white p-8 rounded-xl border border-slate-100 shadow-sm space-y-6">
+                    <div class="text-center">
+                        <i class="fas fa-folder-plus text-amber-500 text-3xl mb-2"></i>
+                        <h4 class="text-base font-extrabold text-[#0a2a4b] uppercase tracking-wide">Bulk Deploy Academic Reports</h4>
+                        <p class="text-[11px] text-slate-500 font-medium">Input report details directly into the OscBase ecosystem storage matrices.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Academic Year</label>
+                            <select id="rep-year" class="w-full px-3 py-2 border rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#0a2a4b]">
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Term Block</label>
+                            <select id="rep-term" class="w-full px-3 py-2 border rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#0a2a4b]">
+                                <option value="Term 1">Term 1</option>
+                                <option value="Term 2">Term 2</option>
+                                <option value="Term 3">Term 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Student Code</label>
+                            <input type="text" id="rep-sid" placeholder="NHS/2026/041" class="w-full px-3 py-2 border rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#0a2a4b]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Student Full Name</label>
+                            <input type="text" id="rep-name" placeholder="John Doe" class="w-full px-3 py-2 border rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#0a2a4b]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Select Report PDF File</label>
+                            <input type="file" id="rep-file-upload" class="w-full text-xs font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-[#0a2a4b] hover:file:bg-slate-200 cursor-pointer border rounded-xl p-1 bg-slate-50">
+                        </div>
+                    </div>
+
+                    <button onclick="handleSingleReportUpload()" id="deployReportsBtn" class="w-full bg-[#0a2a4b] text-white font-bold text-xs uppercase py-3.5 rounded-xl transition shadow-md hover:bg-slate-800">
+                        Deploy Live to OscBase
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer style="background: #031222; color: white; padding: 60px 5% 30px 5%; font-size: 0.9rem; border-top: 4px solid var(--secondary);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+            <div>
+                <img src="SCHOOL BADGE.png" alt="Badge" class="footer-logo" onerror="this.src='https://via.placeholder.com/80'">
+                <p style="opacity: 0.8; line-height: 1.8;">Namungoona High School is a premier educational institution providing quality learning metrics with strong spiritual foundations, deep structural disciplines, and unparalleled academic excellence arrays continuously since 1999.</p>
+            </div>
+            <div>
+                <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif; font-weight:700;">Quick Link Matrices</h3>
+                <a href="#home" class="footer-link">Portal Home Base</a>
+                <a href="#director" class="footer-link">Director's Office Desk</a>
+                <a href="#sectors" class="footer-link">Sectors & Curriculum</a>
+                <a href="#admissions" class="footer-link">Online Admissions desk</a>
+                <a href="https://mis.nhs.ac.ug" class="footer-link">MIS Portal Systems</a>
+            </div>
+            <div>
+                <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Montserrat', sans-serif; font-weight:700;">Contact Matrix Channels</h3>
+                <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+256 700 627 960<br>+256 788 772 660</span></div>
+                <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>namungoonahighschool@gmail.com</span></div>
+                <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Hoima Road, Nakibinge Stage,<br>Kampala, Uganda.</span></div>
+            </div>
+        </div>
+        <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.7;">
+            <p>© 2026 Namungoona High School. All Rights Reserved. Strive to Excel.</p>
+        </div>
+    </footer>
+
+    <script>
+        // OscBase Global Configuration Engine Pointing to Your Database Service
+        const OSCBASE_URL = 'http://localhost:7000';
+
+        let activeTab = 'student';
+        let activeAdminTab = 'papers';
+        let isAdminLoggedIn = false;
+        let pastPapersCache = [];
+
+        function toggleMenu(menuId) {
+            const headerElement = document.getElementById('header');
+            if (menuId === 'header') {
+                headerElement.classList.toggle('mobile-active');
+            } else if (menuId === 'anthemMenu') {
+                alert("Playing Namungoona High School Anthem audio matrix...");
+            }
         }
 
-        // --- BULK BATCH REPORT CARDS UPLOAD LOGIC ---
-        async function handleBatchReportsUpload() {
-            const fileInput = document.getElementById('batchPdfFiles');
-            const year = document.getElementById('batchYear').value.trim();
-            const term = document.getElementById('batchTerm').value;
-            const progressContainer = document.getElementById('batchProgressContainer');
-            const progressBar = document.getElementById('batchProgressBar');
-            const statusText = document.getElementById('batchStatusText');
-            const progressPercent = document.getElementById('batchProgressPercent');
-            const submitBtn = document.getElementById('batchSubmitBtn');
+        function switchTab(target) {
+            activeTab = target;
+            const sBtn = document.getElementById('tab-btn-student');
+            const aBtn = document.getElementById('tab-btn-admin');
+            const sPanel = document.getElementById('student-panel');
+            const aPanel = document.getElementById('admin-panel');
 
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert("Please select at least one PDF report card file.");
+            if (target === 'student') {
+                sBtn.className = "px-6 py-2.5 font-bold text-sm uppercase rounded-lg bg-[#0a2a4b] text-white shadow-sm transition";
+                aBtn.className = "px-6 py-2.5 font-bold text-sm uppercase rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+                sPanel.classList.remove('hidden');
+                aPanel.classList.add('hidden');
+            } else {
+                aBtn.className = "px-6 py-2.5 font-bold text-sm uppercase rounded-lg bg-[#0a2a4b] text-white shadow-sm transition";
+                sBtn.className = "px-6 py-2.5 font-bold text-sm uppercase rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+                aPanel.classList.remove('hidden');
+                sPanel.classList.add('hidden');
+            }
+        }
+
+        function switchAdminSubTab(target) {
+            activeAdminTab = target;
+            const pBtn = document.getElementById('subtab-btn-papers');
+            const rBtn = document.getElementById('subtab-btn-reports');
+            const pBox = document.getElementById('admin-sub-papers');
+            const rBox = document.getElementById('admin-sub-reports');
+
+            if(target === 'papers') {
+                pBtn.className = "border-b-2 border-[#0a2a4b] px-4 py-2 text-xs font-bold uppercase text-[#0a2a4b]";
+                rBtn.className = "px-4 py-2 text-xs font-bold uppercase text-slate-500 hover:text-slate-800";
+                pBox.classList.remove('hidden');
+                rBox.classList.add('hidden');
+            } else {
+                rBtn.className = "border-b-2 border-[#0a2a4b] px-4 py-2 text-xs font-bold uppercase text-[#0a2a4b]";
+                pBtn.className = "px-4 py-2 text-xs font-bold uppercase text-slate-500 hover:text-slate-800";
+                rBox.classList.remove('hidden');
+                pBox.classList.add('hidden');
+            }
+        }
+
+        function verifyAdminAccess() {
+            const pin = document.getElementById('admin-passkey').value;
+            if(pin === 'DOS2026') { 
+                isAdminLoggedIn = true;
+                document.getElementById('admin-gate').classList.add('hidden');
+                document.getElementById('admin-workspace').classList.remove('hidden');
+                fetchAdminPapersDashboard();
+            } else {
+                alert("Access Denied: Invalid Security Passkey.");
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-passkey').value = '';
+            document.getElementById('admin-gate').classList.remove('hidden');
+            document.getElementById('admin-workspace').classList.add('hidden');
+        }
+
+        /* Fetch Report Card logic via OscBase API matrix lookup */
+        async function checkReportCard() {
+            const sid = document.getElementById('chk-student-id').value.trim();
+            const year = document.getElementById('chk-year').value;
+            const term = document.getElementById('chk-term').value;
+            const resultDiv = document.getElementById('report-card-result');
+
+            if(!sid) {
+                alert("Please fill in your allocated student identification code.");
                 return;
             }
 
-            const files = Array.from(fileInput.files);
-            const totalFiles = files.length;
-            
-            submitBtn.disabled = true;
-            progressContainer.classList.remove('hidden');
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `<span class="text-xs font-bold text-slate-500 uppercase animate-pulse">Querying OscBase registers...</span>`;
 
-            for (let i = 0; i < totalFiles; i++) {
-                const file = files[i];
-                const studentId = file.name.replace(/\.[^/.]+$/, ""); 
-                
-                statusText.innerText = `Uploading: ${file.name}`;
-                let percent = Math.round((i / totalFiles) * 100);
-                progressBar.style.width = `${percent}%`;
-                progressPercent.innerText = `${percent}%`;
+            try {
+                const lookupKey = `report_${sid.replace(/\//g, '_')}_${year}_${term.replace(/\s/g, '')}`;
+                const response = await fetch(`${OSCBASE_URL}/retrieve/${lookupKey}`);
+                const resData = await response.json();
 
-                const filePath = `${year}/${term}/${file.name}`;
-                
-                const { data: uploadData, error: uploadError } = await _supabase.storage
-                    .from('reports')
-                    .upload(filePath, file, { upsert: true });
-
-                if (uploadError) {
-                    console.error(`Error uploading file ${file.name}:`, uploadError);
-                    continue; 
+                if (resData.success && resData.value) {
+                    const data = resData.value;
+                    resultDiv.innerHTML = `
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="text-left">
+                                <h4 class="text-sm font-extrabold text-[#0a2a4b] uppercase">${data.student_name || 'Academic Record Sheet'}</h4>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase mt-0.5">${data.year} • ${data.term}</p>
+                            </div>
+                            <a href="${data.file_url}" download="Report_${sid.replace(/\//g, '_')}.pdf" class="bg-emerald-600 text-white text-[11px] font-bold uppercase px-4 py-2 rounded-lg shadow hover:bg-emerald-700 transition">
+                                <i class="fas fa-file-download mr-1.5"></i>Launch PDF Report
+                            </a>
+                        </div>`;
+                } else {
+                    resultDiv.innerHTML = `<p class="text-xs font-bold text-red-500 uppercase">No corresponding records tracked for "${sid}" within this term block.</p>`;
                 }
-
-                const { data: urlData } = _supabase.storage
-                    .from('reports')
-                    .getPublicUrl(filePath);
-                    
-                const fileUrl = urlData.publicUrl;
-
-                // Wrapped payload structural fields within array bounds [{...}]
-                const { error: dbError } = await _supabase
-                    .from('report_cards')
-                    .upsert([{
-                        student_id: studentId,
-                        access_code: studentId, 
-                        student_name: `Student (${studentId})`, 
-                        year: year,
-                        term: term,
-                        file_url: fileUrl,
-                        parent_phone: "+256700000000" 
-                    }], { onConflict: 'student_id,year,term' });
-
-                if (dbError) {
-                    console.error(`Database linking failed for ${studentId}:`, dbError);
-                }
-            }
-
-            progressBar.style.width = '100%';
-            progressPercent.innerText = '100%';
-            statusText.innerText = `Successfully deployed ${totalFiles} report cards live!`;
-            submitBtn.disabled = false;
-            fileInput.value = '';
-            
-            if (activeAdminTab === 'reports') {
-                fetchAdminReportCards();
+            } catch (err) {
+                resultDiv.innerHTML = `<p class="text-xs font-bold text-red-600 uppercase">OscBase core connection loss or alignment error.</p>`;
             }
         }
+
+        /* Past Papers logic via unified master array stored inside OscBase */
+        async function fetchPastPapers() {
+            try {
+                const response = await fetch(`${OSCBASE_URL}/retrieve/master_past_papers`);
+                const resData = await response.json();
+                if (resData.success && resData.value) {
+                    pastPapersCache = resData.value;
+                    renderStudentPapersGrid(pastPapersCache);
+                }
+            } catch(e) {
+                console.error("Failed synchronization to OscBase cluster core repository.");
+            }
+        }
+
+        function renderStudentPapersGrid(arr) {
+            const grid = document.getElementById('papers-student-grid');
+            if(!arr || arr.length === 0) {
+                grid.innerHTML = `<p class="text-center text-xs font-semibold text-slate-400 uppercase py-10 col-span-full">No documents published live in this category matrix.</p>`;
+                return;
+            }
+
+            grid.innerHTML = arr.map(p => `
+                <div class="bg-white rounded-xl p-5 border border-slate-100 shadow-sm hover-card-trigger flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-3">
+                            <span class="px-2.5 py-1 bg-amber-50 rounded-md text-[10px] font-bold text-amber-600 uppercase">${p.level}</span>
+                        </div>
+                        <h3 class="text-sm font-extrabold text-[#0a2a4b] uppercase leading-snug mb-1">${p.title}</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">${p.term} • ${p.year}</p>
+                    </div>
+                    <a href="${p.file_url}" download="${p.title.replace(/\s/g, '_')}" class="mt-4 flex items-center justify-center gap-2 bg-slate-50 border hover:bg-[#0a2a4b] hover:text-white text-[#0a2a4b] font-bold text-xs uppercase py-2.5 rounded-lg transition">
+                        <i class="fas fa-arrow-alt-circle-down"></i>Download Document
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function filterPapers(lvl) {
+            document.querySelectorAll('[id^="paper-filter-"]').forEach(btn => {
+                btn.className = "px-5 py-2 rounded-full text-xs font-bold uppercase transition bg-white text-slate-600 border border-slate-200";
+            });
+            document.getElementById(`paper-filter-${lvl.toLowerCase().replace('-','')}`).className = "px-5 py-2 rounded-full text-xs font-bold uppercase transition bg-[#0a2a4b] text-white";
+
+            if (lvl === 'all') {
+                renderStudentPapersGrid(pastPapersCache);
+            } else {
+                renderStudentPapersGrid(pastPapersCache.filter(p => p.level === lvl));
+            }
+        }
+
+        async function fetchAdminPapersDashboard() {
+            const tbody = document.getElementById('admin-papers-tbody');
+            if(!pastPapersCache || pastPapersCache.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 font-medium">Dashboard Registry Empty.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = pastPapersCache.map((p, idx) => `
+                <tr class="border-b hover:bg-slate-50 transition">
+                    <td class="p-3 font-bold text-slate-800 uppercase">${p.title}</td>
+                    <td class="p-3 font-semibold text-amber-600 uppercase text-xs">${p.level}</td>
+                    <td class="p-3 text-slate-400 font-medium text-xs">${p.term} - ${p.year}</td>
+                    <td class="p-3 text-right">
+                        <button onclick="deletePaper(${idx})" class="text-red-600 hover:text-red-800 font-bold"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        /* Convert Storage File to Base64 and store directly inside OscBase */
+        async function handlePaperUpload() {
+            const t = document.getElementById('p-title').value.trim();
+            const l = document.getElementById('p-level').value;
+            const y = document.getElementById('p-year').value.trim();
+            const tm = document.getElementById('p-term').value;
+            const fileInput = document.getElementById('p-file-upload');
+
+            if(!t || fileInput.files.length === 0) {
+                alert("Please fill out the Title field and select a document file from storage.");
+                return;
+            }
+
+            const btn = document.getElementById('uploadPaperBtn');
+            btn.disabled = true;
+            btn.innerText = "Ingesting Storage File...";
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function(e) {
+                const base64String = e.target.result;
+                const newPaperItem = { title: t, level: l, year: y, term: tm, file_url: base64String };
+                pastPapersCache.unshift(newPaperItem);
+
+                try {
+                    await fetch(`${OSCBASE_URL}/store`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key: 'master_past_papers', value: pastPapersCache })
+                    });
+
+                    alert("Resource completely stored inside your OscBase data log successfully!");
+                    document.getElementById('p-title').value = '';
+                    fileInput.value = '';
+                } catch (err) {
+                    alert("OscBase transmission sequence failure.");
+                    pastPapersCache.shift();
+                }
+
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i>Publish File Live`;
+                fetchAdminPapersDashboard();
+                renderStudentPapersGrid(pastPapersCache);
+            };
+
+            reader.onerror = function() {
+                alert("Could not process or read the file from storage.");
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i>Publish File Live`;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        async function deletePaper(idx) {
+            if(!confirm("Are you certain you want to purge this resource record from OscBase logs?")) return;
+            pastPapersCache.splice(idx, 1);
+
+            try {
+                await fetch(`${OSCBASE_URL}/store`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'master_past_papers', value: pastPapersCache })
+                });
+                fetchAdminPapersDashboard();
+                renderStudentPapersGrid(pastPapersCache);
+            } catch(e) {
+                alert("OscBase rewrite error occurred.");
+            }
+        }
+
+        /* Ingest Report Card File to Base64 and assign directly to targeted Student key in OscBase */
+        async function handleSingleReportUpload() {
+            const sid = document.getElementById('rep-sid').value.trim();
+            const name = document.getElementById('rep-name').value.trim();
+            const year = document.getElementById('rep-year').value;
+            const term = document.getElementById('rep-term').value;
+            const fileInput = document.getElementById('rep-file-upload');
+
+            if(!sid || !name || fileInput.files.length === 0) {
+                alert("Please complete the student identification entries and select a report file.");
+                return;
+            }
+
+            const submitBtn = document.getElementById('deployReportsBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Encoding File Data...";
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function(e) {
+                const base64String = e.target.result;
+                const reportObject = { student_id: sid, student_name: name, year: year, term: term, file_url: base64String };
+                const targetKey = `report_${sid.replace(/\//g, '_')}_${year}_${term.replace(/\s/g, '')}`;
+
+                try {
+                    await fetch(`${OSCBASE_URL}/store`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key: targetKey, value: reportObject })
+                    });
+
+                    alert(`Academic record file compiled and saved for [${sid}] into OscBase filesystem logs.`);
+                    document.getElementById('rep-sid').value = '';
+                    document.getElementById('rep-name').value = '';
+                    fileInput.value = '';
+                } catch (err) {
+                    alert("OscBase connection pipeline dropped out processing payload data.");
+                }
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Deploy Live to OscBase";
+            };
+
+            reader.onerror = function() {
+                alert("Failed to read report document.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Deploy Live to OscBase";
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchPastPapers();
+
+            const reveals = document.querySelectorAll('.fade-in-section');
+            const obs = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.05 });
+            reveals.forEach(r => obs.observe(r));
+        });
     </script>
 </body>
 </html>
