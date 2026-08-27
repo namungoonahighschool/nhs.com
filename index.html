@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namungoona High School | Excellence & Integrity</title>
+    <title>Namungoona High School | Strive to Excel</title>
     <link rel="icon" type="image/png" href="SCHOOL BADGE.png">
     <link rel="apple-touch-icon" href="SCHOOL BADGE.png">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,254 +18,306 @@
             --light: #f8f9fa;
             --dark: #1a1a1a;
             --glass: rgba(255, 255, 255, 0.95);
-            --whatsapp: #25d366;
+            --transition: 0.3s ease;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {font-family: 'Montserrat', sans-serif; line-height: 1.6; color: var(--dark); background-color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: 'Montserrat', sans-serif; line-height: 1.6; color: var(--dark); background-color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 
         /* TOP CONTACT BAR */
         .top-bar {
-            background: var(--primary);
-            color: white;
-            padding: 8px 5%;
+            background: var(--dark);
+            color: rgba(255,255,255,0.8);
+            padding: 10px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 1001;
+            font-size: 0.85rem;
             position: fixed;
             width: 100%;
             top: 0;
-            height: 35px;
+            height: 40px;
+            z-index: 1001;
+            flex-wrap: wrap;
         }
-        .top-bar i { color: var(--accent); margin-right: 5px; }
-        .top-bar span { margin-right: 15px; }
+        .top-bar a { color: inherit; text-decoration: none; transition: var(--transition); }
+        .top-bar a:hover { color: var(--accent); }
 
-        .header { 
-            background: var(--glass); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 1rem 5%; 
+        /* HEADER & NAVIGATION */
+        header { 
             position: fixed; 
+            top: 40px; 
+            left: 0; 
             width: 100%; 
-            top: 35px; 
             z-index: 1000; 
+            background: rgba(10, 42, 75, 0.95); 
             backdrop-filter: blur(10px); 
-            border-bottom: 1px solid rgba(0,0,0,0.05); 
-            transition: 0.4s ease; 
+            color: #fff; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+            transition: var(--transition); 
         }
-        .header.scrolled { padding: 0.5rem 5%; box-shadow: 0 10px 30px rgba(0,0,0,0.1); top: 0; }
-        
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--primary); font-weight: 700; font-size: 0.75rem; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-links a:hover { color: var(--secondary); }
-        .logo-container img { height: 70px; transition: 0.3s; }
+        header.scrolled { top: 0; padding: 5px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; max-width: 1300px; margin: 0 auto; padding: 10px 25px; }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-area img { width: 55px; height: 55px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .school-name { font-size: 1.3rem; font-weight: 700; }
+        .school-motto { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
 
-        .contact-container {
-            padding: 100px 10%;
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 50px;
-            background: white;
-        }
+        .desktop-nav { display: flex; gap: 20px; align-items: center; }
+        .desktop-nav a { color: #fff; text-decoration: none; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
+        .desktop-nav a:hover, .desktop-nav a.active { color: var(--accent); }
 
-        .contact-info h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: #fff; }
 
-        .contact-form-wrapper {
-            background: var(--light);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .contact-form-wrapper .form-group {
-            margin-bottom: 20px;
-        }
-
-        .contact-form-wrapper textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        @media (max-width: 992px) {
-            .contact-container { grid-template-columns: 1fr; padding: 60px 5%; }
-        }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 6px;
+        /* BUTTONS */
+        .btn-primary, .btn-secondary, .portal-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
             cursor: pointer;
-            z-index: 2002;
-            padding: 10px;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            display: inline-block;
         }
-        .menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px;
-            transition: 0.4s;
-        }
+        .btn-primary { background: var(--secondary); color: #fff; }
+        .btn-primary:hover { background: #b71c1c; }
+        .btn-secondary { background: var(--accent); color: var(--primary); }
+        .btn-secondary:hover { background: #fbc02d; transform: translateY(-2px); }
 
-        .back-to-top {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            background: var(--primary);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2999;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .back-to-top:hover { background: var(--secondary); transform: scale(1.1); }
-
+        /* SIDE DRAWERS */
         .side-menu { 
             position: fixed; 
-            right: -100%; 
             top: 0; 
-            width: 100%; 
-            max-width: 350px; 
-            height: 100%; 
+            right: -100%; 
+            width: 320px; 
+            height: 100vh; 
             background: var(--primary); 
+            color: #fff; 
             z-index: 2005; 
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-            padding: 80px 30px; 
-            color: white; 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            padding: 40px 30px; 
             overflow-y: auto; 
             box-shadow: -10px 0 50px rgba(0,0,0,0.3);
         }
         .side-menu.active { right: 0; }
-        .side-menu#mobileNav { left: -100%; right: auto; transition: 0.5s ease; }
-        .side-menu#mobileNav.active { left: 0; }
+        .side-menu#mobileNav { right: -100%; }
+        .side-menu#mobileNav.active { right: 0; }
+        .close-menu { font-size: 1.8rem; cursor: pointer; color: var(--accent); float: right; }
         
-        .close-menu { position: absolute; top: 25px; right: 30px; font-size: 2rem; cursor: pointer; color: var(--accent); }
-        #mobileNav .close-menu { left: auto; right: 30px; }
+        .side-menu ul { list-style: none; margin-top: 30px; }
+        .side-menu li { margin-bottom: 12px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
+        .side-menu a { color: #fff; text-decoration: none; font-weight: 600; width: 100%; }
 
         .side-triggers { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 999; display: flex; flex-direction: column; gap: 5px; }
-        .trigger-btn { background: var(--secondary); color: white; padding: 15px 8px; border-radius: 0 8px 8px 0; cursor: pointer; writing-mode: vertical-rl; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; transition: 0.3s; text-align: center; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
-        .trigger-btn:hover { padding-left: 15px; background: var(--primary); }
-        .anthem-trigger { background: var(--primary); }
+        .trigger-btn { background: var(--primary); color: #fff; padding: 12px 8px; font-size: 0.7rem; font-weight: 700; writing-mode: vertical-lr; cursor: pointer; border-radius: 0 5px 5px 0; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+        .anthem-trigger { background: var(--secondary); }
 
-        .side-menu ul { list-style: none; margin-top: 20px; }
-        .side-menu li { 
-            margin-bottom: 12px; 
-            padding: 15px;
-            border-radius: 10px;
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            font-size: 0.95rem; 
-            background: rgba(255,255,255,0.08);
-            transition: 0.3s ease;
-            cursor: pointer;
-        }
-        .side-menu li:hover { 
-            transform: scale(1.05); 
-            background: var(--accent); 
-            color: var(--primary); 
-        }
-        .side-menu a { color: white; text-decoration: none; font-weight: 600; width: 100%; display: block; }
-        .side-menu li:hover a { color: var(--primary); }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #25d366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-            z-index: 3000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .whatsapp-float:hover { transform: scale(1.1); }
-
-        .wa-menu {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: none;
-            flex-direction: column;
-            padding: 10px;
-            z-index: 3001;
-            border: 1px solid #eee;
-            min-width: 220px;
-        }
-        .wa-menu.active { display: flex; animation: fadeIn 0.3s ease; }
-
-        .wa-option {
-            text-decoration: none;
-            color: #333;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            border-bottom: 1px solid #eee;
-        }
-        .wa-option:last-child { border-bottom: none; }
-        .wa-option:hover { background: #f0f0f0; border-radius: 8px; color: #25d366; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; color: white; text-align: center; overflow: hidden; }
-        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; transition: 1.5s ease-in-out; opacity: 0; z-index: -1; }
+        /* HERO SECTION */
+        .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; overflow: hidden; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(10,42,75,0.8), rgba(0,0,0,0.65)); z-index: 2; }
+        .slideshow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .slide { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: 1.5s ease-in-out; }
         .slide.active { opacity: 1; transform: scale(1.05); }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10,42,75,0.7), rgba(0,0,0,0.4)); }
-        .hero-content { z-index: 10; max-width: 900px; padding: 20px; }
-        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1rem; }
+        .hero-content { position: relative; z-index: 3; max-width: 900px; padding: 20px; }
+        .hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 15px; }
 
-        .btn {
-            padding: 12px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            font-size: 0.8rem;
+        /* STATS BAR */
+        .stats-bar { background: #fff; padding: 40px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); position: relative; z-index: 4; }
+        .stat-item h2 { font-size: 2.8rem; color: var(--primary); }
+
+        /* SECTIONS GENERAL */
+        .section { padding: 90px 10%; }
+        .director-section { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center; }
+        .bursary-alert-container { background: linear-gradient(135deg, var(--primary) 0%, #154575 100%); color: white; padding: 25px; border-radius: 12px; margin-top: 25px; display: flex; gap: 20px; align-items: center; }
+
+        .sector-section { padding: 80px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; background: #fff; }
+        .info-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; text-align: center; }
+        .card-img { width: 100%; height: 220px; object-fit: cover; }
+        .card-body { padding: 25px; }
+
+        /* ADMISSION & MIS */
+        .admission-section { padding: 90px 10%; background: var(--light); }
+        .portal-info { display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; align-items: start; }
+        .mis-card { background: var(--primary); color: white; padding: 40px; border-radius: 20px; }
+        .mis-card ul { list-style: none; margin: 20px 0; }
+        .mis-card li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+
+        .admission-form { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .admission-form h2 { grid-column: span 2; color: var(--primary); text-align: center; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--primary); }
+        .form-group input, .form-group select, .form-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        .form-full { grid-column: span 2; }
+        .submit-btn { grid-column: span 2; background: var(--secondary); color: white; padding: 15px; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+
+        /* NEWS & CONTACT */
+        .news-section { padding: 80px 10%; background: #fff; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .news-card { background: var(--light); border-radius: 15px; overflow: hidden; }
+        .news-card img { width: 100%; height: 200px; object-fit: cover; }
+        .news-card-body { padding: 20px; }
+
+        .contact-container { padding: 80px 10%; display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; background: white; }
+
+        /* ADMIN CONSOLE */
+        .admin-dashboard-section { padding: 80px 10%; background: #071e36; color: white; display: none; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; margin-top: 30px; }
+        .admin-panel-card { background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .admin-input { width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0,0,0,0.3); color: white; border-radius: 6px; margin-bottom: 12px; }
+
+        /* UTILITIES */
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 3000; cursor: pointer; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); }
+        .back-to-top { position: fixed; bottom: 100px; right: 35px; background: var(--primary); color: white; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 2999; cursor: pointer; }
+        
+        #success-section { display: none; background: white; padding: 40px; border-radius: 20px; text-align: center; }
+
+        @media (max-width: 992px) {
+            .top-bar { display: none; }
+            header { top: 0; }
+            .desktop-nav { display: none; }
+            .menu-toggle { display: block; }
+            .director-section, .portal-info, .contact-container, .admin-grid { grid-template-columns: 1fr; }
+            .admission-form { grid-template-columns: 1fr; }
+            .admission-form h2, .form-full, .submit-btn { grid-column: span 1; }
         }
-        .btn-red { background: var(--secondary); color: white; }
-        .btn-gold { background: var(--accent); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div>
+            <i class="fas fa-phone" style="color: var(--accent);"></i> <a href="tel:+256700627960">+256 700 627 960</a> / <a href="tel:+256788772660">+256 788 772 660</a>
+            <i class="fas fa-envelope" style="color: var(--accent); margin-left: 15px;"></i> <a href="mailto:namungoonahighschool@gmail.com">namungoonahighschool@gmail.com</a>
+        </div>
+        <div>
+            <i class="fas fa-map-marker-alt" style="color: var(--secondary);"></i> 5 Km Hoima Road, 100m off Nakibinge Stage, Kampala
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION HEADER -->
+    <header id="mainHeader">
+        <div class="nav-container">
+            <div class="logo-area">
+                <img src="SCHOOL BADGE.png" alt="NHS Logo" onerror="this.src='https://via.placeholder.com/60'">
+                <div>
+                    <div class="school-name">Namungoona High School</div>
+                    <div class="school-motto">Excellence and Integrity</div>
+                </div>
+            </div>
+            
+            <nav class="desktop-nav">
+                <a href="#home" class="active">Home</a>
+                <a href="#director">Director</a>
+                <a href="#sectors">Community</a>
+                <a href="#admissions">Admissions</a>
+                <a href="magazine.html">Magazine</a>
+                <a href="school gallery.html">Gallery</a>
+                <a href="dos.html">Past Papers</a>
+                <a href="constitution.html">Constitution</a>
+                <a href="https://mis.nhs.ac.ug" target="_blank"><i class="fas fa-user-graduate"></i> MIS Portal</a>
+                <button class="portal-btn" onclick="toggleMenu('anthemMenu')" style="background: var(--accent); color: var(--primary);">Anthem</button>
+            </nav>
+            
+            <div class="menu-toggle" onclick="toggleMenu('mobileNav')">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE SIDE NAVIGATION -->
+    <div class="side-menu" id="mobileNav">
+        <span class="close-menu" onclick="toggleMenu('mobileNav')">&times;</span>
+        <h3 style="color: var(--accent); margin-bottom: 20px;">Main Menu</h3>
+        <ul>
+            <li><a href="#home" onclick="toggleMenu('mobileNav')"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#director" onclick="toggleMenu('mobileNav')"><i class="fas fa-user-tie"></i> Director's Desk</a></li>
+            <li><a href="#sectors" onclick="toggleMenu('mobileNav')"><i class="fas fa-users"></i> Our Community</a></li>
+            <li><a href="#admissions" onclick="toggleMenu('mobileNav')"><i class="fas fa-pen-alt"></i> Admissions</a></li>
+            <li><a href="magazine.html"><i class="fas fa-file-alt"></i> Magazine</a></li>
+            <li><a href="school gallery.html"><i class="fas fa-images"></i> Gallery</a></li>
+            <li><a href="dos.html"><i class="fas fa-book"></i> Past Papers</a></li>
+            <li><a href="constitution.html"><i class="fas fa-gavel"></i> Constitution</a></li>
+            <li><a href="https://mis.nhs.ac.ug" target="_blank"><i class="fas fa-user-graduate"></i> MIS Portal</a></li>
+        </ul>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+            <button class="btn-secondary" onclick="toggleMenu('clubsMenu'); toggleMenu('mobileNav');"><i class="fas fa-star"></i> School Clubs</button>
+            <button class="btn-primary" onclick="toggleMenu('anthemMenu'); toggleMenu('mobileNav');"><i class="fas fa-music"></i> School Anthem</button>
+            <button class="portal-btn" onclick="promptAdminLogin()" style="background: rgba(251, 192, 45, 0.15); border: 1px dashed var(--accent); text-align: center;"><i class="fas fa-lock"></i> Admin Panel</button>
+        </div>
+    </div>
+
+    <!-- CLUBS SIDE MENU -->
+    <div class="side-menu" id="clubsMenu" style="background: #fff; color: var(--dark);">
+        <span class="close-menu" onclick="toggleMenu('clubsMenu')" style="color: var(--primary);">&times;</span>
+        <h3 style="color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;"><i class="fas fa-star" style="color: var(--accent);"></i> School Clubs</h3>
+        <ul style="color: #475569;"> 
+            <li style="background:#f1f5f9;"><i class="fas fa-microchip" style="color: var(--primary);"></i> ICT & Robotics Club</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-comments" style="color: var(--primary);"></i> Debate Society</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-flask" style="color: var(--primary);"></i> Science Club</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-leaf" style="color: var(--primary);"></i> Wildlife & Environment</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-music" style="color: var(--primary);"></i> Music, Dance & Drama</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-cross" style="color: var(--primary);"></i> Scripture Union</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-mosque" style="color: var(--primary);"></i> Muslim Students Association</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-first-aid" style="color: var(--primary);"></i> Red Cross Club</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-briefcase" style="color: var(--primary);"></i> Entrepreneurship Club</li>
+            <li style="background:#f1f5f9;"><i class="fas fa-futbol" style="color: var(--primary);"></i> Sports Club</li>
+        </ul>
+    </div>
+
+    <!-- ANTHEM SIDE MENU -->
+    <div class="side-menu" id="anthemMenu">
+        <span class="close-menu" onclick="toggleMenu('anthemMenu')">&times;</span>
+        <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px;"><i class="fas fa-music" style="color: var(--accent);"></i> School Anthem</h3>
+        <div style="font-style: italic; line-height: 1.8; font-size: 0.9rem;">
+            <p><strong style="color: var(--accent);">Verse 1:</strong><br>We are the trainees, of tomorrow.<br>At NAMUNGOONA HIGH SCHOOL,<br>The school of brilliant ladies and gentlemen,<br>It caters for those in need,<br>You can enter and enjoy it's our pleasure,<br>Education is the key wherever the world.</p><br>
+            <p><strong style="color: var(--accent);">Verse 2:</strong><br>We have a motto, in our school.<br>We still Strive to Excel,<br>Support us whenever we call for help,<br>To fulfill our motto,<br>Let us struggle and raise our standards.</p><br>
+            <p><strong style="color: var(--accent);">Verse 3:</strong><br>Lord Almighty, Bless our school.<br>Without your power no one can stand,<br>We hand our school in your hands,<br>So that you may embrace it.</p>
+        </div>
+    </div>
+
+    <!-- QUICK SIDE TRIGGERS -->
+    <div class="side-triggers">
+        <div class="trigger-btn" onclick="toggleMenu('clubsMenu')">SCHOOL CLUBS</div>
+        <div class="trigger-btn anthem-trigger" onclick="toggleMenu('anthemMenu')">SCHOOL ANTHEM</div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home"> 
+        <div class="hero-overlay"></div>
+        <div class="slideshow">
+            <div class="slide active" style="background-image: url('slide1.jpg');"></div>
+            <div class="slide" style="background-image: url('slide2.jpg');"></div>
+            <div class="slide" style="background-image: url('slide3.jpg');"></div>
+        </div>
+
+        <div class="hero-content">
+            <h1>Namungoona High School</h1>
+            <p style="font-size: 1.3rem; color: var(--accent); font-weight: 600;"><i>Strive to Excel</i>, Securing Futures since 1999</p>
+            <p style="font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 30px;">UNEB CENTER NO. U1256</p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="#admissions" class="btn-primary">Enroll Now</a>
+                <button onclick="toggleMenu('clubsMenu')" class="btn-secondary">Explore Clubs</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS COUNTER BAR -->
+    <div class="stats-bar">
+        <div class="stat-item"><h2>25+</h2><p>Years of Excellence</p></div>
+        <div class="stat-item"><h2 style="color: var(--secondary);">70+</h2><p>Professional Staff</p></div>
+        <div class="stat-item"><h2>50+</h2><p>Student Leaders</p></div>
+        <div class="stat-item"><h2 style="color: var(--accent);">1.5k</h2><p>Active Scholars</p></div>
+    </div>
+
+    <!-- DIRECTOR SECTION -->
+    <section class="section director-section" id="director">
+        <div>
+            <img src="PRINCIPAL.jpg" alt="Director Sseimary); }
 
         .stats-bar { background: var(--primary); color: white; display: flex; justify-content: space-around; padding: 60px 5%; flex-wrap: wrap; gap: 30px; text-align: center; }
         .stat-item h2 { font-size: 3rem; color: var(--accent); }
