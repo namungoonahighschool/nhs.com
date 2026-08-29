@@ -106,44 +106,45 @@
         .btn-secondary { background: var(--accent); color: var(--primary); font-weight: 700; box-shadow: 0 4px 15px rgba(251, 192, 45, 0.3); }
         .btn-secondary:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
-        /* SIDE DRAWERS */
-        .side-menu { 
-            position: fixed; 
-            top: 0; 
-            right: -100%; 
-            width: 340px; 
-            height: 100vh; 
-            background: var(--primary-dark); 
-            color: #fff; 
-            z-index: 2005; 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            padding: 40px 30px; 
-            overflow-y: auto; 
-            box-shadow: -10px 0 50px rgba(0,0,0,0.5);
-        }
-        .side-menu.active { right: 0; }
-        .close-menu { font-size: 1.8rem; cursor: pointer; color: var(--accent); float: right; }
-        
-        .side-menu ul { list-style: none; margin-top: 30px; }
-        .side-menu li { margin-bottom: 10px; padding: 12px 15px; border-radius: var(--radius); background: rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px; transition: var(--transition); }
-        .side-menu li:hover { background: rgba(255,255,255,0.12); transform: translateX(-3px); }
-        .side-menu a { color: #fff; text-decoration: none; font-weight: 500; width: 100%; }
+        /* LIGHTENED HERO OVERLAY FOR MAXIMUM VISIBILITY */
+.hero-overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    /* Reduced dark overlay opacity for clear, bright visibility */
+    background: linear-gradient(180deg, rgba(10,42,75,0.3) 0%, rgba(5,24,45,0.15) 100%); 
+    z-index: 2; 
+}
 
-        .side-triggers { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 999; display: flex; flex-direction: column; gap: 5px; }
-        .trigger-btn { background: var(--primary); color: #fff; padding: 14px 10px; font-size: 0.68rem; font-weight: 700; writing-mode: vertical-lr; cursor: pointer; border-radius: 0 8px 8px 0; box-shadow: 4px 4px 15px rgba(0,0,0,0.25); letter-spacing: 2px; transition: var(--transition); }
-        .trigger-btn:hover { padding-left: 14px; background: var(--accent); color: var(--primary); }
-        .anthem-trigger { background: var(--secondary); }
-        .anthem-trigger:hover { background: var(--secondary-hover); color: white; }
+/* HIGH-BRIGHTNESS SLIDESHOW */
+.slideshow { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 1; 
+}
 
-        /* HERO SECTION */
-        .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; overflow: hidden; }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(10,42,75,0.85) 0%, rgba(5,24,45,0.75) 100%); z-index: 2; }
-        .slideshow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .slide { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: 1.5s ease-in-out; }
-        .slide.active { opacity: 1; transform: scale(1.04); }
-        .hero-content { position: relative; z-index: 3; max-width: 900px; padding: 20px; margin-top: 40px; }
-        .hero h1 { font-size: clamp(2.5rem, 5.5vw, 4.5rem); margin-bottom: 15px; line-height: 1.1; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.slide { 
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    background-size: cover; 
+    background-position: center; 
+    opacity: 0; 
+    transition: opacity 1s ease-in-out, transform 4s ease-in-out; 
+    /* Boost image brightness and contrast natively */
+    filter: brightness(1.15) contrast(1.05);
+}
 
+/* ENSURE FIRST SLIDE SHOWS INSTANTLY WITHOUT BLINK OR FADE-IN LAG */
+.slide.active { 
+    opacity: 1 !important; 
+    transform: scale(1.03); 
+}
         /* STATS BAR */
         .stats-bar { background: #fff; padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; box-shadow: var(--shadow); position: relative; z-index: 4; border-bottom: 1px solid #edf2f7; }
         .stat-item h2 { font-size: 3rem; color: var(--primary); font-family: 'Outfit', sans-serif; font-weight: 700; }
